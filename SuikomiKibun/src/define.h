@@ -16,4 +16,7 @@ const int kWindowInitHeight = 720;
 const int kWindowInitPosX = 0;
 const int kWindowInitPosY = 0;
 
-#endif /* DEFINE_H_ */
+//fps
+const int kFps = 60;
+
+#endif /* SUIKOMIKIBUN_DEFINE_H_ */
