@@ -18,5 +18,4 @@ void SelectScene::Update() {
 
 //描画
 void SelectScene::Draw() const {
-	//printf("選択\n");
 }

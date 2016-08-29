@@ -18,5 +18,4 @@ void StartScene::Update() {
 
 //描画
 void StartScene::Draw() const {
-	//printf("スタート\n");
 }
