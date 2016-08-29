@@ -12,6 +12,7 @@
 typedef enum {
 	kSceneStart, //スタート
 	kSceneSelect, //選択
+	kSceneBtDemo, //bulletテスト
 	//無し
 	kSceneNone
 } Scene;
@@ -46,6 +47,7 @@ public:
 
 #include "start.h"
 #include "select.h"
+#include "bt_demo.h"
 #include "../util/uGL.h"
 
 //シーン遷移管理クラス
