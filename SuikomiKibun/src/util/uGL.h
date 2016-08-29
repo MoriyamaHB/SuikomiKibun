@@ -10,7 +10,7 @@
 #include <stdarg.h>
 #include <iostream>
 
-#include "vector3.h"
+#include "../util/vector3.h"
 
 #define uPI 3.1415926
 
