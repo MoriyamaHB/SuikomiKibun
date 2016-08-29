@@ -101,13 +101,13 @@ int mouse_left_button_frame = 0;
 }
 
 //前回の呼び出しからのマウス移動量を返します
-//namespace input {
-//void TakeMouseMotionAndInit(int *dx, int *dy) {
-//	*dx = mouse_dx;
-//	*dy = mouse_dy;
-//	mouse_dx = mouse_dy = 0;
-//}
-//}
+namespace input {
+void TakeMouseMotionAndInit(int *dx, int *dy) {
+	*dx = mouse_dx;
+	*dy = mouse_dy;
+	mouse_dx = mouse_dy = 0;
+}
+}
 
 //左マウスクリックフレーム数を取得
 namespace input {
@@ -132,18 +132,18 @@ void CheckMouse(int button, int state, int x, int y) {
 //ボタンを押している時 & 押していない時の両方で呼び出されます
 namespace input {
 void CheckMouseMotion(int x, int y) {
-//	static int wrap_flag = 0;
-//
-//	if (!wrap_flag) {
-//		int ww = glutGet(GLUT_WINDOW_WIDTH);
-//		int wh = glutGet(GLUT_WINDOW_HEIGHT);
-//		mouse_dx += x - (ww / 2);
-//		mouse_dy += y - (wh / 2);
-//		wrap_flag = 1;
-//		glutWarpPointer(ww / 2, wh / 2);
-//	} else {
-//		wrap_flag = 0;
-//	}
+	static int wrap_flag = 0;
+
+	if (!wrap_flag) {
+		int ww = glutGet(GLUT_WINDOW_WIDTH);
+		int wh = glutGet(GLUT_WINDOW_HEIGHT);
+		mouse_dx += x - (ww / 2);
+		mouse_dy += y - (wh / 2);
+		wrap_flag = 1;
+		glutWarpPointer(ww / 2, wh / 2);
+	} else {
+		wrap_flag = 0;
+	}
 }
 }
 

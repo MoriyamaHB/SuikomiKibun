@@ -24,7 +24,7 @@ int get_mouse_left_button_frame();
 void Init();
 
 //前回呼び出した時からのマウスの移動量を返す
-//void TakeMouseMotionAndInit(int *dx, int *dy);
+void TakeMouseMotionAndInit(int *dx, int *dy);
 }
 
 #endif
