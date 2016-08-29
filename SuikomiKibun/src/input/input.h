@@ -1,5 +1,5 @@
-#ifndef OPENGLGAME_INPUT_INPUT_H_
-#define OPENGLGAME_INPUT_INPUT_H_
+#ifndef SUIKOMIKIBUN_INPUT_INPUT_H_
+#define SUIKOMIKIBUN_INPUT_INPUT_H_
 
 #include <string.h>
 #include <GL/freeglut.h>

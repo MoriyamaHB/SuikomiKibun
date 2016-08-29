@@ -37,8 +37,7 @@ void u3Dto2D() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	gluOrtho2D(0, glutGet(GLUT_INIT_WINDOW_WIDTH),
-			glutGet(GLUT_INIT_WINDOW_HEIGHT), 0);
+	gluOrtho2D(0, glutGet(GLUT_INIT_WINDOW_WIDTH), glutGet(GLUT_INIT_WINDOW_HEIGHT), 0);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
@@ -66,10 +65,15 @@ void u2Dto3D() {
 }
 
 //エラー出力
-void uErrorOut(const char file[], const char func[], int line,
-		const char message[]) {
-	fprintf(stderr, "<file:%s func:%s line:%d>\n", file, func, line);
-	fprintf(stderr, "Error:%s\n\n", message);
+void uErrorOut(const std::string file, const std::string func, int line, const std::string message) {
+	std::cerr << "<file:" << file << '(' << line << ')' << " func:" << func << '>' << std::endl;
+	std::cerr << "Error:" << message << std::endl;
+}
+
+//OpenGL用の強制終了関数(エラー時用)
+extern void uExit() {
+	std::cerr << "uExitが呼び出されました。メインループを終了します。" << std::endl;
+	glutLeaveMainLoop();
 }
 
 //2D上にの点を描画する(size=直径)
@@ -94,8 +98,8 @@ void uLine2D(int x1, int y1, int x2, int y2, float width) {
 }
 
 //2D上に四角形を描画する
-void uSquare2D(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4,
-		float width, const float color[]) {
+void uSquare2D(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, float width,
+		const float color[]) {
 	u3Dto2D();
 	glColor4fv(color);
 	glLineWidth(width);
@@ -108,8 +112,7 @@ void uSquare2D(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4,
 	u2Dto3D();
 }
 
-void uSquare2D(int x1, int y1, int x2, int y2, float width,
-		const float color[]) {
+void uSquare2D(int x1, int y1, int x2, int y2, float width, const float color[]) {
 	u3Dto2D();
 	glColor4fv(color);
 	glLineWidth(width);
@@ -123,8 +126,7 @@ void uSquare2D(int x1, int y1, int x2, int y2, float width,
 }
 
 //2D上に四角形を描画する(塗りつぶし)
-void uSquareFill2D(int x1, int y1, int x2, int y2, int x3, int y3, int x4,
-		int y4, const float color[]) {
+void uSquareFill2D(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, const float color[]) {
 	u3Dto2D();
 	glColor4fv(color);
 	glBegin(GL_QUADS);
@@ -235,8 +237,7 @@ void uOval2DFill(float radius, int x, int y, float ovalx, float ovaly) {
 }
 
 //三角形を描画
-void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[],
-		Vector3 v3, float color3[]) {
+void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vector3 v3, float color3[]) {
 	u3Dto2D();
 	glBegin(GL_TRIANGLES);
 	glColor4fv(color1);
@@ -250,8 +251,8 @@ void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[],
 }
 
 //四角形を描画
-void uDrawQuadrangle(Vector3 v1, float color1[], Vector3 v2, float color2[],
-		Vector3 v3, float color3[], Vector3 v4, float color4[]) {
+void uDrawQuadrangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vector3 v3, float color3[],
+		Vector3 v4, float color4[]) {
 	u3Dto2D();
 	glBegin(GL_QUADS);
 	glColor4fv(color1);

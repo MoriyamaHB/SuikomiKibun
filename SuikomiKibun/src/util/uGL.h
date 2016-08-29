@@ -9,6 +9,7 @@
 #include <utility>
 #include <stdarg.h>
 #include <iostream>
+#include <string>
 
 #include "../util/vector3.h"
 
@@ -37,7 +38,10 @@ extern const float uMaterial4fv_green[];
 extern const float uMaterial4fv_brown[];
 
 //エラー出力
-extern void uErrorOut(const char file[], const char func[], int line, const char message[]);
+extern void uErrorOut(const std::string file, const std::string func, int line, const std::string message);
+
+//OpenGL用の強制終了関数(エラー時用)
+extern void uExit();
 
 //3D設定から2Dの設定に変更します
 extern void u3Dto2D();

@@ -5,6 +5,7 @@
 #include "define.h"
 #include "util/uGL.h"
 #include "input/input.h"
+#include "scene/scene_mgr.h"
 
 void DisplayFunc(void);
 void Resize(int w, int h);
@@ -12,6 +13,9 @@ void Timer(int value);
 
 //無名名前空間
 namespace {
+
+//画面遷移管理
+SceneMgr *scene_mgr;
 
 //ゲーム起動時に行う初期化
 void FirstInit(int argc, char *argv[]) {
@@ -44,10 +48,15 @@ void FirstInit(int argc, char *argv[]) {
 
 	//alutの初期化
 	alutInit(&argc, argv);
+
+	//ゲームの初期化
+	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
 }
 
 //ゲーム終了時に行う処理
 void EndFinalize() {
+	//ゲームの終了処理
+	delete scene_mgr;
 
 	//ライブラリ終了処理
 	alutExit();
@@ -86,6 +95,10 @@ void DisplayFunc(void) {
 
 	//入力更新
 	input::UpdateFrame();
+
+	//シーン
+	scene_mgr->Update();
+	scene_mgr->Draw();
 
 	//ディスプレイ終了処理
 	glEnd();
