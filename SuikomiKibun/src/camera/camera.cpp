@@ -116,15 +116,23 @@ void Camera3D3P::TransfarByKey() {
 	}
 }
 
-//カメラの情報を表示（速度)
-void Camera3D3P::DisplayInfo() const {
-	uDrawString2("スピード:", 1100, 30, uColor4fv_red);
-	uSquareFill2D(1280, 10, 1280 + 200, 15, uColor4fv_brack);
-}
-
 //gluLookAtを設定する
 void Camera3D3P::SetGluLookAt() const {
 	gluLookAt(x_, y_, z_, gx_, gy_, gz_, ux_, uy_, uz_);
+}
+
+//更新
+void Camera3D3P::Update() {
+	TransfarByKey();
+	TransfarAndRotateByMouse();
+	SetGluLookAt();
+}
+
+//更新2
+void Camera3D3P::Update(int dx, int dy) {
+	TransfarByKey();
+	TransfarAndRotateByParam(dx, dy);
+	SetGluLookAt();
 }
 
 //-------------------------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 #include "../input/input.h"
 #include "../util/uGL.h"
 #include "../camera/camera.h"
+#include "../define.h"
 
 class BtDemoScene: public BaseScene {
 private:

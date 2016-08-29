@@ -4,7 +4,6 @@
 #include <math.h>
 #include <GL/freeglut.h>
 #include "../input/input.h"
-#include "../util/output_display.h"
 
 class Vector3;
 
@@ -24,17 +23,9 @@ public:
 	double get_speed() const;
 
 	//更新
-	//TransfarByKey()→TransfarAndRotateByMouse()の順に呼び出さないと横移動の時ずれます
-	void TransfarByKey();
-	void TransfarAndRotateByMouse();
-	void TransfarAndRotateByParam(int dx, int dy);
-
-	//カメラの情報を表示（速度)
-	void DisplayInfo() const;
-
-	//gluLookAtを設定する
-	//更新でなるべく最初の方に読んだほうがいいみたい(ライトより後だとライトがおかしくなる)
-	void SetGluLookAt() const;
+	//更新でなるべく最初の方に読んだほうがいいみたい(ライトより後だとライトがおかしくなる)(glulookat)
+	void Update(); 					//マウスによる視点移動
+	void Update(int dx, int dy); 	//パラメータによる視点移動
 
 protected:
 	float x_;
@@ -56,6 +47,13 @@ protected:
 	const static double kMaxWrapAngleH = M_PI / 2 - 0.001;
 	//カメラの感度
 	const static int kCameraRotatePx = 4000;
+
+	//更新(内部呼び出し)
+	//TransfarByKey()→TransfarAndRotateByMouse()の順に呼び出さないと横移動の時ずれます
+	void TransfarByKey();
+	void TransfarAndRotateByMouse();
+	void TransfarAndRotateByParam(int dx, int dy);
+	void SetGluLookAt() const;
 };
 
 //1人称 & 自由飛行のカメラ移動計算を行います
