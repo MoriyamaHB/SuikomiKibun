@@ -23,9 +23,6 @@ public:
 	void GetAngle(double *angle_w, double *angle_h) const;
 	double get_speed() const;
 
-	//setter
-	void set_speed(double sp);
-
 	//更新
 	//TransfarByKey()→TransfarAndRotateByMouse()の順に呼び出さないと横移動の時ずれます
 	void TransfarByKey();
@@ -36,6 +33,7 @@ public:
 	void DisplayInfo() const;
 
 	//gluLookAtを設定する
+	//更新でなるべく最初の方に読んだほうがいいみたい(ライトより後だとライトがおかしくなる)
 	void SetGluLookAt() const;
 
 protected:
@@ -51,25 +49,13 @@ protected:
 	double angle_w_;
 	double angle_h_;
 	double speed_;
+	double distance_;
+
 	//カメラの角度限度
 	const static double kMinWrapAngleH = -M_PI / 2 + 0.001;
 	const static double kMaxWrapAngleH = M_PI / 2 - 0.001;
-	//カメラの速度関連
-	const static double kAcceleration = 0.012; //加速度
-	const static double kMaxSpeed = 0.05; //最高速度
-	const static double kMinSpeed = 0; //最低速度
-	//速度に応じて視点を遠ざける関連
-	const static double kMaxWatchDistance = 2;
-	const static double kMinWatchDistance = 1;
 	//カメラの感度
 	const static int kCameraRotatePx = 4000;
-
-	double distance_;	//現在の距離
-
-	//速度をラップする
-	void WrapSpeed();
-	//スピードに応じてカメラ距離を変更する
-	void UpdateWatchDistance();
 };
 
 //1人称 & 自由飛行のカメラ移動計算を行います

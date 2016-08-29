@@ -34,7 +34,8 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	//慣性モーメントの計算
 	btVector3 inertia(0, 0, 0);
 	sphere_shape->calculateLocalInertia(mass, inertia);
-	ground_shape->calculateLocalInertia(0.00, inertia);
+	inertia.setValue(0, 100, 0);
+	ground_shape->calculateLocalInertia(1.00, inertia);
 
 	//剛体オブジェクト生成
 	sphere_body_ = new btRigidBody(mass, motion_state, sphere_shape, inertia);
@@ -63,26 +64,27 @@ BtDemoScene::~BtDemoScene() {
 
 //更新
 void BtDemoScene::Update() {
-	//ライト
-	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
-	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 	camera.TransfarByKey();
 	camera.TransfarAndRotateByMouse();
 	camera.SetGluLookAt();
+
+	//ライト
+	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
+	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
 	dynamics_world_->stepSimulation(0.016);
 
 }
 
 //描画
 void BtDemoScene::Draw() const {
-	camera.DisplayInfo();
 	btVector3 pos = ground_body_->getCenterOfMassPosition();
 	glPushMatrix();
 	//glTranslated(pos[0], pos[1], pos[2]);
 	uDrawGround(50);
 	glPopMatrix();
+
 	pos = sphere_body_->getCenterOfMassPosition();
-	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
