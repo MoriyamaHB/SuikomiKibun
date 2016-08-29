@@ -4,6 +4,8 @@
 
 #include "define.h"
 #include "util/uGL.h"
+#include "util/fps.h"
+#include "util/output_display.h"
 #include "input/input.h"
 #include "scene/scene_mgr.h"
 
@@ -16,6 +18,8 @@ namespace {
 
 //画面遷移管理
 SceneMgr *scene_mgr;
+//fps管理
+Fps fps;
 
 //ゲーム起動時に行う初期化
 void FirstInit(int argc, char *argv[]) {
@@ -51,6 +55,8 @@ void FirstInit(int argc, char *argv[]) {
 
 	//ゲームの初期化
 	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
+	fps.Init(); 				//fps初期化
+	output_display::Init(); 	//ディスプレイ文字列初期化
 }
 
 //ゲーム終了時に行う処理
@@ -96,9 +102,16 @@ void DisplayFunc(void) {
 	//入力更新
 	input::UpdateFrame();
 
+	//fps
+	fps.Update();
+	fps.Draw();
+
 	//シーン
 	scene_mgr->Update();
 	scene_mgr->Draw();
+
+	//ディスプレイ文字列描画
+	output_display::Draw();
 
 	//ディスプレイ終了処理
 	glEnd();
