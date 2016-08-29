@@ -1,7 +1,7 @@
 #include "select.h"
 
 //コンストラクタ
-SelectScene::SelectScene(ISceneChanger* changer) :
+SelectScene::SelectScene(ISceneChanger* changer, SceneParam param) :
 		BaseScene(changer) {
 }
 
@@ -11,10 +11,12 @@ SelectScene::~SelectScene() {
 
 //更新
 void SelectScene::Update() {
-	if (input::get_keyboard_frame(13) == 1)
+	if (input::get_keyboard_frame(13) == 1) {
 		scene_changer_->ChangeScene(kSceneStart);
+	}
 }
 
 //描画
 void SelectScene::Draw() const {
+	//printf("選択\n");
 }

@@ -8,6 +8,7 @@
 #ifndef SUIKOMIKIBUN_SCENE_SCENEMGR_H_
 #define SUIKOMIKIBUN_SCENE_SCENEMGR_H_
 
+//各シーンを示す列挙型
 typedef enum {
 	kSceneStart, //スタート
 	kSceneSelect, //選択
@@ -15,12 +16,17 @@ typedef enum {
 	kSceneNone
 } Scene;
 
+//シーン変更時に渡すデータ
+typedef struct {
+} SceneParam;
+
 //シーンを変更するためのインターフェイスクラス
 class ISceneChanger {
 public:
 	virtual ~ISceneChanger() {
 	}
 	virtual void ChangeScene(Scene NextScene) = 0; //指定シーンに変更する
+	virtual void ChangeScene(Scene NextScene, SceneParam param) = 0; //指定シーンに変更する
 };
 
 //シーンの基底クラス。
@@ -47,6 +53,7 @@ class SceneMgr: public ISceneChanger {
 private:
 	BaseScene* scene_;    //シーン管理変数
 	Scene next_scene_;    //次のシーン管理変数
+	SceneParam scene_param_;    //次のシーンに渡すパラメータ
 
 public:
 	SceneMgr();
@@ -55,7 +62,8 @@ public:
 	void Draw() const;  //描画
 
 	// 引数 nextScene にシーンを変更する
-	void ChangeScene(Scene NextScene);
+	void ChangeScene(Scene NextScene);  //パラーメータ不要時
+	void ChangeScene(Scene NextScene, SceneParam param);
 };
 
 #endif /* SUIKOMIKIBUN_SCENEMGR_H_ */

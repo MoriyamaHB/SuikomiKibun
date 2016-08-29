@@ -3,10 +3,11 @@
 
 #include "scene_mgr.h"
 #include "../input/input.h"
+#include "../util/output_display.h"
 
 class SelectScene: public BaseScene {
 public:
-	SelectScene(ISceneChanger* changer);
+	SelectScene(ISceneChanger* changer, SceneParam param);
 	~SelectScene();
 	void Update();
 	void Draw() const;
