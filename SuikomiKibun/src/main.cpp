@@ -79,7 +79,7 @@ void Resize(int w, int h) {
 	//透視変換行列設定
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity(); //透視変換行列の初期化
-	gluPerspective(85.0, (double) w / (double) h, 0.1, 200.0);
+	gluPerspective(75.0, (double) w / (double) h, 0.1, 200.0);
 
 	//モデルビュー変換行列の指定
 	glMatrixMode(GL_MODELVIEW);
@@ -97,6 +97,7 @@ void Timer(int value) {
 void DisplayFunc(void) {
 	//ディスプレイ初期化
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //画面の初期化
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); //モデルビュー変換行列の初期化
 
 	//入力更新

@@ -12,6 +12,8 @@ unsigned int shift;
 unsigned int shift_frame;
 unsigned int enter;
 unsigned int enter_frame;
+unsigned int space;
+unsigned int space_frame;
 }
 
 //キーボードの入力フレーム数を返す
@@ -23,6 +25,8 @@ int get_keyboard_frame(unsigned char key) {
 		return escape_frame;
 	} else if (key == 13) {
 		return enter_frame;
+	} else if (key == ' ') {
+		return space_frame;
 	} else {
 		uErrorOut(__FILE__, __func__, __LINE__, "keyの値が不正です");
 		return -1;
@@ -54,6 +58,8 @@ void CheckPushKey(unsigned char key, int x, int y) {
 		escape = 1;
 	} else if (key == 13) {
 		enter = 1;
+	} else if (key == ' ') {
+		space = 1;
 	}
 }
 }
@@ -70,6 +76,8 @@ void CheckUpkey(unsigned char key, int x, int y) {
 		escape = 0;
 	} else if (key == 13) {
 		enter = 0;
+	} else if (key == ' ') {
+		space = 0;
 	}
 }
 }
@@ -79,6 +87,8 @@ namespace input {
 void CheckPushSpecialKey(int key, int x, int y) {
 	if (key == GLUT_KEY_SHIFT_L)
 		shift = 1;
+	else
+		printf("%d", key);
 }
 }
 
@@ -101,13 +111,13 @@ int mouse_left_button_frame = 0;
 }
 
 //前回の呼び出しからのマウス移動量を返します
-//namespace input {
-//void TakeMouseMotionAndInit(int *dx, int *dy) {
-//	*dx = mouse_dx;
-//	*dy = mouse_dy;
-//	mouse_dx = mouse_dy = 0;
-//}
-//}
+namespace input {
+void TakeMouseMotionAndInit(int *dx, int *dy) {
+	*dx = mouse_dx;
+	*dy = mouse_dy;
+	mouse_dx = mouse_dy = 0;
+}
+}
 
 //左マウスクリックフレーム数を取得
 namespace input {
@@ -132,18 +142,18 @@ void CheckMouse(int button, int state, int x, int y) {
 //ボタンを押している時 & 押していない時の両方で呼び出されます
 namespace input {
 void CheckMouseMotion(int x, int y) {
-//	static int wrap_flag = 0;
-//
-//	if (!wrap_flag) {
-//		int ww = glutGet(GLUT_WINDOW_WIDTH);
-//		int wh = glutGet(GLUT_WINDOW_HEIGHT);
-//		mouse_dx += x - (ww / 2);
-//		mouse_dy += y - (wh / 2);
-//		wrap_flag = 1;
-//		glutWarpPointer(ww / 2, wh / 2);
-//	} else {
-//		wrap_flag = 0;
-//	}
+	static int wrap_flag = 0;
+
+	if (!wrap_flag) {
+		int ww = glutGet(GLUT_WINDOW_WIDTH);
+		int wh = glutGet(GLUT_WINDOW_HEIGHT);
+		mouse_dx += x - (ww / 2);
+		mouse_dy += y - (wh / 2);
+		wrap_flag = 1;
+		glutWarpPointer(ww / 2, wh / 2);
+	} else {
+		wrap_flag = 0;
+	}
 }
 }
 
@@ -171,6 +181,10 @@ void UpdateFrame() {
 		enter_frame++;
 	else
 		enter_frame = 0;
+	if (space)
+		space_frame++;
+	else
+		space_frame = 0;
 	//左マウスクリック
 	if (is_down_mouse_left_button)
 		mouse_left_button_frame++;
@@ -190,6 +204,8 @@ void Init() {
 	shift_frame = 0;
 	enter = 0;
 	enter_frame = 0;
+	space = 0;
+	space_frame = 0;
 	mouse_dx = 0;
 	mouse_dy = 0;
 	is_down_mouse_left_button = false;
