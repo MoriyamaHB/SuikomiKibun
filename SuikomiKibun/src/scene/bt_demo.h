@@ -4,6 +4,7 @@
 #include <bullet/btBulletCollisionCommon.h>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <GL/freeglut.h>
+#include <math.h>
 
 #include "scene_mgr.h"
 #include "../input/input.h"

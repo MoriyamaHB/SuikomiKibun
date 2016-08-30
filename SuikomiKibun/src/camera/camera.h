@@ -20,12 +20,14 @@ public:
 	Vector3 GetStateCoordinates() const;
 	Vector3 GetStateUpCoordinates() const;
 	void GetAngle(double *angle_w, double *angle_h) const;
+	double get_angle_w() const;
 	double get_speed() const;
 
 	//更新
 	//更新でなるべく最初の方に読んだほうがいいみたい(ライトより後だとライトがおかしくなる)(glulookat)
 	void Update(); 					//マウスによる視点移動
-	void Update(int dx, int dy); 	//パラメータによる視点移動
+	void Update(int dx, int dy); 	//パラメータによるカメラ座標移動
+	void Update(float gx, float gy, float gz); 	//パラメータによる視点座標の移動
 
 protected:
 	float x_;

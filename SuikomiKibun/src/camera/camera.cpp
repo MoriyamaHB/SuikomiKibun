@@ -14,7 +14,7 @@ void Camera3D3P::InitCoordinates() {
 	angle_w_ = M_PI / 2;
 	angle_h_ = 0;
 	speed_ = 0.07;
-	distance_ = 1;
+	distance_ = 3;
 }
 
 Camera3D3P::Camera3D3P() {
@@ -36,10 +36,16 @@ Vector3 Camera3D3P::GetStateUpCoordinates() const {
 	return Vector3(ux_, uy_, uz_);
 }
 
+
 //カメラ角度をgetする
 void Camera3D3P::GetAngle(double *angle_w, double *angle_h) const {
 	*angle_w = angle_w_;
 	*angle_h = angle_h_;
+}
+
+//カメラ角度(w)
+double Camera3D3P::get_angle_w() const {
+	return angle_w_;
 }
 
 //カメラ速度をgetする
@@ -132,6 +138,15 @@ void Camera3D3P::Update() {
 void Camera3D3P::Update(int dx, int dy) {
 	TransfarByKey();
 	TransfarAndRotateByParam(dx, dy);
+	SetGluLookAt();
+}
+
+//更新3
+void Camera3D3P::Update(float gx, float gy, float gz) {
+	gx_ = gx;
+	gy_ = gy;
+	gz_ = gz;
+	TransfarAndRotateByMouse();
 	SetGluLookAt();
 }
 

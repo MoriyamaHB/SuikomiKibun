@@ -67,10 +67,6 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 //	sphere_body_->setFriction(100000);
 //	ground_body_->setFriction(0.5);
 //	cube_body_->setFriction(100000);
-
-	//撃力を加える
-//	btVector3 impulse(0.1, 0.01, 0);
-//	sphere_body_->applyCentralImpulse(impulse);
 }
 
 //デストラクタ
@@ -93,11 +89,33 @@ BtDemoScene::~BtDemoScene() {
 
 //更新
 void BtDemoScene::Update() {
-	camera.Update();
+	btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	camera.Update(pos[0], pos[1], pos[2]);
 
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
+	//撃力を加える
+	btVector3 impulse;
+	const double ang = camera.get_angle_w();
+	printf("%f\n", ang);
+	if (input::get_keyboard_frame('w') == 1) {
+		impulse.setValue(sin(ang), 0, cos(ang));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('s') == 1) {
+		impulse.setValue(sin(-ang), 0, cos(-ang));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('a') == 1) {
+		impulse.setValue(sin(ang + M_PI / 2.0), 0, cos(ang + M_PI / 2.0));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('d') == 1) {
+		impulse.setValue(sin(ang - M_PI / 2.0), 0, cos(ang - M_PI / 2.0));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
 
 	dynamics_world_->stepSimulation(1.0 / kFps);
 
