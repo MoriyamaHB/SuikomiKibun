@@ -55,10 +55,6 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
 	ground_body_ = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
 	cube_body_ = new btRigidBody(cube_mass, cube_motion_state, cube_shape, cube_inertia);
-	//ワールドに剛体オブジェクトを追加
-	dynamics_world_->addRigidBody(sphere_body_);
-	dynamics_world_->addRigidBody(ground_body_);
-	dynamics_world_->addRigidBody(cube_body_);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
 	ground_body_->setRestitution(ground_rest);
@@ -67,6 +63,10 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 //	sphere_body_->setFriction(100000);
 //	ground_body_->setFriction(0.5);
 //	cube_body_->setFriction(100000);
+	//ワールドに剛体オブジェクトを追加
+	dynamics_world_->addRigidBody(sphere_body_);
+	dynamics_world_->addRigidBody(ground_body_);
+	dynamics_world_->addRigidBody(cube_body_);
 }
 
 //デストラクタ
@@ -89,6 +89,10 @@ BtDemoScene::~BtDemoScene() {
 
 //更新
 void BtDemoScene::Update() {
+	//bulletをすすめる
+	dynamics_world_->stepSimulation(1.0 / kFps);
+
+	//カメラ更新
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
 	camera.Update(pos[0], pos[1], pos[2]);
 
@@ -98,10 +102,10 @@ void BtDemoScene::Update() {
 
 	//撃力を加える
 	btVector3 impulse;
-	const double ang = camera.get_angle_w();
-	printf("%f\n", ang);
+	const double ang = camera.get_angle_w() + M_PI * 3.0 / 2.0;
+	printf("%f,%f,%f\n", ang, sin(ang), cos(ang));
 	if (input::get_keyboard_frame('w') == 1) {
-		impulse.setValue(sin(ang), 0, cos(ang));
+		impulse.setValue(0.01, 0, 0);
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 	if (input::get_keyboard_frame('s') == 1) {
@@ -117,7 +121,6 @@ void BtDemoScene::Update() {
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 
-	dynamics_world_->stepSimulation(1.0 / kFps);
 
 }
 
