@@ -104,30 +104,58 @@ void BtDemoScene::Update() {
 	btVector3 impulse;
 	const double ang = camera.get_angle_w() + M_PI;
 	double t = 0.1;
-	if (input::get_keyboard_frame('w') == 1) {
-		sphere_body_->activate(true);
-		impulse.setValue(t * cos(ang), 0, t * sin(ang));
-		sphere_body_->applyCentralImpulse(impulse);
-	}
-	if (input::get_keyboard_frame('s') == 1) {
-		sphere_body_->activate(true);
-		impulse.setValue(t * cos(ang + M_PI), 0, t * sin(ang + M_PI));
-		sphere_body_->applyCentralImpulse(impulse);
-	}
-	if (input::get_keyboard_frame('a') == 1) {
-		sphere_body_->activate(true);
-		impulse.setValue(t * cos(ang - M_PI / 2.0), 0, t * sin(ang - M_PI / 2.0));
-		sphere_body_->applyCentralImpulse(impulse);
-	}
-	if (input::get_keyboard_frame('d') == 1) {
-		sphere_body_->activate(true);
-		impulse.setValue(t * cos(ang + M_PI / 2.0), 0, t * sin(ang + M_PI / 2.0));
-		sphere_body_->applyCentralImpulse(impulse);
-	}
-	if (input::get_keyboard_frame(' ') == 1) {
-		sphere_body_->activate(true);
-		impulse.setValue(0, t, 0);
-		sphere_body_->applyCentralImpulse(impulse);
+	if (input::get_special_keyboard_frame(GLUT_KEY_SHIFT_L) >= 1) {
+		if (input::get_keyboard_frame('w') >= 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang), 0, t * sin(ang));
+			sphere_body_->applyCentralForce(impulse);
+		}
+		if (input::get_keyboard_frame('s') >= 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang + M_PI), 0, t * sin(ang + M_PI));
+			sphere_body_->applyCentralForce(impulse);
+		}
+		if (input::get_keyboard_frame('a') >= 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang - M_PI / 2.0), 0, t * sin(ang - M_PI / 2.0));
+			sphere_body_->applyCentralForce(impulse);
+		}
+		if (input::get_keyboard_frame('d') >= 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang + M_PI / 2.0), 0, t * sin(ang + M_PI / 2.0));
+			sphere_body_->applyCentralForce(impulse);
+		}
+		if (input::get_keyboard_frame(' ') >= 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(0, 0.3, 0);
+			sphere_body_->applyCentralForce(impulse);
+		}
+	} else {
+		if (input::get_keyboard_frame('w') == 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang), 0, t * sin(ang));
+			sphere_body_->applyCentralImpulse(impulse);
+		}
+		if (input::get_keyboard_frame('s') == 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang + M_PI), 0, t * sin(ang + M_PI));
+			sphere_body_->applyCentralImpulse(impulse);
+		}
+		if (input::get_keyboard_frame('a') == 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang - M_PI / 2.0), 0, t * sin(ang - M_PI / 2.0));
+			sphere_body_->applyCentralImpulse(impulse);
+		}
+		if (input::get_keyboard_frame('d') == 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(ang + M_PI / 2.0), 0, t * sin(ang + M_PI / 2.0));
+			sphere_body_->applyCentralImpulse(impulse);
+		}
+		if (input::get_keyboard_frame(' ') == 1) {
+			sphere_body_->activate(true);
+			impulse.setValue(0, t, 0);
+			sphere_body_->applyCentralImpulse(impulse);
+		}
 	}
 }
 
