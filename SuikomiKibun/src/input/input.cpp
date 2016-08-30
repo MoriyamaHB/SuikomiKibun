@@ -12,6 +12,8 @@ unsigned int shift;
 unsigned int shift_frame;
 unsigned int enter;
 unsigned int enter_frame;
+unsigned int space;
+unsigned int space_frame;
 }
 
 //キーボードの入力フレーム数を返す
@@ -23,6 +25,8 @@ int get_keyboard_frame(unsigned char key) {
 		return escape_frame;
 	} else if (key == 13) {
 		return enter_frame;
+	} else if (key == ' ') {
+		return space_frame;
 	} else {
 		uErrorOut(__FILE__, __func__, __LINE__, "keyの値が不正です");
 		return -1;
@@ -54,6 +58,8 @@ void CheckPushKey(unsigned char key, int x, int y) {
 		escape = 1;
 	} else if (key == 13) {
 		enter = 1;
+	} else if (key == ' ') {
+		space = 1;
 	}
 }
 }
@@ -70,6 +76,8 @@ void CheckUpkey(unsigned char key, int x, int y) {
 		escape = 0;
 	} else if (key == 13) {
 		enter = 0;
+	} else if (key == ' ') {
+		space = 0;
 	}
 }
 }
@@ -79,6 +87,8 @@ namespace input {
 void CheckPushSpecialKey(int key, int x, int y) {
 	if (key == GLUT_KEY_SHIFT_L)
 		shift = 1;
+	else
+		printf("%d", key);
 }
 }
 
@@ -171,6 +181,10 @@ void UpdateFrame() {
 		enter_frame++;
 	else
 		enter_frame = 0;
+	if (space)
+		space_frame++;
+	else
+		space_frame = 0;
 	//左マウスクリック
 	if (is_down_mouse_left_button)
 		mouse_left_button_frame++;
@@ -190,6 +204,8 @@ void Init() {
 	shift_frame = 0;
 	enter = 0;
 	enter_frame = 0;
+	space = 0;
+	space_frame = 0;
 	mouse_dx = 0;
 	mouse_dy = 0;
 	is_down_mouse_left_button = false;

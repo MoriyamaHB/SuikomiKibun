@@ -21,7 +21,7 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	btVector3 cube_pos = btVector3(1, 25, 0);
 	//大きさ
 	btScalar sphere_radius = 1.0;
-	btVector3 ground_extents = btVector3(25, 0.1, 25);
+	btVector3 ground_extents = btVector3(25, 0.00001, 25);
 	double a = 1.0, b = 20.0, c = 1.0;
 	btVector3 cube_extents = btVector3(a, b, c);
 	//質量
@@ -102,32 +102,38 @@ void BtDemoScene::Update() {
 
 	//撃力を加える
 	btVector3 impulse;
-	const double ang = camera.get_angle_w() + M_PI * 3.0 / 2.0;
-	printf("%f,%f,%f\n", ang, sin(ang), cos(ang));
+	const double ang = camera.get_angle_w() + M_PI;
+	double t = 0.1;
 	if (input::get_keyboard_frame('w') == 1) {
-		impulse.setValue(0.01, 0, 0);
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(ang), 0, t * sin(ang));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 	if (input::get_keyboard_frame('s') == 1) {
-		impulse.setValue(sin(-ang), 0, cos(-ang));
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(ang + M_PI), 0, t * sin(ang + M_PI));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 	if (input::get_keyboard_frame('a') == 1) {
-		impulse.setValue(sin(ang + M_PI / 2.0), 0, cos(ang + M_PI / 2.0));
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(ang - M_PI / 2.0), 0, t * sin(ang - M_PI / 2.0));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 	if (input::get_keyboard_frame('d') == 1) {
-		impulse.setValue(sin(ang - M_PI / 2.0), 0, cos(ang - M_PI / 2.0));
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(ang + M_PI / 2.0), 0, t * sin(ang + M_PI / 2.0));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
-
-
+	if (input::get_keyboard_frame(' ') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(0, t, 0);
+		sphere_body_->applyCentralImpulse(impulse);
+	}
 }
 
 //描画
 void BtDemoScene::Draw() const {
 	btVector3 pos;
-
 	//地面
 	glPushMatrix();
 	pos = ground_body_->getCenterOfMassPosition();
