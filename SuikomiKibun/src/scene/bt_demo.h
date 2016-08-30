@@ -16,6 +16,7 @@ private:
 	btDynamicsWorld* dynamics_world_;
 	btRigidBody* sphere_body_;
 	btRigidBody* ground_body_;
+	btRigidBody* cube_body_;
 	Camera3D3P camera;
 public:
 	BtDemoScene(ISceneChanger* changer, SceneParam param);
