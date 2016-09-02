@@ -8,6 +8,7 @@
 #include "util/output_display.h"
 #include "input/input.h"
 #include "scene/scene_mgr.h"
+#include "gv.h"
 
 void DisplayFunc(void);
 void Resize(int w, int h);
@@ -56,7 +57,7 @@ void FirstInit(int argc, char *argv[]) {
 	//ゲームの初期化
 	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
 	fps.Init(); 				//fps初期化
-	output_display::Init(); 	//ディスプレイ文字列初期化
+	output_display0.Init(); 	//ディスプレイ文字列初期化
 }
 
 //ゲーム終了時に行う処理
@@ -105,14 +106,14 @@ void DisplayFunc(void) {
 
 	//fps
 	fps.Update();
-	fps.Draw();
+	fps.Draw(&output_display0);
 
 	//シーン
 	scene_mgr->Update();
 	scene_mgr->Draw();
 
 	//ディスプレイ文字列描画
-	output_display::Draw();
+	output_display0.Draw();
 
 	//ディスプレイ終了処理
 	glEnd();
