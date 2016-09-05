@@ -1,26 +1,32 @@
 #include "server.h"
 
 Server::Server() :
-		client0_(io_service_, 31400), client1_(io_service_, 31401), client2_(io_service_, 31402) {
+		client0_(io_service0_, 31400), client1_(io_service1_, 31401), client2_(io_service2_, 31402) {
 	state_ = kAcceptWait;
 	//接続待機開始
 	client0_.StartAccept();
 	client1_.StartAccept();
 	client2_.StartAccept();
-	boost::thread thd(&Server::ThRun, this);
-	accept_thread_.swap(thd);
+	boost::thread thd0(&Server::ThRun, this, &io_service0_);
+	thread0_.swap(thd0);
+	boost::thread thd1(&Server::ThRun, this, &io_service1_);
+	thread1_.swap(thd1);
+	boost::thread thd2(&Server::ThRun, this, &io_service2_);
+	thread2_.swap(thd2);
 }
 
 Server::~Server() {
 	//スレッド終了まで待機
-	if (accept_thread_.joinable())
-		accept_thread_.join();
-	if (com_thread_.joinable())
-		accept_thread_.join();
+	if (thread0_.joinable())
+		thread0_.join();
+	if (thread1_.joinable())
+		thread1_.join();
+	if (thread2_.joinable())
+		thread2_.join();
 }
 
-void Server::ThRun() {
-	io_service_.run();
+void Server::ThRun(asio::io_service *io) {
+	io->run();
 }
 
 void Server::Update() {
@@ -35,8 +41,12 @@ void Server::Update() {
 		client1_.Start();
 		client2_.Start();
 		{	//クラス生成するため{}が必要
-			boost::thread thd(&Server::ThRun, this);
-			com_thread_.swap(thd);
+			boost::thread thd0(&Server::ThRun, this, &io_service0_);
+			thread0_.swap(thd0);
+			boost::thread thd1(&Server::ThRun, this, &io_service1_);
+			thread1_.swap(thd1);
+			boost::thread thd2(&Server::ThRun, this, &io_service2_);
+			thread2_.swap(thd2);
 		}
 		state_ = kCom;
 		break;
