@@ -20,12 +20,4 @@
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
-typedef struct {
-	Vector3 pos;
-} ClientData;
-
-typedef struct {
-
-} ServerData;
-
 #endif /* SUIKOMIKIBUN_NET_NET_H_ */

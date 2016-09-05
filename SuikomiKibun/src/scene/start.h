@@ -5,8 +5,11 @@
 #include "../input/input.h"
 #include "../util/output_display.h"
 #include "../network/network.h"
+#include "../net/server.h"
 
 class StartScene: public BaseScene {
+private:
+	Server server;
 public:
 	StartScene(ISceneChanger* changer, SceneParam param);
 	~StartScene();

@@ -8,13 +8,14 @@
 #include <string.h>
 
 #include "../util/uGL.h"
+#include "../gv.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
 class ComClient {
 private:
-	asio::io_service io_service_;
+	asio::io_service &io_service_;
 	tcp::acceptor acceptor_;
 	tcp::socket socket_;
 	asio::streambuf receive_buff_;	//受信バッファ
@@ -33,10 +34,11 @@ private:
 public:
 	ComClient(asio::io_service &io_service, int port);
 	void StartAccept();
-	void Start();			//返ってこないので別スレッドで呼び出し
+	void Start();
+
 	void set_send_data(ServerData send_data);
-	ClientData get_receive_data();
-	bool get_has_accepted();
+	ClientData get_receive_data() const;
+	bool get_has_accepted() const;
 };
 
 #endif

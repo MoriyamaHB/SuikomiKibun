@@ -10,23 +10,31 @@
 
 #include "../util/uGL.h"
 #include "com_client.h"
+#include "../gv.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
 class Server {
 private:
+	enum State {
+		kAcceptWait, kRun, kCom
+	};
+
 	ComClient client0_;
 	ComClient client1_;
 	ComClient client2_;
 	asio::io_service io_service_;
+	State state_;
+	boost::thread accept_thread_;
+	boost::thread com_thread_;
 
-	void ThRun(ComClient *com);
 public:
+	void ThRun();
 	Server();
-	void StartAccept();			//全体つながるまで返ってこない
-	void Run();
+	~Server();
 	void Update();
+	void Draw() const;
 };
 
 #endif /* SUIKOMIKIBUN_NET_NET_H_ */

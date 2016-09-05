@@ -12,17 +12,10 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "../util/vector3.h"
+#include "../gv.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
-
-typedef struct {
-	Vector3 pos;
-} ClientData;
-
-typedef struct {
-	Vector3 pos;
-} ServerData;
 
 class Client {
 	asio::io_service& io_service_;

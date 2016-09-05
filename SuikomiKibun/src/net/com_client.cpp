@@ -1,8 +1,8 @@
 #include "com_client.h"
 
 ComClient::ComClient(asio::io_service &io_service, int port) :
-		io_service_(io_service), acceptor_(io_service, kPort(port), asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket_(
-				io_service) {
+		io_service_(io_service), acceptor_(io_service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket_(
+				io_service), kPort(port) {
 	has_accepted_ = false;
 }
 
@@ -46,7 +46,8 @@ void ComClient::OnSend(const boost::system::error_code& error, size_t bytes_tran
 //受信
 void ComClient::Receive() {
 	asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ClientData)),
-			bind(&ComClient::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			bind(&ComClient::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 }
 
 void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
@@ -54,7 +55,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 		uErrorOut(__FILE__, __func__, __LINE__, "受信:" + error.message());
 	} else {
 		const ClientData* data = asio::buffer_cast<const ClientData*>(receive_buff_.data());
-		receive_buff_ = *data;
+		receive_data_ = *data;
 		receive_buff_.consume(receive_buff_.size());
 		Receive();
 	}
@@ -65,11 +66,11 @@ void ComClient::set_send_data(ServerData send_data) {
 	send_data_ = send_data;
 }
 
-ClientData ComClient::get_receive_data() {
+ClientData ComClient::get_receive_data() const {
 	return receive_data_;
 }
 
-bool ComClient::get_has_accepted() {
+bool ComClient::get_has_accepted() const {
 	return has_accepted_;
 }
 
