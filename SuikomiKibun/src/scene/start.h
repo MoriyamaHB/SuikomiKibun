@@ -4,6 +4,7 @@
 #include "scene_mgr.h"
 #include "../input/input.h"
 #include "../util/output_display.h"
+#include "../network/network.h"
 
 class StartScene: public BaseScene {
 public:
