@@ -3,7 +3,7 @@
 SceneMgr::SceneMgr() :
 		next_scene_(kSceneNone) //次のシーン管理変数
 {
-	scene_ = (BaseScene*) new BtDemoScene(this, scene_param_);
+	scene_ = (BaseScene*) new StartScene(this, scene_param_);
 	memset(&scene_param_, 0, sizeof(scene_param_));
 }
 
@@ -25,6 +25,7 @@ void SceneMgr::Update() {
 		default:
 			uErrorOut(__FILE__, __func__, __LINE__, "不明なシーンです、スタート画面に移行します");
 			scene_ = (BaseScene*) new StartScene(this, scene_param_);
+			break;
 		}
 		next_scene_ = kSceneNone;   //次のシーン情報をクリア
 	}

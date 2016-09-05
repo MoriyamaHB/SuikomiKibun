@@ -1,8 +1,13 @@
 #include "start.h"
 
+
 //コンストラクタ
 StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		BaseScene(changer) {
+	ClientData posdata;
+	 asio::io_service io_service;
+	    Client client(io_service,"127.0.0.1",&posdata);
+	    client.Start();
 }
 
 //デストラクタ
