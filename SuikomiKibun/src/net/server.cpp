@@ -51,16 +51,15 @@ void Server::Update() {
 		if (com_accept_num_ == 3)
 			state_ = kRun;		//すべて接続されたら次に進む
 		break;
-	case kRun:		//送受信開始
+	case kRun: {	//送受信開始
 		client0_->Start();
 		client1_->Start();
 		client2_->Start();
-		{	//クラス生成するため{}が必要
-			boost::thread thd(&Server::ThRun, this);
-			com_thread_.swap(thd);
-		}
+		boost::thread thd(&Server::ThRun, this);
+		com_thread_.swap(thd);
 		state_ = kCom;
 		break;
+	}
 	case kCom:
 		//ここで送受信データのやり取りを行う
 		break;
@@ -72,8 +71,7 @@ void Server::Update() {
 
 void Server::Draw() const {
 	switch (state_) {
-	case kAcceptWait: //接続待機中
-	{
+	case kAcceptWait: { //接続待機中
 		char string[256];
 		sprintf(string, "sever:接続を確認.送受信を開始しました.(現在%d台接続されました)", com_accept_num_);
 		output_display0.Regist(string, uColor4fv_green);
