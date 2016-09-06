@@ -102,7 +102,7 @@ void Client::OnRecive(const boost::system::error_code& error, size_t bytes_trans
 	}
 	const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
 	receive_data_ = *recive_data;
-	std::cout << "client_receive:" << kPort << ":" << recive_data->pos.x << std::endl;
+	printf("client_receive(%d):%f\n", kPort, receive_data_.pos.x);
 	receive_buff_.consume(receive_buff_.size());
 	StartReceive();
 }
