@@ -1,24 +1,18 @@
-/*
- * network.cpp
- *
- *  Created on: 2016/09/05
- *      Author: c501506069
- */
-
 #include "../network/client.h"
-
-namespace asio = boost::asio;
-using asio::ip::tcp;
 
 Client::Client(std::string ip_adress, int port) :
 		socket_(io_service_), kIpAdress(ip_adress), kPort(port) {
+	//メンバー変数初期化
+	has_conected_ = false;
+	//接続を登録
 	Connect();
+	//接続を別スレッドで実行
 	boost::thread thd(&Client::ThRun, this);
 	conect_thread_.swap(thd);
-	has_conected_ = false;
 }
 
 Client::~Client() {
+	//io_serviceを止める
 	io_service_.stop();
 	//スレッド終了まで待機
 	if (conect_thread_.joinable())
@@ -29,48 +23,77 @@ Client::~Client() {
 
 void Client::Update() {
 	switch (state_) {
-	case kConectWait:
+	case kConnectWait: //未接続
+		//接続済みなら送受信開始
 		if (has_conected_)
 			state_ = kRun;
 		break;
-	case kRun: {
+	case kRun: { //送受信開始
+		//送受信登録
 		Send();
 		StartReceive();
-		state_ = kCom;
+		//別スレッドで実行
 		boost::thread thd(&Client::ThRun, this);
 		run_thread_.swap(thd);
+		//送受信中状態に移行
+		state_ = kCom;
 		break;
 	}
-	case kCom: {
+	case kCom: //送受信中
+		//ここでデータを書き換え
 		break;
-	}
+	default:
+		uErrorOut(__FILE__, __func__, __LINE__, "不明なcaseです");
+		break;
 	}
 }
+
 void Client::Draw() {
-
-}
-void Client::Connect() {
-	socket_.async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), kPort),
-			boost::bind(&Client::OnConnect, this, asio::placeholders::error));
-}
-
-void Client::OnConnect(const boost::system::error_code& error) {
-	if (error) {
-		std::cout << "Connect failed :" << error.message() << std::endl;
-		return;
+	switch (state_) {
+	case kConnectWait: { //未接続
+		char string[256];
+		sprintf(string, "client:サーバーと接続中です");
+		output_display0.Regist(string, uColor4fv_maroon);
+		break;
 	}
-	has_conected_ = true;
+	case kRun: //送受信開始
+		output_display0.Regist("client:接続を確認.送受信を開始.", uColor4fv_maroon, 60);
+		break;
+	case kCom: //送受信中
+		output_display0.Regist("client:送受信中です", uColor4fv_maroon);
+		break;
+	default:
+		uErrorOut(__FILE__, __func__, __LINE__, "不明なcaseです");
+		break;
+	}
 }
 
+//io_serviceを実行する(別スレッドで呼び出し用)
 void Client::ThRun() {
 	io_service_.run();
 	io_service_.reset();
 }
 
+//接続
+void Client::Connect() {
+	socket_.async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), kPort),
+			boost::bind(&Client::OnConnect, this, asio::placeholders::error));
+}
+
+//接続完了
+void Client::OnConnect(const boost::system::error_code& error) {
+	if (error) {
+		uErrorOut(__FILE__, __func__, __LINE__, "接続受信失敗:" + error.message());
+		return;
+	}
+	has_conected_ = true;
+}
+
 //クライアント情報送信
 void Client::Send() {
 	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ClientData)),
-			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnSend, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 }
 
 //送信完了
@@ -78,7 +101,7 @@ void Client::Send() {
 // bytes_tranferred: 送信したバイト数
 void Client::OnSend(const boost::system::error_code &error, size_t bytes_transferred) {
 	if (error) {
-		std::cout << "send failed:" << error.message() << std::endl;
+		uErrorOut(__FILE__, __func__, __LINE__, "送信失敗:" + error.message());
 		return;
 	}
 
@@ -95,10 +118,9 @@ void Client::StartReceive() {
 // 受信完了
 // error : エラー情報
 // bytes_transferred : 受信したバイト数
-
 void Client::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
 	if (error && error != boost::asio::error::eof) {
-		std::cout << "receive failed:" << error.message() << std::endl;
+		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
 		return;
 	}
 	const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());

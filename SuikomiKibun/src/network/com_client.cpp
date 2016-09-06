@@ -4,6 +4,7 @@ ComClient::ComClient(asio::io_service &io_service, int port) :
 		io_service_(io_service), acceptor_(io_service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket_(
 				io_service), kPort(port) {
 	has_accepted_ = false;
+	StartAccept(); //接続待機開始
 }
 
 //接続
@@ -15,7 +16,7 @@ void ComClient::OnAccept(const boost::system::error_code& error) {
 	if (error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "接続受信失敗:" + error.message());
 		return;
-	} else
+	}
 		has_accepted_ = true;
 }
 
@@ -52,14 +53,14 @@ void ComClient::Receive() {
 
 void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
 	if (error && error != asio::error::eof) {
-		uErrorOut(__FILE__, __func__, __LINE__, "受信:" + error.message());
-	} else {
-		const ClientData* data = asio::buffer_cast<const ClientData*>(receive_buff_.data());
-		receive_data_ = *data;
-		printf("server_receive(%d):%f\n", kPort, receive_data_.pos.x);
-		receive_buff_.consume(receive_buff_.size());
-		Receive();
+		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
+		return;
 	}
+	const ClientData* data = asio::buffer_cast<const ClientData*>(receive_buff_.data());
+	receive_data_ = *data;
+	printf("server_receive(%d):%f\n", kPort, receive_data_.pos.x);
+	receive_buff_.consume(receive_buff_.size());
+	Receive();
 }
 
 //getter,setter
