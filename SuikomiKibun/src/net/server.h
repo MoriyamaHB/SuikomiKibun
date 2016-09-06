@@ -30,8 +30,8 @@ private:
 	boost::thread com_thread_;
 	int com_accept_num_; //接続数
 
-public:
 	void ThRun();
+public:
 	Server();
 	~Server();
 	void Update();

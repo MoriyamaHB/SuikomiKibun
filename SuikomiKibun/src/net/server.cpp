@@ -17,12 +17,12 @@ Server::Server() {
 }
 
 Server::~Server() {
+	//io_service終了処理
+	io_service_.stop();
 	//クライアント削除
 	delete client0_;
 	delete client1_;
 	delete client2_;
-	//io_service終了処理
-	io_service_.stop();
 	//スレッド終了まで待機
 	if (accept_thread_.joinable())
 		accept_thread_.join();

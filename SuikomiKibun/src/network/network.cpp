@@ -10,14 +10,45 @@
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
-Client::Client(asio::io_service& io_service, std::string ip_adress, ClientData *send_data) :
-		io_service_(io_service), socket_(io_service), kIpAdress(ip_adress), send_data_(send_data) {
-}
-
-void Client::Start() {
+Client::Client(std::string ip_adress) :
+		socket_(io_service_), kIpAdress(ip_adress) {
 	Connect();
+	boost::thread thd(&Client::ThRun, this);
+	conect_thread_.swap(thd);
+	has_conected_ = false;
 }
 
+Client::~Client() {
+	io_service_.stop();
+	//スレッド終了まで待機
+	if (conect_thread_.joinable())
+		conect_thread_.join();
+	if (run_thread_.joinable())
+		run_thread_.join();
+}
+
+void Client::Update() {
+	switch (state_) {
+	case kConectWait:
+		if (has_conected_)
+			state_ = kRun;
+		break;
+	case kRun: {
+		Send();
+		StartReceive();
+		state_ = kCom;
+		boost::thread thd(&Client::ThRun, this);
+		run_thread_.swap(thd);
+		break;
+	}
+	case kCom: {
+		break;
+	}
+	}
+}
+void Client::Draw() {
+
+}
 void Client::Connect() {
 	socket_.async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), 31400),
 			boost::bind(&Client::OnConnect, this, asio::placeholders::error));
@@ -28,13 +59,17 @@ void Client::OnConnect(const boost::system::error_code& error) {
 		std::cout << "Connect failed :" << error.message() << std::endl;
 		return;
 	}
-	Send();
-	StartRecive();
+	has_conected_ = true;
+}
+
+void Client::ThRun() {
+	io_service_.run();
+	io_service_.reset();
 }
 
 //クライアント情報送信
 void Client::Send() {
-	asio::async_write(socket_, asio::buffer(send_data_, sizeof(ClientData)),
+	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ClientData)),
 			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
@@ -50,8 +85,8 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 }
 
 //サーバー情報受信
-void Client::StartRecive() {
-	boost::asio::async_read(socket_, receive_buff_,asio::transfer_exactly(sizeof(ServerData)) ,
+void Client::StartReceive() {
+	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ServerData)),
 			boost::bind(&Client::OnRecive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
@@ -63,8 +98,7 @@ void Client::OnRecive(const boost::system::error_code& error, size_t bytes_trans
 	if (error && error != boost::asio::error::eof) {
 		std::cout << "receive failed:" << error.message() << std::endl;
 
-	}
-	else{
+	} else {
 		const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
 		std::cout << recive_data->pos.x << std::endl;
 		receive_buff_.consume(receive_buff_.size());
