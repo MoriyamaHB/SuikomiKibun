@@ -21,11 +21,10 @@ private:
 		kAcceptWait, kRun, kCom
 	};
 
-	//コンストラクタの関係上必ずio_service→clientの順番で定義しないとコアダンプする
 	asio::io_service io_service_;
-	ComClient client0_;
-	ComClient client1_;
-	ComClient client2_;
+	ComClient *client0_;
+	ComClient *client1_;
+	ComClient *client2_;
 	State state_;
 	boost::thread accept_thread_;
 	boost::thread com_thread_;

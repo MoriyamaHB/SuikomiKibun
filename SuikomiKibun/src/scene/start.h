@@ -9,7 +9,7 @@
 
 class StartScene: public BaseScene {
 private:
-	Server server;
+	Server *server;
 public:
 	StartScene(ISceneChanger* changer, SceneParam param);
 	~StartScene();
