@@ -28,5 +28,9 @@
 *.out
 *.app
 
-Debug/
-.settings/
+Debug
+.setting
+.settings
+libboost_*
+core
+.gitignore~

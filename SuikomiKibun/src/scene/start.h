@@ -3,9 +3,16 @@
 
 #include "scene_mgr.h"
 #include "../input/input.h"
+#include "../network/client.h"
+#include "../network/server.h"
 #include "../util/output_display.h"
 
 class StartScene: public BaseScene {
+private:
+	Server *server;
+	Client *client;
+	Client *client1;
+	Client *client2;
 public:
 	StartScene(ISceneChanger* changer, SceneParam param);
 	~StartScene();

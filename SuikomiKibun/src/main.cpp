@@ -10,6 +10,9 @@
 #include "scene/scene_mgr.h"
 #include "gv.h"
 
+//グローバルな定義
+OutputDisplay output_display0("font/hui.ttf", 0, 20, 24);
+
 void DisplayFunc(void);
 void Resize(int w, int h);
 void Timer(int value);
