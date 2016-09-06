@@ -21,16 +21,20 @@ private:
 		kAcceptWait, kRun, kCom
 	};
 
-	asio::io_service io_service_;
+	asio::io_service io_service0_;
+	asio::io_service io_service1_;
+	asio::io_service io_service2_;
+
 	ComClient *client0_;
 	ComClient *client1_;
 	ComClient *client2_;
 	State state_;
-	boost::thread accept_thread_;
-	boost::thread com_thread_;
+	boost::thread thread0_;
+	boost::thread thread1_;
+	boost::thread thread2_;
 	int com_accept_num_; //接続数
 
-	void ThRun();
+	void ThRun(asio::io_service *io);
 public:
 	Server();
 	~Server();

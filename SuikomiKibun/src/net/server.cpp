@@ -3,35 +3,44 @@
 Server::Server() {
 	state_ = kAcceptWait;
 	//クライアント作成
-	client0_ = new ComClient(io_service_, 31470);
-	client1_ = new ComClient(io_service_, 31471);
-	client2_ = new ComClient(io_service_, 31472);
+	client0_ = new ComClient(io_service0_, 31470);
+	client1_ = new ComClient(io_service1_, 31471);
+	client2_ = new ComClient(io_service2_, 31472);
 	//接続待機開始
 	client0_->StartAccept();
 	client1_->StartAccept();
 	client2_->StartAccept();
-	boost::thread thd(&Server::ThRun, this);
-	accept_thread_.swap(thd);
+	boost::thread thd0(&Server::ThRun, this, &io_service0_);
+	thread0_.swap(thd0);
+	boost::thread thd1(&Server::ThRun, this, &io_service1_);
+	thread1_.swap(thd1);
+	boost::thread thd2(&Server::ThRun, this, &io_service2_);
+	thread2_.swap(thd2);
 	//その他
 	com_accept_num_ = 0;
 }
 
 Server::~Server() {
 	//io_service終了処理
-	io_service_.stop();
+	io_service0_.stop();
+	io_service1_.stop();
+	io_service2_.stop();
 	//クライアント削除
 	delete client0_;
 	delete client1_;
 	delete client2_;
 	//スレッド終了まで待機
-	if (accept_thread_.joinable())
-		accept_thread_.join();
-	if (com_thread_.joinable())
-		com_thread_.join();
+	if (thread0_.joinable())
+		thread0_.join();
+	if (thread1_.joinable())
+		thread1_.join();
+	if (thread2_.joinable())
+		thread2_.join();
 }
 
-void Server::ThRun() {
-	io_service_.run();
+void Server::ThRun(asio::io_service *io) {
+	io->run();
+	io->reset();
 }
 
 void Server::Update() {
@@ -52,12 +61,15 @@ void Server::Update() {
 			state_ = kRun;		//すべて接続されたら次に進む
 		break;
 	case kRun: {	//送受信開始
-		io_service_.reset();
 		client0_->Start();
 		client1_->Start();
 		client2_->Start();
-		boost::thread thd(&Server::ThRun, this);
-		com_thread_.swap(thd);
+		boost::thread thd0(&Server::ThRun, this, &io_service0_);
+		thread0_.swap(thd0);
+		boost::thread thd1(&Server::ThRun, this, &io_service1_);
+		thread1_.swap(thd1);
+		boost::thread thd2(&Server::ThRun, this, &io_service2_);
+		thread2_.swap(thd2);
 		state_ = kCom;
 		break;
 	}
