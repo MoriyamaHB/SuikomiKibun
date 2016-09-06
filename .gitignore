@@ -30,3 +30,7 @@
 
 Debug
 .setting
+.settings
+libboost_*
+core
+.gitignore~
