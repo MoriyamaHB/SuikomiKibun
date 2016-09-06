@@ -9,8 +9,8 @@
 #include <time.h>
 
 #include "../util/uGL.h"
-#include "com_client.h"
 #include "../gv.h"
+#include "../network/com_client.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;

@@ -14,8 +14,8 @@
 #include <iostream>
 #include <string.h>
 
+#include "../network/server.h"
 #include "../util/uGL.h"
-#include "server.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;

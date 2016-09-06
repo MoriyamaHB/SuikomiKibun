@@ -1,4 +1,4 @@
-#include "com_client.h"
+#include "../network/com_client.h"
 
 ComClient::ComClient(asio::io_service &io_service, int port) :
 		io_service_(io_service), acceptor_(io_service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket_(

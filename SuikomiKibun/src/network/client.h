@@ -48,7 +48,7 @@ private:
 	void Send();
 	void OnSend(const boost::system::error_code& error, size_t bytes_transferred);
 	void StartReceive();
-	void OnRecive(const boost::system::error_code& error, size_t bytes_transferred);
+	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void ThRun();
 };
 

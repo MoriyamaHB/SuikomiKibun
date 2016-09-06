@@ -5,7 +5,7 @@
  *      Author: c501506069
  */
 
-#include "network.h"
+#include "../network/client.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
@@ -88,14 +88,15 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 //サーバー情報受信
 void Client::StartReceive() {
 	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ServerData)),
-			boost::bind(&Client::OnRecive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 }
 
 // 受信完了
 // error : エラー情報
 // bytes_transferred : 受信したバイト数
 
-void Client::OnRecive(const boost::system::error_code& error, size_t bytes_transferred) {
+void Client::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
 	if (error && error != boost::asio::error::eof) {
 		std::cout << "receive failed:" << error.message() << std::endl;
 		return;
