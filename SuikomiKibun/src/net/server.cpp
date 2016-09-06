@@ -32,7 +32,6 @@ Server::~Server() {
 
 void Server::ThRun() {
 	io_service_.run();
-	io_service_.reset();
 }
 
 void Server::Update() {
@@ -53,6 +52,7 @@ void Server::Update() {
 			state_ = kRun;		//すべて接続されたら次に進む
 		break;
 	case kRun: {	//送受信開始
+		io_service_.reset();
 		client0_->Start();
 		client1_->Start();
 		client2_->Start();
