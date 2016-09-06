@@ -21,19 +21,16 @@ private:
 		kAcceptWait, kRun, kCom
 	};
 
+	asio::io_service io_service_;
 	ComClient client0_;
 	ComClient client1_;
 	ComClient client2_;
-	asio::io_service io_service0_;
-	asio::io_service io_service1_;
-	asio::io_service io_service2_;
 	State state_;
-	boost::thread thread0_;
-	boost::thread thread1_;
-	boost::thread thread2_;
+	boost::thread accept_thread_;
+	boost::thread com_thread_;
 
 public:
-	void ThRun(asio::io_service *io);
+	void ThRun();
 	Server();
 	~Server();
 	void Update();
