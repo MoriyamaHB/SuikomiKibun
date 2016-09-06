@@ -21,7 +21,7 @@ void ComClient::OnAccept(const boost::system::error_code& error) {
 
 //送受信スタート
 void ComClient::Start() {
-	if (has_accepted_) {
+	if (!has_accepted_) {
 		uErrorOut(__FILE__, __func__, __LINE__, "まだ接続されていません");
 		return;
 	}
@@ -46,8 +46,7 @@ void ComClient::OnSend(const boost::system::error_code& error, size_t bytes_tran
 //受信
 void ComClient::Receive() {
 	asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ClientData)),
-			bind(&ComClient::OnReceive, this, asio::placeholders::error,
-					asio::placeholders::bytes_transferred));
+			bind(&ComClient::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
 void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
@@ -56,6 +55,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	} else {
 		const ClientData* data = asio::buffer_cast<const ClientData*>(receive_buff_.data());
 		receive_data_ = *data;
+		std::cout << "server_receive:" << kPort << ":" << data->pos.x << std::endl;
 		receive_buff_.consume(receive_buff_.size());
 		Receive();
 	}

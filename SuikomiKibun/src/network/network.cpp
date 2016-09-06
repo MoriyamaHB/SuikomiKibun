@@ -79,9 +79,10 @@ void Client::Send() {
 void Client::OnSend(const boost::system::error_code &error, size_t bytes_transferred) {
 	if (error) {
 		std::cout << "send failed:" << error.message() << std::endl;
-	} else {
-		std::cout << "send correct!" << std::endl;
+		return;
 	}
+
+	Send();
 }
 
 //サーバー情報受信
@@ -97,10 +98,11 @@ void Client::StartReceive() {
 void Client::OnRecive(const boost::system::error_code& error, size_t bytes_transferred) {
 	if (error && error != boost::asio::error::eof) {
 		std::cout << "receive failed:" << error.message() << std::endl;
-
-	} else {
-		const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
-		std::cout << recive_data->pos.x << std::endl;
-		receive_buff_.consume(receive_buff_.size());
+		return;
 	}
+	const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
+	receive_data_ = *recive_data;
+	std::cout << "client_receive:" << kPort << ":" << recive_data->pos.x << std::endl;
+	receive_buff_.consume(receive_buff_.size());
+	StartReceive();
 }
