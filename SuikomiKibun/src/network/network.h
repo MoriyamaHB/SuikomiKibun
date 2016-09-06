@@ -24,6 +24,7 @@ private:
 	asio::streambuf receive_buff_;
 	tcp::socket socket_;
 	const std::string kIpAdress; //サーバーのIPアドレス
+	const int kPort; //ポート番号
 	ClientData send_data_;
 	ServerData receive_data_;
 	boost::thread conect_thread_;
@@ -35,7 +36,7 @@ private:
 	State state_;
 
 public:
-	Client(std::string ip_adress);
+	Client(std::string ip_adress, int port);
 	~Client();
 	void Update();
 	void Draw();

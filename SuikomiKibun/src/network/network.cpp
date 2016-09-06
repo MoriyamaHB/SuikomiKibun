@@ -10,8 +10,8 @@
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
-Client::Client(std::string ip_adress) :
-		socket_(io_service_), kIpAdress(ip_adress) {
+Client::Client(std::string ip_adress, int port) :
+		socket_(io_service_), kIpAdress(ip_adress), kPort(port) {
 	Connect();
 	boost::thread thd(&Client::ThRun, this);
 	conect_thread_.swap(thd);
@@ -50,7 +50,7 @@ void Client::Draw() {
 
 }
 void Client::Connect() {
-	socket_.async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), 31400),
+	socket_.async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), kPort),
 			boost::bind(&Client::OnConnect, this, asio::placeholders::error));
 }
 

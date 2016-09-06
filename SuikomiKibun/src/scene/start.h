@@ -10,6 +10,9 @@
 class StartScene: public BaseScene {
 private:
 	Server *server;
+	Client *client;
+	Client *client1;
+	Client *client2;
 public:
 	StartScene(ISceneChanger* changer, SceneParam param);
 	~StartScene();
