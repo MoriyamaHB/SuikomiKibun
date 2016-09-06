@@ -1,7 +1,7 @@
 #include "server.h"
 
 Server::Server() :
-		client0_(io_service_, 31410), client1_(io_service_, 31411), client2_(io_service_, 31412) {
+		client0_(io_service_, 31430), client1_(io_service_, 31431), client2_(io_service_, 31432) {
 	state_ = kAcceptWait;
 	//接続待機開始
 	client0_.StartAccept();
@@ -26,9 +26,19 @@ void Server::ThRun() {
 void Server::Update() {
 	switch (state_) {
 	case kAcceptWait: 	//接続待機中
-		//すべて接続されたら次に進む
-		if (client0_.get_has_accepted() && client1_.get_has_accepted() && client2_.get_has_accepted())
-			state_ = kRun;
+		//残り接続数をカウント
+		com_accept_num_ = 0;
+		if (client0_.get_has_accepted()) {
+			com_accept_num_++;
+		}
+		if (client1_.get_has_accepted()) {
+			com_accept_num_++;
+		}
+		if (client2_.get_has_accepted()) {
+			com_accept_num_++;
+		}
+		if (com_accept_num_ == 3)
+			state_ = kRun;		//すべて接続されたら次に進む
 		break;
 	case kRun:		//送受信開始
 		client0_.Start();
@@ -52,10 +62,14 @@ void Server::Update() {
 void Server::Draw() const {
 	switch (state_) {
 	case kAcceptWait: //接続待機中
-		output_display0.Regist("sever:接続待機中です", uColor4fv_green);
+	{
+		char string[256];
+		sprintf(string, "sever:接続を確認.送受信を開始しました.(現在%d台接続されました)", com_accept_num_);
+		output_display0.Regist(string, uColor4fv_green);
 		break;
+	}
 	case kRun:
-		output_display0.Regist("sever:接続を確認.送受信を開始しました.", uColor4fv_green, 180);
+		output_display0.Regist("sever:接続開始", uColor4fv_green, 60);
 		break;
 	case kCom:
 		output_display0.Regist("sever:送受信中です", uColor4fv_green);

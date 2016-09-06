@@ -5,7 +5,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <time.h>
 
 #include "../util/uGL.h"
@@ -21,6 +21,7 @@ private:
 		kAcceptWait, kRun, kCom
 	};
 
+	//コンストラクタの関係上必ずio_service→clientの順番で定義しないとコアダンプする
 	asio::io_service io_service_;
 	ComClient client0_;
 	ComClient client1_;
@@ -28,6 +29,7 @@ private:
 	State state_;
 	boost::thread accept_thread_;
 	boost::thread com_thread_;
+	int com_accept_num_; //接続数
 
 public:
 	void ThRun();
