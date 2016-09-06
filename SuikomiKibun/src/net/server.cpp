@@ -32,6 +32,7 @@ Server::~Server() {
 
 void Server::ThRun() {
 	io_service_.run();
+	io_service_.reset();
 }
 
 void Server::Update() {
