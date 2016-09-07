@@ -1,4 +1,4 @@
-#include "../network/server.h"
+#include "server.h"
 
 Server::Server() {
 	//状態初期化
@@ -75,9 +75,14 @@ void Server::Update() {
 		state_ = kCom;
 		break;
 	}
-	case kCom:	//送受信中
+	case kCom: {	//送受信中
 		//ここで送受信データのやり取りを行う
+		ServerData data;
+		static int i;
+		data.pos.x = i++;
+		client1_->set_send_data(data);
 		break;
+	}
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なcaseです");
 		break;
