@@ -37,7 +37,6 @@ void FirstInit(int argc, char *argv[]) {
 
 	//openglコールバック関数
 	glutReshapeFunc(Resize);
-	glutTimerFunc(100, Timer, 0);
 	glutDisplayFunc(DisplayFunc);
 	glutKeyboardFunc(input::CheckPushKey);
 	glutKeyboardUpFunc(input::CheckUpkey);
@@ -48,11 +47,11 @@ void FirstInit(int argc, char *argv[]) {
 	glutMotionFunc(input::CheckMouseMotion);
 
 	//その他openGLの設定
-	glutIgnoreKeyRepeat(GL_TRUE); //繰り返しのキー入力を無視する
+	glutIgnoreKeyRepeat (GL_TRUE); //繰り返しのキー入力を無視する
 	glClearColor(uColor4fv_sky_brue[0], uColor4fv_sky_brue[1], uColor4fv_sky_brue[2], uColor4fv_sky_brue[3]); //塗りつぶし色を空色に設定
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	glEnable (GL_DEPTH_TEST);
+	glEnable (GL_LIGHTING);
+	glEnable (GL_LIGHT0);
 
 	//alutの初期化
 	alutInit(&argc, argv);
@@ -61,6 +60,10 @@ void FirstInit(int argc, char *argv[]) {
 	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
 	fps.Init(); 				//fps初期化
 	output_display0.Init(); 	//ディスプレイ文字列初期化
+	input::Init();				//入力初期化
+
+	//タイマー関数を設定
+	glutTimerFunc(100, Timer, 0);
 }
 
 //ゲーム終了時に行う処理
@@ -81,12 +84,12 @@ void Resize(int w, int h) {
 	glViewport(0, 0, w, h); //ウィンドウ全体をビューポートにする
 
 	//透視変換行列設定
-	glMatrixMode(GL_PROJECTION);
+	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity(); //透視変換行列の初期化
 	gluPerspective(75.0, (double) w / (double) h, 0.1, 200.0);
 
 	//モデルビュー変換行列の指定
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode (GL_MODELVIEW);
 }
 
 //OpenGLコールバック関数
@@ -101,7 +104,7 @@ void Timer(int value) {
 void DisplayFunc(void) {
 	//ディスプレイ初期化
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //画面の初期化
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity(); //モデルビュー変換行列の初期化
 
 	//入力更新
@@ -126,7 +129,6 @@ void DisplayFunc(void) {
 	if (input::get_keyboard_frame('\033') == 1) //Escを押すと
 		glutLeaveMainLoop(); //メインループを抜ける
 }
-
 
 //メイン
 int main(int argc, char *argv[]) {

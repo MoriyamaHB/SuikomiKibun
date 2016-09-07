@@ -14,6 +14,8 @@ unsigned int enter;
 unsigned int enter_frame;
 unsigned int space;
 unsigned int space_frame;
+
+bool is_enabled_mouse_motion; //マウスの移動量取得(マウスをセンターに戻す)を有効にしたか
 }
 
 //キーボードの入力フレーム数を返す
@@ -113,6 +115,12 @@ int mouse_left_button_frame = 0;
 //前回の呼び出しからのマウス移動量を返します
 namespace input {
 void TakeMouseMotionAndInit(int *dx, int *dy) {
+	if (!is_enabled_mouse_motion) {
+		uErrorOut(__FILE__, __func__, __LINE__, "マウス移動量取得が無効になっています");
+		*dx = 0;
+		*dy = 0;
+		return;
+	}
 	*dx = mouse_dx;
 	*dy = mouse_dy;
 	mouse_dx = mouse_dy = 0;
@@ -138,10 +146,30 @@ void CheckMouse(int button, int state, int x, int y) {
 }
 }
 
+//マウス移動量取得の設定
+namespace input {
+void set_is_enabled_mouse_motion(bool boo) {
+	if (is_enabled_mouse_motion != boo) { //設定を変更するとき
+		//boolを書き換え
+		is_enabled_mouse_motion = boo;
+		if (is_enabled_mouse_motion == true) {		//有効にするとき
+			//変数を初期化,マウスをセンターに移動
+			mouse_dx = 0;
+			mouse_dy = 0;
+			int ww = glutGet(GLUT_WINDOW_WIDTH);
+			int wh = glutGet(GLUT_WINDOW_HEIGHT);
+			glutWarpPointer(ww / 2, wh / 2);
+		}
+	}
+}
+}
+
 //OpenGLコールバック関数
 //ボタンを押している時 & 押していない時の両方で呼び出されます
 namespace input {
 void CheckMouseMotion(int x, int y) {
+	if (!is_enabled_mouse_motion)
+		return;
 	static int wrap_flag = 0;
 
 	if (!wrap_flag) {
@@ -210,5 +238,6 @@ void Init() {
 	mouse_dy = 0;
 	is_down_mouse_left_button = false;
 	mouse_left_button_frame = 0;
+	is_enabled_mouse_motion = false;
 }
 }
