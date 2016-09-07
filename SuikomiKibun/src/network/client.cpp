@@ -4,6 +4,9 @@ Client::Client(std::string ip_adress, int port) :
 		socket_(io_service_), kIpAdress(ip_adress), kPort(port) {
 	//メンバー変数初期化
 	has_conected_ = false;
+	state_ = kConnectWait;
+	memset(&send_data_, 0, sizeof(send_data_));
+	memset(&receive_data_, 0, sizeof(receive_data_));
 	//接続を登録
 	Connect();
 	//接続を別スレッドで実行
@@ -92,8 +95,7 @@ void Client::OnConnect(const boost::system::error_code& error) {
 //クライアント情報送信
 void Client::Send() {
 	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ClientData)),
-			boost::bind(&Client::OnSend, this, asio::placeholders::error,
-					asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
 //送信完了
@@ -111,8 +113,7 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 //サーバー情報受信
 void Client::StartReceive() {
 	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ServerData)),
-			boost::bind(&Client::OnReceive, this, asio::placeholders::error,
-					asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
 // 受信完了

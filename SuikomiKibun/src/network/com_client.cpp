@@ -3,6 +3,9 @@
 ComClient::ComClient(asio::io_service &io_service, int port) :
 		io_service_(io_service), acceptor_(io_service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket_(
 				io_service), kPort(port) {
+	//メンバー変数初期化
+	memset(&send_data_, 0, sizeof(send_data_));
+	memset(&receive_data_, 0, sizeof(receive_data_));
 	has_accepted_ = false;
 	StartAccept(); //接続待機開始
 }
@@ -17,7 +20,7 @@ void ComClient::OnAccept(const boost::system::error_code& error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "接続受信失敗:" + error.message());
 		return;
 	}
-		has_accepted_ = true;
+	has_accepted_ = true;
 }
 
 //送受信スタート
@@ -47,8 +50,7 @@ void ComClient::OnSend(const boost::system::error_code& error, size_t bytes_tran
 //受信
 void ComClient::Receive() {
 	asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ClientData)),
-			bind(&ComClient::OnReceive, this, asio::placeholders::error,
-					asio::placeholders::bytes_transferred));
+			bind(&ComClient::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
 void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
