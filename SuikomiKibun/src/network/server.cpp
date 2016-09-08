@@ -81,9 +81,9 @@ void Server::Update() {
 void Server::Draw() const {
 	switch (state_) {
 	case kAcceptWait: { //接続待機中
-		char string[256];
-		sprintf(string, "sever:接続待機を待機中(現在%d/%d台接続されました)", com_accept_num_, kClientNum);
-		output_display0.Regist(string, uColor4fv_green);
+		output_display0.Regist(
+				"sever:接続待機を待機中(現在" + uToStr(com_accept_num_) + "/" + uToStr(kClientNum) + "台接続されました)",
+				uColor4fv_green);
 		break;
 	}
 	case kRun: //送受信開始

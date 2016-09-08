@@ -9,11 +9,13 @@
 #include <utility>
 #include <stdarg.h>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include "../util/vector3.h"
 
 #define uPI 3.1415926
+
 
 //色(4fv)
 extern const float uColor4fv_brack[];
@@ -39,6 +41,13 @@ extern const float uMaterial4fv_brown[];
 
 //エラー出力
 extern void uErrorOut(const std::string file, const std::string func, int line, const std::string message);
+
+//数値をstd::stringに変換
+template<typename T> std::string uToStr(const T& t) {
+	std::ostringstream os;
+	os << t;
+	return os.str();
+}
 
 //OpenGL用の強制終了関数(エラー時用)
 extern void uExit();

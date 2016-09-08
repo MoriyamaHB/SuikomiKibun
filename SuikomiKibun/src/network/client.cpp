@@ -54,9 +54,7 @@ void Client::Update() {
 void Client::Draw() {
 	switch (state_) {
 	case kConnectWait: { //未接続
-		char string[256];
-		sprintf(string, "client:サーバーと接続中です");
-		output_display0.Regist(string, uColor4fv_maroon);
+		output_display0.Regist("client:サーバーと接続中です", uColor4fv_maroon);
 		break;
 	}
 	case kRun: //送受信開始

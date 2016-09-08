@@ -1,6 +1,9 @@
 #ifndef SUIKOMIKIBUN_UTIL_FPS_H_
 #define SUIKOMIKIBUN_UTIL_FPS_H_
 
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <string.h>
 #include "output_display.h"
 #include "uGL.h"

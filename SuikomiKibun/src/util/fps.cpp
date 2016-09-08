@@ -35,9 +35,9 @@ void Fps::Update() {
 
 //OutputDisplayにfps情報を登録します
 void Fps::Draw(OutputDisplay *output) const {
-	char string[256];
-	sprintf(string, "fps:%.2f", fps_);
-	output->Regist(string, color_);
+	std::stringstream string;
+	string << "fps:" << std::fixed << std::setprecision(2) << fps_;
+	output->Regist(string.str(), color_);
 }
 
 //x0,y0の位置に計測したfpsの描画を登録します

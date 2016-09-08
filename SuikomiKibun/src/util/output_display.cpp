@@ -32,7 +32,7 @@ void OutputDisplay::Init() {
 }
 
 //画面出力文字の登録
-void OutputDisplay::Regist(const char str[], const float color[], int life) {
+void OutputDisplay::Regist(const std::string string, const float color[], int life) {
 	int n = SerchEmptyItem();
 	if (n == -1) { //満杯なら
 		uErrorOut(__FILE__, __func__, __LINE__, "出力文字は満杯です");
@@ -40,7 +40,7 @@ void OutputDisplay::Regist(const char str[], const float color[], int life) {
 	}
 
 	//項目に登録する
-	strcpy(item_[n].str, str);
+	item_[n].string = string;
 	for (int i = 0; i < 4; i++)
 		item_[n].color[i] = color[i];
 	item_[n].life = life;
@@ -58,7 +58,7 @@ void OutputDisplay::Draw() {
 				glColor4fv(item_[i].color);
 				glRasterPos2f(x0_, y0_ + (font_size_ + line_space_) * dn);
 				if (!font_.Error())
-					font_.Render(item_[i].str);
+					font_.Render(item_[i].string.c_str());
 				dn++;
 			}
 			//削除処理
