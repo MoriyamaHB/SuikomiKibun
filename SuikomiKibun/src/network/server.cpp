@@ -65,11 +65,6 @@ void Server::Update() {
 		break;
 	}
 	case kCom: {	//送受信中
-		//ここで送受信データのやり取りを行う
-		ServerData data;
-		static int i;
-		data.pos.x = i++;
-		client_[0]->set_send_data(data);
 		break;
 	}
 	default:
@@ -96,4 +91,16 @@ void Server::Draw() const {
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なcaseです");
 		break;
 	}
+}
+
+void Server::SetSendData(const ServerData &send_data, int n) {
+	if (n < 0 || n >= kClientNum)
+		uErrorOut(__FILE__, __func__, __LINE__, "範囲外");
+	client_[n]->set_send_data(send_data);
+}
+
+ClientData Server::GetReceiveData(int n) const {
+	if (n < 0 || n >= kClientNum)
+		uErrorOut(__FILE__, __func__, __LINE__, "範囲外");
+	return client_[n]->get_receive_data();
 }

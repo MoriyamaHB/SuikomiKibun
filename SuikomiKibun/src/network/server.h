@@ -42,6 +42,9 @@ public:
 	~Server();
 	void Update();
 	void Draw() const;
+
+	void SetSendData(const ServerData &send_data, int n);
+	ClientData GetReceiveData(int n) const;
 };
 
 #endif /* SUIKOMIKIBUN_NET_NET_H_ */

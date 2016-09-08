@@ -43,7 +43,6 @@ void Client::Update() {
 		break;
 	}
 	case kCom: //送受信中
-		//ここでデータを書き換え
 		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なcaseです");
@@ -127,4 +126,12 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 	printf("client_receive(%d):%f\n", kPort, receive_data_.pos.x);
 	receive_buff_.consume(receive_buff_.size());
 	StartReceive();
+}
+
+void Client::set_send_data(const ClientData& send_data) {
+	send_data_ = send_data;
+}
+
+ServerData Client::get_receive_data() const {
+	return receive_data_;
 }

@@ -59,6 +59,8 @@ public:
 	void Update();
 	void Draw();
 
+	void set_send_data(const ClientData &send_data);
+	ServerData get_receive_data() const;
 };
 
 #endif

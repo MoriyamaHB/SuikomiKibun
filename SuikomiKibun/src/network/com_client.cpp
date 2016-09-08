@@ -66,7 +66,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 }
 
 //getter,setter
-void ComClient::set_send_data(ServerData send_data) {
+void ComClient::set_send_data(const ServerData& send_data) {
 	send_data_ = send_data;
 }
 

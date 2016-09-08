@@ -40,7 +40,7 @@ public:
 	ComClient(asio::io_service &io_service, int port);
 	void Start();	//送受信スタート
 
-	void set_send_data(ServerData send_data);
+	void set_send_data(const ServerData &send_data);
 	ClientData get_receive_data() const;
 	bool get_has_accepted() const;
 };
