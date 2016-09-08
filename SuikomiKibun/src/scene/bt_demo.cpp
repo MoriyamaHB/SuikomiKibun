@@ -3,6 +3,9 @@
 //コンストラクタ
 BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 		BaseScene(changer) {
+	//input初期化
+	input::Init();
+	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
 
 	//衝突検出方法の選択(デフォルトを選択)
 	btDefaultCollisionConfiguration *config = new btDefaultCollisionConfiguration();

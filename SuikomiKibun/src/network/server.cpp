@@ -1,38 +1,37 @@
 #include "server.h"
 
-Server::Server() {
+Server::Server(int start_port, int client_num) :
+		kStartPort(start_port), kClientNum(client_num) {
 	//状態初期化
 	com_accept_num_ = 0;
 	state_ = kAcceptWait;
-	//クライアント作成
-	client0_ = new ComClient(io_service0_, 31470);
-	client1_ = new ComClient(io_service1_, 31471);
-	client2_ = new ComClient(io_service2_, 31472);
-	//接続を別スレッドで実行
-	boost::thread thd0(&Server::ThRun, this, &io_service0_);
-	thread0_.swap(thd0);
-	boost::thread thd1(&Server::ThRun, this, &io_service1_);
-	thread1_.swap(thd1);
-	boost::thread thd2(&Server::ThRun, this, &io_service2_);
-	thread2_.swap(thd2);
+	for (int i = 0; i < kClientNum; i++) {
+		//io_service作成
+		io_service_.push_back(new asio::io_service());
+		//クライアント作成
+		client_.push_back(new ComClient(*io_service_[i], start_port + i));
+		//スレッド作成,実行
+		thread_.push_back(new boost::thread());
+		boost::thread thd(&Server::ThRun, this, io_service_[i]);
+		thread_[i]->swap(thd);
+	}
 }
 
 Server::~Server() {
-	//io_service終了処理
-	io_service0_.stop();
-	io_service1_.stop();
-	io_service2_.stop();
-	//クライアント削除
-	delete client0_;
-	delete client1_;
-	delete client2_;
-	//スレッド終了まで待機
-	if (thread0_.joinable())
-		thread0_.join();
-	if (thread1_.joinable())
-		thread1_.join();
-	if (thread2_.joinable())
-		thread2_.join();
+	for (int i = kClientNum - 1; i >= 0; i--) {
+		//io_service終了処理
+		io_service_[i]->stop();
+		//スレッド終了まで待機
+		if (thread_[i]->joinable())
+			thread_[i]->join();
+		//vectorの中身削除
+		delete thread_[i];
+		thread_.pop_back();
+		delete client_[i];
+		client_.pop_back();
+		delete io_service_[i];
+		io_service_.pop_back();
+	}
 }
 
 //io_serviceを実行する(別スレッドで呼び出し用)
@@ -46,31 +45,21 @@ void Server::Update() {
 	case kAcceptWait: 	//接続待機中
 		//残り接続数をカウント
 		com_accept_num_ = 0;
-		if (client0_->get_has_accepted()) {
-			com_accept_num_++;
-		}
-		if (client1_->get_has_accepted()) {
-			com_accept_num_++;
-		}
-		if (client2_->get_has_accepted()) {
-			com_accept_num_++;
-		}
+		for (int i = 0; i < kClientNum; i++)
+			if (client_[i]->get_has_accepted())
+				com_accept_num_++;
 		//すべて接続されたら次に進む
-		if (com_accept_num_ == 3)
+		if (com_accept_num_ == kClientNum)
 			state_ = kRun;
 		break;
 	case kRun: {	//送受信開始
-		//送受信開始を登録
-		client0_->Start();
-		client1_->Start();
-		client2_->Start();
-		//別スレッドで送受信を実行
-		boost::thread thd0(&Server::ThRun, this, &io_service0_);
-		thread0_.swap(thd0);
-		boost::thread thd1(&Server::ThRun, this, &io_service1_);
-		thread1_.swap(thd1);
-		boost::thread thd2(&Server::ThRun, this, &io_service2_);
-		thread2_.swap(thd2);
+		for (int i = 0; i < kClientNum; i++) {
+			//送受信開始を登録
+			client_[i]->Start();
+			//別スレッドで送受信を実行
+			boost::thread thd(&Server::ThRun, this, io_service_[i]);
+			thread_[i]->swap(thd);
+		}
 		//送受信中状態へ移行
 		state_ = kCom;
 		break;
@@ -80,7 +69,7 @@ void Server::Update() {
 		ServerData data;
 		static int i;
 		data.pos.x = i++;
-		client1_->set_send_data(data);
+		client_[0]->set_send_data(data);
 		break;
 	}
 	default:
@@ -93,7 +82,7 @@ void Server::Draw() const {
 	switch (state_) {
 	case kAcceptWait: { //接続待機中
 		char string[256];
-		sprintf(string, "sever:接続待機を待機中(現在%d台接続されました)", com_accept_num_);
+		sprintf(string, "sever:接続待機を待機中(現在%d/%d台接続されました)", com_accept_num_, kClientNum);
 		output_display0.Regist(string, uColor4fv_green);
 		break;
 	}
