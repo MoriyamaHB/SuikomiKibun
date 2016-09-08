@@ -16,6 +16,8 @@ Client::Client(std::string ip_adress, int start_port) :
 }
 
 Client::~Client() {
+	// タイムアウトのタイマーを切る
+	connect_timer_.cancel();
 	//接続を切る
 	socket_.close();
 	//io_serviceを止める
