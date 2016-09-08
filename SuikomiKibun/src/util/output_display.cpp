@@ -57,7 +57,8 @@ void OutputDisplay::Draw() {
 				//項目描画
 				glColor4fv(item_[i].color);
 				glRasterPos2f(x0_, y0_ + (font_size_ + line_space_) * dn);
-				font_.Render(item_[i].str);
+				if (!font_.Error())
+					font_.Render(item_[i].str);
 				dn++;
 			}
 			//削除処理
