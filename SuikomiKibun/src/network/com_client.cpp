@@ -10,6 +10,13 @@ ComClient::ComClient(asio::io_service &io_service, int port) :
 	StartAccept(); //接続待機開始
 }
 
+ComClient::~ComClient() {
+	//接続を切る
+	socket_.close();
+	//アクセプターを切る
+	acceptor_.close();
+}
+
 //接続
 void ComClient::StartAccept() {
 	acceptor_.async_accept(socket_, bind(&ComClient::OnAccept, this, asio::placeholders::error));

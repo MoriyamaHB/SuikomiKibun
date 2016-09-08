@@ -30,6 +30,8 @@ private:
 	asio::io_service io_service_;
 	asio::streambuf receive_buff_;
 	tcp::socket socket_;
+	int port_; //ポート番号
+	asio::deadline_timer connect_timer_; //接続タイムアウト
 	ClientData send_data_;		//送信データ
 	ServerData receive_data_;	//受信データ
 	//スレッド
@@ -37,7 +39,6 @@ private:
 	boost::thread run_thread_;
 	//定数
 	const std::string kIpAdress; //サーバーのIPアドレス
-	const int kPort; //ポート番号
 	//状態
 	bool has_conected_;
 	State state_;
@@ -45,6 +46,7 @@ private:
 	//接続
 	void Connect();
 	void OnConnect(const boost::system::error_code& error);
+	void OnConnectTimeOut(const boost::system::error_code& error);
 	//送信
 	void Send();
 	void OnSend(const boost::system::error_code& error, size_t bytes_transferred);
@@ -54,7 +56,7 @@ private:
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun();
 public:
-	Client(std::string ip_adress, int port);
+	Client(std::string ip_adress, int start_port);
 	~Client();
 	void Update();
 	void Draw();

@@ -38,6 +38,7 @@ private:
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 public:
 	ComClient(asio::io_service &io_service, int port);
+	~ComClient();
 	void Start();	//送受信スタート
 
 	void set_send_data(const ServerData &send_data);
