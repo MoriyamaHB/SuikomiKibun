@@ -24,7 +24,7 @@ private:
 	int SerchEmptyItem();
 
 public:
-	OutputDisplay(std::string font_path, int x0, int y0, unsigned int font_size);
+	OutputDisplay(const std::string& font_path, int x0, int y0, unsigned int font_size);
 	~OutputDisplay();
 	void Init(); //登録している文字をすべて削除)
 	void Regist(const std::string& string, const float color[], int life = 1); //項目を登録

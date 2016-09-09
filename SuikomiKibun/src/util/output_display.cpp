@@ -1,6 +1,6 @@
 #include "output_display.h"
 
-OutputDisplay::OutputDisplay(std::string font_path, int x0, int y0, unsigned int font_size) :
+OutputDisplay::OutputDisplay(const std::string& font_path, int x0, int y0, unsigned int font_size) :
 		font_(font_path.c_str()) {
 	if (font_.Error()) {
 		uErrorOut(__FILE__, __func__, __LINE__, "フォントが開けません");
