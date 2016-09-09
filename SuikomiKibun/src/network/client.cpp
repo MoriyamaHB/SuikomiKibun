@@ -179,3 +179,7 @@ void Client::set_send_data(const ClientData& send_data) {
 ServerData Client::get_receive_data() const {
 	return receive_data_;
 }
+
+
+
+
