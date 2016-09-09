@@ -31,7 +31,10 @@ private:
 	asio::streambuf receive_buff_;
 	tcp::socket socket_;
 	int port_; //ポート番号
-	asio::deadline_timer connect_timer_; //接続タイムアウト
+	//接続タイムアウト
+	asio::deadline_timer connect_timer_;
+	asio::deadline_timer send_timer_;
+	asio::deadline_timer receive_timer_;
 	ClientData send_data_;		//送信データ
 	ServerData receive_data_;	//受信データ
 	//スレッド
@@ -50,9 +53,11 @@ private:
 	//送信
 	void Send();
 	void OnSend(const boost::system::error_code& error, size_t bytes_transferred);
+	void OnSendTimeOut(const boost::system::error_code& error);
 	//受信
 	void StartReceive();
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
+	void OnReceiveTimeOut(const boost::system::error_code& error);
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun();
 public:

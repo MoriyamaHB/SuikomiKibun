@@ -22,6 +22,10 @@ private:
 	asio::streambuf receive_buff_;	//受信バッファ
 	ClientData receive_data_; 	//受信データ
 	ServerData send_data_;		//送信データ
+	//接続タイムアウト
+	asio::deadline_timer accept_timer_;
+	asio::deadline_timer send_timer_;
+	asio::deadline_timer receive_timer_;
 	//定数
 	const int kPort;			//ポート番号
 	//状態変数
@@ -30,12 +34,15 @@ private:
 	//接続待機
 	void StartAccept();
 	void OnAccept(const boost::system::error_code& error);
+	void OnAcceptTimeOut(const boost::system::error_code& error);
 	//送信
 	void Send();
 	void OnSend(const boost::system::error_code& error, size_t bytes_transferred);
+	void OnSendTimeOut(const boost::system::error_code& error);
 	//受信
 	void Receive();
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
+	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
 	ComClient(asio::io_service &io_service, int port);
 	~ComClient();
