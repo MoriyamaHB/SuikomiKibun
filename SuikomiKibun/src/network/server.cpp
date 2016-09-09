@@ -69,7 +69,7 @@ void Server::Update() {
 			ServerData server_data;
 			for (int j = 0, cnt = 0; j < kClientNum; j++) {
 				if (i != j) {
-					server_data.pos[cnt] = client_[i]->get_receive_data().pos;
+					server_data.pos[cnt] = client_[j]->get_receive_data().pos;
 					cnt++;
 				}
 			}
