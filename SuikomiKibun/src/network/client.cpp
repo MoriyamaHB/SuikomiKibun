@@ -111,8 +111,7 @@ void Client::OnConnectTimeOut(const boost::system::error_code& error) {
 //クライアント情報送信
 void Client::Send() {
 	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ClientData)),
-			boost::bind(&Client::OnSend, this, asio::placeholders::error,
-					asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
 //送信完了
@@ -130,8 +129,7 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 //サーバー情報受信
 void Client::StartReceive() {
 	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ServerData)),
-			boost::bind(&Client::OnReceive, this, asio::placeholders::error,
-					asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
 // 受信完了
@@ -144,7 +142,7 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 	}
 	const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
 	receive_data_ = *recive_data;
-	printf("client_receive(%d):%f\n", port_, receive_data_.pos.x);
+	printf("client_receive(%d):%f\n", port_, receive_data_.pos[0].x);
 	receive_buff_.consume(receive_buff_.size());
 	StartReceive();
 }

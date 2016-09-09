@@ -65,6 +65,16 @@ void Server::Update() {
 		break;
 	}
 	case kCom: {	//送受信中
+		for (int i = 0; i < kClientNum; i++) {
+			ServerData server_data;
+			for (int j = 0, cnt = 0; j < kClientNum; j++) {
+				if (i != j) {
+					server_data.pos[cnt] = client_[i]->get_receive_data().pos;
+					cnt++;
+				}
+			}
+			client_[i]->set_send_data(server_data);
+		}
 		break;
 	}
 	default:
@@ -76,8 +86,7 @@ void Server::Update() {
 void Server::Draw() const {
 	switch (state_) {
 	case kAcceptWait: { //接続待機中
-		output_display0.Regist(
-				"sever:接続待機を待機中(現在" + uToStr(com_accept_num_) + "/" + uToStr(kClientNum) + "台接続されました)",
+		output_display0.Regist("sever:接続待機を待機中(現在" + uToStr(com_accept_num_) + "/" + uToStr(kClientNum) + "台接続されました)",
 				uColor4fv_green);
 		break;
 	}

@@ -3,7 +3,7 @@
 SceneMgr::SceneMgr() :
 		next_scene_(kSceneNone) //次のシーン管理変数
 {
-	scene_ = (BaseScene*) new StartScene(this, scene_param_);
+	scene_ = (BaseScene*) new BtDemoScene(this, scene_param_);
 	memset(&scene_param_, 0, sizeof(scene_param_));
 }
 

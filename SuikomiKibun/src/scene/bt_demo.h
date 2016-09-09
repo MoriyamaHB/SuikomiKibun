@@ -11,6 +11,9 @@
 #include "../util/uGL.h"
 #include "../camera/camera.h"
 #include "../define.h"
+#include "../gv.h"
+#include "../network/server.h"
+#include "../network/client.h"
 
 class BtDemoScene: public BaseScene {
 private:
@@ -19,6 +22,13 @@ private:
 	btRigidBody* ground_body_;
 	btRigidBody* cube_body_;
 	Camera3D3P camera;
+
+	//ネットワーク
+	Server *server_;
+	Client *client_;
+	bool is_server_;
+	Vector3 pos1_;
+	Vector3 pos2_;
 public:
 	BtDemoScene(ISceneChanger* changer, SceneParam param);
 	~BtDemoScene();

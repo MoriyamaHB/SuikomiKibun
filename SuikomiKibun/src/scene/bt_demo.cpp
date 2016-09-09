@@ -7,6 +7,25 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	input::Init();
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
 
+	//ネットワーク初期化
+	char is_server;
+	std::string server_ip;
+	int port;
+	std::cout << "s/c?";
+	std::cin >> is_server;
+	if (is_server == 's') {
+		server_ = new Server(31600, 3);
+		is_server_ = true;
+	} else {
+		server_ = NULL;
+		is_server_ = false;
+	}
+	std::cout << "server_ip:";
+	std::cin >> server_ip;
+	std::cout << "port:";
+	std::cin >> port;
+	client_ = new Client(server_ip, port);
+
 	//衝突検出方法の選択(デフォルトを選択)
 	btDefaultCollisionConfiguration *config = new btDefaultCollisionConfiguration();
 	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(config);
@@ -74,6 +93,12 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 
 //デストラクタ
 BtDemoScene::~BtDemoScene() {
+
+	//ネットワーク
+	if (is_server_)
+		delete server_;
+	delete client_;
+
 	//オブジェクト破壊
 	delete sphere_body_->getMotionState();
 	delete ground_body_->getMotionState();
@@ -92,11 +117,26 @@ BtDemoScene::~BtDemoScene() {
 
 //更新
 void BtDemoScene::Update() {
+	//ネットワーク
+	if (is_server_) {
+		server_->Update();
+	}
+	ClientData client_data;
+	btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	client_data.pos.x = pos[0];
+	client_data.pos.y = pos[1];
+	client_data.pos.z = pos[2];
+	client_->set_send_data(client_data);
+	ServerData server_data = client_->get_receive_data();
+	pos1_ = server_data.pos[0];
+	pos2_ = server_data.pos[1];
+	client_->Update();
+
 	//bulletをすすめる
 	dynamics_world_->stepSimulation(1.0 / kFps);
 
 	//カメラ更新
-	btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	pos = sphere_body_->getCenterOfMassPosition();
 	camera.Update(pos[0], pos[1], pos[2]);
 
 	//ライト
@@ -164,6 +204,11 @@ void BtDemoScene::Update() {
 
 //描画
 void BtDemoScene::Draw() const {
+	//ネットワーク
+	if (is_server_)
+		server_->Draw();
+	client_->Draw();
+
 	btVector3 pos;
 	//地面
 	glPushMatrix();
@@ -191,6 +236,20 @@ void BtDemoScene::Draw() const {
 	pos = sphere_body_->getCenterOfMassPosition();
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
+	glutSolidSphere(1.0, 20, 20);
+	glPopMatrix();
+
+	//球1
+	glPushMatrix();
+	glTranslatef(pos1_.x, pos1_.y, pos1_.z);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
+	glutSolidSphere(1.0, 20, 20);
+	glPopMatrix();
+
+	//球2
+	glPushMatrix();
+	glTranslatef(pos2_.x, pos2_.y, pos2_.z);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
 	glutSolidSphere(1.0, 20, 20);
 	glPopMatrix();

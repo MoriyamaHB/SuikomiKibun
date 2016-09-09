@@ -13,7 +13,7 @@ typedef struct {
 } ClientData;
 
 typedef struct {
-	Vector3 pos;
+	Vector3 pos[2];
 } ServerData;
 
 #endif /* SUIKOMIKIBUN_GV_H_ */
