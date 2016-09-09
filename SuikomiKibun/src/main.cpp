@@ -57,10 +57,10 @@ void FirstInit(int argc, char *argv[]) {
 	alutInit(&argc, argv);
 
 	//ゲームの初期化
-	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
+	input::Init();				//入力初期化
 	fps.Init(); 				//fps初期化
 	output_display0.Init(); 	//ディスプレイ文字列初期化
-	input::Init();				//入力初期化
+	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
 
 	//タイマー関数を設定
 	glutTimerFunc(100, Timer, 0);
