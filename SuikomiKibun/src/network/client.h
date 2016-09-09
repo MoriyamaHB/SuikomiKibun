@@ -31,12 +31,12 @@ private:
 	asio::streambuf receive_buff_;
 	tcp::socket socket_;
 	int port_; //ポート番号
+	ClientData send_data_;		//送信データ
+	ServerData receive_data_;	//受信データ
 	//接続タイムアウト
 	asio::deadline_timer connect_timer_;
 	asio::deadline_timer send_timer_;
 	asio::deadline_timer receive_timer_;
-	ClientData send_data_;		//送信データ
-	ServerData receive_data_;	//受信データ
 	//スレッド
 	boost::thread conect_thread_;
 	boost::thread run_thread_;
