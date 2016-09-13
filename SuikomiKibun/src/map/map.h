@@ -5,8 +5,8 @@
  *      Author: mi
  */
 
-#ifndef MAP_MAP_H_
-#define MAP_MAP_H_
+#ifndef SUIKOMIKIBUN_MAP_H_
+#define SUIKOMIKIBUN_MAP_H_
 
 #include <bullet/btBulletCollisionCommon.h>
 #include <bullet/btBulletDynamicsCommon.h>
@@ -32,4 +32,4 @@ public:
 };
 
 
-#endif /* MAP_MAP_H_ */
+#endif
