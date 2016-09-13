@@ -21,7 +21,7 @@ StageMap::StageMap(btDynamicsWorld* world):world_(world)
 	btVector3 cube_extents = btVector3(a, b, c);
 	//質量
 	btScalar ground_mass = 0.0;
-	btScalar cube_mass = 0.2;
+	btScalar cube_mass = 0.001;
 	//反発係数
 	btScalar ground_rest = 1.0;
 	btScalar cube_rest = 0.5;
