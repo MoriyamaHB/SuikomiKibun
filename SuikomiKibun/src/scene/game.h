@@ -13,6 +13,7 @@
 #include "../define.h"
 #include "../gv.h"
 #include "../map/map.h"
+#include "../player/player.h"
 #include "../network/server.h"
 #include "../network/client.h"
 
@@ -21,6 +22,7 @@ private:
 	btDynamicsWorld* dynamics_world_;
 	Camera3D3P camera_;
 	StageMap* map_;
+	Player *player_;
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();
