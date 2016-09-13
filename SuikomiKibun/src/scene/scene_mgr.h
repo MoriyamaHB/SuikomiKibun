@@ -12,6 +12,7 @@
 typedef enum {
 	kSceneStart, //スタート
 	kSceneSelect, //選択
+	kSceneGame, //ゲーム
 	kSceneBtDemo, //bulletテスト
 	//無し
 	kSceneNone
@@ -47,6 +48,7 @@ public:
 
 #include "start.h"
 #include "select.h"
+#include "game.h"
 #include "bt_demo.h"
 #include "../util/uGL.h"
 
