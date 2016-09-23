@@ -36,7 +36,6 @@ Vector3 Camera3D3P::GetStateUpCoordinates() const {
 	return Vector3(ux_, uy_, uz_);
 }
 
-
 //カメラ角度をgetする
 void Camera3D3P::GetAngle(double *angle_w, double *angle_h) const {
 	*angle_w = angle_w_;
@@ -51,6 +50,11 @@ double Camera3D3P::get_angle_w() const {
 //カメラ速度をgetする
 double Camera3D3P::get_speed() const {
 	return speed_;
+}
+
+//カメラ距離をセットする
+void Camera3D3P::set_distance(double distance) {
+	distance_ = distance;
 }
 
 //カメラ座標をマウスの移動から計算する(3人称視点)
