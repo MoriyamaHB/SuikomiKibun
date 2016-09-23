@@ -44,6 +44,7 @@ void StageMap::myinit(void)
 //コンストラクタ
 StageMap::StageMap(btDynamicsWorld* world):world_(world)
 {
+
 	//中心座標
 	btVector3 ground_pos = btVector3(0, 0, 0);
 	btVector3 cube_pos = btVector3(0, 0, 2);
@@ -64,6 +65,9 @@ StageMap::StageMap(btDynamicsWorld* world):world_(world)
 	btVector3 ground_inertia(0, 0, 0);
 	btVector3 cube_inertia(cube_mass * (b * b + c * c) / 3.0, cube_mass * (a * a + c * c) / 3.0,
 			cube_mass * (b * b + a * a) / 3.0);
+	btCollisionShape* colShape = new btBoxShape(cube_extents);
+
+
 	//形状を設定
 	btCollisionShape *ground_shape = new btBoxShape(ground_extents);
 	btCollisionShape *cube_shape = new btBoxShape(cube_extents);
@@ -79,6 +83,7 @@ StageMap::StageMap(btDynamicsWorld* world):world_(world)
 	cube_shape->calculateLocalInertia(cube_mass, cube_inertia);
 	//剛体オブジェクト生成
 	ground_body_ = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
+	m_collisionShapes.push_back(colShape);
 	cube_body_ = new btRigidBody(cube_mass, cube_motion_state, cube_shape, cube_inertia);
 	cube_body2_ = new btRigidBody(cube_mass, cube_motion_state2, cube_shape, cube_inertia);
 	cube_body3_ = new btRigidBody(cube_mass, cube_motion_state3, cube_shape, cube_inertia);
@@ -130,7 +135,7 @@ void StageMap::Update(){
 
 //描画
 void StageMap::Draw(){
-
+/*
 	btVector3 pos;
 	//地面
 	glPushMatrix();
@@ -140,18 +145,17 @@ void StageMap::Draw(){
 	btVector3 ground_half_extent = ground_shape->getHalfExtentsWithMargin();
 	uDrawGround(ground_half_extent[0] * 2);
 	glPopMatrix();
-
+*/
 	myinit();
 	renderscene(1);
 
-//	glClear(GL_STENCIL_BUFFER_BIT);
+	glClear(GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_CULL_FACE);
-	renderscene(0);
 
 	glDisable(GL_LIGHTING);
 	glDepthMask(GL_FALSE);
 	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_STENCIL_TEST);
+//	glEnable(GL_STENCIL_TEST);
 	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
 	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
 	glFrontFace(GL_CCW);

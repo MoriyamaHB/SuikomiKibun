@@ -27,6 +27,7 @@ protected:
 	btScalar	m_defaultContactProcessingThreshold;
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
 
+
 private:
 	btDynamicsWorld* world_;
 	btRigidBody* ground_body_;

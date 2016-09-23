@@ -109,12 +109,14 @@ void Player::Update(double angle) {
 //描画
 void Player::Draw() const {
 	//球
+	/*
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
 	glutSolidSphere(1.0, 20, 20);
 	glPopMatrix();
+	*/
 }
 
 Vector3 Player::GetCenterPos(){
