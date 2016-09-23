@@ -1,8 +1,7 @@
 #include "player.h"
 
 //コンストラクタ
-Player::Player(btDynamicsWorld* world) :
-		world_(world) {
+Player::Player(btDynamicsWorld* world) :world_(world) {
 	//中心座標
 	btVector3 sphere_pos = btVector3(-1, 5, 0);
 	//大きさ
@@ -102,8 +101,7 @@ void Player::Update(double angle) {
 			sphere_body_->applyCentralImpulse(impulse);
 		}
 	}
-
-
+	PlayerSize(2.0);
 }
 
 //描画
@@ -117,9 +115,15 @@ void Player::Draw() const {
 	glPopMatrix();
 }
 
-Vector3 Player::GetCenterPos(){
+void Player::PlayerSize(double size){
+	//形状を設定
+		btCollisionShape *new_sphere_shape = new btSphereShape(size);
+		sphere_body_->setCollisionShape(new_sphere_shape);
+}
+
+Vector3 Player::GetCenterPos() {
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	Vector3 rpos(pos[0],pos[1],pos[2]);
+	Vector3 rpos(pos[0], pos[1], pos[2]);
 	return rpos;
 }
 

@@ -21,6 +21,7 @@ public:
 	void Update(double angle);
 	void Draw() const;
 	Vector3 GetCenterPos();
+	void PlayerSize(double size);
 };
 
 
