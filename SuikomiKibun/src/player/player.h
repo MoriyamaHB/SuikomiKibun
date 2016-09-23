@@ -15,12 +15,14 @@ class Player{
 private:
 	btDynamicsWorld* world_;
 	btRigidBody* sphere_body_;
+	btScalar player_radius_;
 public:
 	Player(btDynamicsWorld* world);
 	~Player();
 	void Update(double angle);
 	void Draw() const;
-	Vector3 GetCenterPos();
+	Vector3 get_center_pos();
+	double get_camera_distance();
 	void PlayerSize(double size);
 };
 

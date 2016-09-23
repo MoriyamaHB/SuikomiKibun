@@ -5,7 +5,7 @@ Player::Player(btDynamicsWorld* world) :world_(world) {
 	//中心座標
 	btVector3 sphere_pos = btVector3(-1, 5, 0);
 	//大きさ
-	btScalar sphere_radius = 1.0;
+    player_radius_ = 1.0;
 	//質量
 	btScalar sphere_mass = 0.03;
 	//反発係数
@@ -13,7 +13,7 @@ Player::Player(btDynamicsWorld* world) :world_(world) {
 	//慣性モーメント
 	btVector3 sphere_inertia(0, 0, 0);
 	//形状を設定
-	btCollisionShape *sphere_shape = new btSphereShape(sphere_radius);
+	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
 	//球体の初期位置、姿勢
 	btQuaternion qrot(0, 0, 0, 1);
 	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
@@ -101,7 +101,9 @@ void Player::Update(double angle) {
 			sphere_body_->applyCentralImpulse(impulse);
 		}
 	}
-	PlayerSize(2.0);
+
+	player_radius_+= 0.01;
+	PlayerSize(player_radius_);
 }
 
 //描画
@@ -110,6 +112,9 @@ void Player::Draw() const {
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
+	btScalar player_radius;
+	player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
+	glScalef(player_radius,player_radius,player_radius);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
 	glutSolidSphere(1.0, 20, 20);
 	glPopMatrix();
@@ -118,12 +123,18 @@ void Player::Draw() const {
 void Player::PlayerSize(double size){
 	//形状を設定
 		btCollisionShape *new_sphere_shape = new btSphereShape(size);
+		delete sphere_body_->getCollisionShape();
 		sphere_body_->setCollisionShape(new_sphere_shape);
 }
 
-Vector3 Player::GetCenterPos() {
+Vector3 Player::get_center_pos() {
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
 	Vector3 rpos(pos[0], pos[1], pos[2]);
 	return rpos;
+}
+
+double Player::get_camera_distance(){
+	return player_radius_ * 3;
+
 }
 

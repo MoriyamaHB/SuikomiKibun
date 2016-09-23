@@ -46,8 +46,9 @@ void GameScene::Update() {
 	dynamics_world_->stepSimulation(1.0 / kFps);
 
 	//カメラ更新
-	Vector3 player_pos = player_->GetCenterPos();
+	Vector3 player_pos = player_->get_center_pos();
 	camera_.Update(player_pos.x, player_pos.y, player_pos.z);
+	camera_.set_distance(player_->get_camera_distance());
 
 	//マップ更新
 	map_->Update();
