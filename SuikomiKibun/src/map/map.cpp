@@ -16,7 +16,7 @@ StageMap::StageMap(btDynamicsWorld* world):world_(world)
 	btVector3 cube_pos3 = btVector3(-2, 0, 0);
 	btVector3 cube_pos4 = btVector3(0,0, -2);
 	//大きさ
-	btVector3 ground_extents = btVector3(30, 0.00001, 30);
+	btVector3 ground_extents = btVector3(100, 0.00001, 100);
 	double a = 1.0, b = 1.0, c = 1.0;
 	btVector3 cube_extents = btVector3(a, b, c);
 	//質量

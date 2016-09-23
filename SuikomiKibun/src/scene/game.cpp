@@ -56,7 +56,7 @@ void GameScene::Update() {
 	player_->Update(camera_.get_angle_w() + M_PI);
 
 	//ライト
-	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
+	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 }
 
