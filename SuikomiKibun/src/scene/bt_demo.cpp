@@ -16,14 +16,16 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	if (is_server == 's') {
 		server_ = new Server(31600, 3);
 		is_server_ = true;
+		server_ip = "127.0.0.1";
+		port = 31600;
 	} else {
 		server_ = NULL;
 		is_server_ = false;
+		std::cout << "server_ip:";
+		std::cin >> server_ip;
+		std::cout << "port:";
+		std::cin >> port;
 	}
-	std::cout << "server_ip:";
-	std::cin >> server_ip;
-	std::cout << "port:";
-	std::cin >> port;
 	client_ = new Client(server_ip, port);
 
 	//衝突検出方法の選択(デフォルトを選択)
