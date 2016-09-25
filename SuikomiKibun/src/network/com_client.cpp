@@ -97,7 +97,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ClientData* data = asio::buffer_cast<const ClientData*>(receive_buff_.data());
 	receive_data_ = *data;
-	printf("server_receive(%d):%f\n", kPort, receive_data_.pos.x);
+	printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
 	receive_buff_.consume(receive_buff_.size());
 	Receive();
 }

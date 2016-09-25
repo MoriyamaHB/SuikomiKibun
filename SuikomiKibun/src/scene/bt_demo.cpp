@@ -124,21 +124,18 @@ void BtDemoScene::Update() {
 		server_->Update();
 	}
 	ClientData client_data;
-	btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	client_data.pos.x = pos[0];
-	client_data.pos.y = pos[1];
-	client_data.pos.z = pos[2];
+	client_data.player_data.pos = sphere_body_->getCenterOfMassPosition();
 	client_->set_send_data(client_data);
 	ServerData server_data = client_->get_receive_data();
-	pos1_ = server_data.pos[0];
-	pos2_ = server_data.pos[1];
+	pos1_ = server_data.player_data[0].pos;
+	pos2_ = server_data.player_data[1].pos;
 	client_->Update();
 
 	//bulletをすすめる
 	dynamics_world_->stepSimulation(1.0 / kFps);
 
 	//カメラ更新
-	pos = sphere_body_->getCenterOfMassPosition();
+	btVector3 pos = sphere_body_->getCenterOfMassPosition();
 	camera.Update(pos[0], pos[1], pos[2]);
 
 	//ライト

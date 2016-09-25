@@ -10,10 +10,15 @@ extern OutputDisplay output_display0;
 
 typedef struct {
 	Vector3 pos;
+	double radius;
+} PlayerData;
+
+typedef struct {
+	PlayerData player_data;
 } ClientData;
 
 typedef struct {
-	Vector3 pos[2];
+	PlayerData player_data[2];
 } ServerData;
 
 #endif /* SUIKOMIKIBUN_GV_H_ */

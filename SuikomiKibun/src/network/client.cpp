@@ -159,7 +159,7 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
 	receive_data_ = *recive_data;
-	printf("client_receive(%d):%f\n", port_, receive_data_.pos[0].x);
+	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
 	receive_buff_.consume(receive_buff_.size());
 	StartReceive();
 }
@@ -179,7 +179,4 @@ void Client::set_send_data(const ClientData& send_data) {
 ServerData Client::get_receive_data() const {
 	return receive_data_;
 }
-
-
-
 
