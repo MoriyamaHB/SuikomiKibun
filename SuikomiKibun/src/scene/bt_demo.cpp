@@ -77,10 +77,14 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	cube_shape->calculateLocalInertia(cube_mass, cube_inertia);
 	//剛体オブジェクト生成
 	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
+	sphere_body1_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
+	sphere_body2_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
 	ground_body_ = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
 	cube_body_ = new btRigidBody(cube_mass, cube_motion_state, cube_shape, cube_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
+	sphere_body1_->setRestitution(sphere_rest);
+	sphere_body2_->setRestitution(sphere_rest);
 	ground_body_->setRestitution(ground_rest);
 	cube_body_->setRestitution(cube_rest);
 	//摩擦
@@ -89,6 +93,8 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 //	cube_body_->setFriction(100000);
 	//ワールドに剛体オブジェクトを追加
 	dynamics_world_->addRigidBody(sphere_body_);
+	dynamics_world_->addRigidBody(sphere_body1_);
+	dynamics_world_->addRigidBody(sphere_body2_);
 	dynamics_world_->addRigidBody(ground_body_);
 	dynamics_world_->addRigidBody(cube_body_);
 }
@@ -103,12 +109,18 @@ BtDemoScene::~BtDemoScene() {
 
 	//オブジェクト破壊
 	delete sphere_body_->getMotionState();
+	delete sphere_body1_->getMotionState();
+	delete sphere_body2_->getMotionState();
 	delete ground_body_->getMotionState();
 	delete cube_body_->getMotionState();
 	dynamics_world_->removeRigidBody(sphere_body_);
+	dynamics_world_->removeRigidBody(sphere_body1_);
+	dynamics_world_->removeRigidBody(sphere_body2_);
 	dynamics_world_->removeRigidBody(ground_body_);
 	dynamics_world_->removeRigidBody(cube_body_);
 	delete sphere_body_;
+	delete sphere_body1_;
+	delete sphere_body2_;
 	delete ground_body_;
 	delete cube_body_;
 
@@ -130,6 +142,19 @@ void BtDemoScene::Update() {
 	pos1_ = server_data.player_data[0].pos;
 	pos2_ = server_data.player_data[1].pos;
 	client_->Update();
+
+	//ほかプレイヤー情報を反映
+	btQuaternion qrot(0, 0, 0, 1);
+	//1
+	btVector3 pos1(pos1_.x, pos1_.y, pos1_.z);
+	btDefaultMotionState* sphere_motion_state1 = new btDefaultMotionState(btTransform(qrot, pos1));
+//	delete sphere_body1_->getMotionState();//何故かコアダンプ
+	sphere_body1_->setMotionState(sphere_motion_state1);
+//	//2
+	btVector3 pos2(pos2_.x, pos2_.y, pos2_.z);
+	btDefaultMotionState* sphere_motion_state2 = new btDefaultMotionState(btTransform(qrot, pos2));
+//	delete sphere_body2_->getMotionState();//何故かコアダンプ
+	sphere_body2_->setMotionState(sphere_motion_state2);
 
 	//bulletをすすめる
 	dynamics_world_->stepSimulation(1.0 / kFps);
@@ -240,15 +265,17 @@ void BtDemoScene::Draw() const {
 	glPopMatrix();
 
 	//球1
+	pos = sphere_body1_->getCenterOfMassPosition();
 	glPushMatrix();
-	glTranslatef(pos1_.x, pos1_.y, pos1_.z);
+	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
 	glutSolidSphere(1.0, 20, 20);
 	glPopMatrix();
 
 	//球2
+	pos = sphere_body2_->getCenterOfMassPosition();
 	glPushMatrix();
-	glTranslatef(pos2_.x, pos2_.y, pos2_.z);
+	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
 	glutSolidSphere(1.0, 20, 20);
 	glPopMatrix();

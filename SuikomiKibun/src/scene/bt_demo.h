@@ -19,6 +19,8 @@ class BtDemoScene: public BaseScene {
 private:
 	btDynamicsWorld* dynamics_world_;
 	btRigidBody* sphere_body_;
+	btRigidBody* sphere_body1_;
+	btRigidBody* sphere_body2_;
 	btRigidBody* ground_body_;
 	btRigidBody* cube_body_;
 	Camera3D3P camera;

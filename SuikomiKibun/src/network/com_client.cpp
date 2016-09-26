@@ -25,8 +25,8 @@ ComClient::~ComClient() {
 //接続
 void ComClient::StartAccept() {
 	acceptor_.async_accept(socket_, bind(&ComClient::OnAccept, this, asio::placeholders::error));
-	//60秒でタイムアウト
-	accept_timer_.expires_from_now(boost::posix_time::seconds(60));
+	//180秒でタイムアウト
+	accept_timer_.expires_from_now(boost::posix_time::seconds(180));
 	accept_timer_.async_wait(boost::bind(&ComClient::OnAcceptTimeOut, this, _1));
 }
 
