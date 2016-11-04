@@ -461,7 +461,6 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 		return;
 	}
 
-
 	glPushMatrix(); 
 	btglMultMatrix(m);
 

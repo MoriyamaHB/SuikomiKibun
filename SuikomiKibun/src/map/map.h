@@ -27,7 +27,6 @@ protected:
 	btScalar	m_defaultContactProcessingThreshold;
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
 
-
 private:
 	btDynamicsWorld* world_;
 	btRigidBody* ground_body_;
@@ -35,14 +34,18 @@ private:
 	btRigidBody* cube_body2_;
 	btRigidBody* cube_body3_;
 	btRigidBody* cube_body4_;
+	btRigidBody* cube_body5_;
+
+	void myinit();
 	void renderscene(int pass);
 	void render();
+	void localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();
 	void Update();
 	void Draw();
-	virtual void myinit();
+
 };
 
 
