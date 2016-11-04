@@ -22,6 +22,8 @@ public:
 	void GetAngle(double *angle_w, double *angle_h) const;
 	double get_angle_w() const;
 	double get_speed() const;
+	//setter
+	void set_distance(double distance);
 
 	//更新
 	//更新でなるべく最初の方に読んだほうがいいみたい(ライトより後だとライトがおかしくなる)(glulookat)
