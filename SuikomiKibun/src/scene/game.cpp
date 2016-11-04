@@ -58,7 +58,7 @@ void GameScene::Update() {
 
 
 	//ライト
-	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
+	GLfloat kLight0Pos[4] = { 0.0, 200.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 }
 

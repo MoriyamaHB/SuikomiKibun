@@ -1,11 +1,12 @@
 #include "player.h"
 
 //コンストラクタ
-Player::Player(btDynamicsWorld* world) :world_(world) {
+Player::Player(btDynamicsWorld* world) :
+		world_(world) {
 	//中心座標
 	btVector3 sphere_pos = btVector3(-1, 5, 0);
 	//大きさ
-    player_radius_ = 1.0;
+	player_radius_ = 1.0;
 	//質量
 	btScalar sphere_mass = 0.03;
 	//反発係数
@@ -16,18 +17,23 @@ Player::Player(btDynamicsWorld* world) :world_(world) {
 	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
 	//球体の初期位置、姿勢
 	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
-			btTransform(qrot, sphere_pos));
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, sphere_pos));
+
 	//慣性モーメントの計算
 	sphere_shape->calculateLocalInertia(sphere_mass, sphere_inertia);
+
 	//剛体オブジェクト生成
-	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,
-			sphere_shape, sphere_inertia);
+	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
+	sphere_body_->setUserPointer(&m_BodyData1);  // ユーザーデータをセット
+
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
 
+
+	// 衝突のコールバック関数をセット
+	gContactProcessedCallback = Player::HandleContactProcess;
 }
 
 //デストラクタ
@@ -102,29 +108,36 @@ void Player::Update(double angle) {
 		}
 	}
 
-	player_radius_+= 0.01;
-	PlayerSize(player_radius_);
+	//player_radius_ += 0.01;
+
+	//playerSize(player_radius_);
+	// if(sphere_body_!= NULL && m_BodyData1.count > 1) {
+//	    DeleteBody(&sphere_body_);// 削除テスト
+	  //}
+
 }
 
 //描画
 void Player::Draw() const {
+
 	//球
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	btScalar player_radius;
 	player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
-	glScalef(player_radius,player_radius,player_radius);
+	glScalef(player_radius, player_radius, player_radius);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
 	glutSolidSphere(1.0, 20, 20);
 	glPopMatrix();
 }
 
-void Player::PlayerSize(double size){
+
+void Player::PlayerSize(double size) {
 	//形状を設定
-		btCollisionShape *new_sphere_shape = new btSphereShape(size);
-		delete sphere_body_->getCollisionShape();
-		sphere_body_->setCollisionShape(new_sphere_shape);
+	btCollisionShape *new_sphere_shape = new btSphereShape(size);
+	delete sphere_body_->getCollisionShape();
+	sphere_body_->setCollisionShape(new_sphere_shape);
 }
 
 Vector3 Player::get_center_pos() {
@@ -133,8 +146,47 @@ Vector3 Player::get_center_pos() {
 	return rpos;
 }
 
-double Player::get_camera_distance(){
+double Player::get_camera_distance() {
 	return player_radius_ * 3;
+}
 
+void Player::DeleteBody(btRigidBody** ppBody){
+	btRigidBody* pBody = *ppBody;
+	world_->removeRigidBody(pBody);
+	if(pBody){
+		delete pBody->getMotionState();
+	}
+	delete pBody;
+	*ppBody = NULL;
+}
+
+bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
+	//btRigidBody* pBody0 = (btRigidBody*) a;
+	//btRigidBody* pBody1 = (btRigidBody*) b;
+
+	//	btRigid
+	//	world_->removeRigidBody(pBody);
+	//	if(pBody){
+	//		delete pBody->getMotionState();
+//		}
+	//	delete pBody;
+	//	pBody0 = NULL;
+
+//	DeleteBody(pBody0);
+
+
+
+
+	//TestData* pUserData0 = (TestData*) pBody0->getUserPointer();
+	//TestData* pUserData1 = (TestData*) pBody1->getUserPointer();
+
+	// カウント
+	//if (pUserData0)
+		//pUserData0->count++;
+//	if (pUserData1)
+	//	pUserData1->count++;
+
+
+	return true;
 }
 
