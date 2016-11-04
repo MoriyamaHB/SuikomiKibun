@@ -10,17 +10,33 @@
 #include "../define.h"
 #include "../input/input.h"
 
+//衝突コールバック
+extern ContactProcessedCallback gContactProcessedCallback;
+
+struct TestData {
+	int count;
+	TestData() : count(0){}
+};
 
 class Player{
 private:
 	btDynamicsWorld* world_;
 	btRigidBody* sphere_body_;
+	btRigidBody* sphere_body2_;
+	btScalar player_radius_;
+	btRigidBody*  m_Body1;
+	TestData    m_BodyData1;
 public:
+
 	Player(btDynamicsWorld* world);
 	~Player();
 	void Update(double angle);
 	void Draw() const;
-	Vector3 GetCenterPos();
+	Vector3 get_center_pos();
+	double get_camera_distance();
+	void PlayerSize(double size);
+	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
+	void DeleteBody(btRigidBody** ppBody);
 };
 
 

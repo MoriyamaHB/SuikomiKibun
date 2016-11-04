@@ -46,8 +46,9 @@ void GameScene::Update() {
 	dynamics_world_->stepSimulation(1.0 / kFps);
 
 	//カメラ更新
-	Vector3 player_pos = player_->GetCenterPos();
+	Vector3 player_pos = player_->get_center_pos();
 	camera_.Update(player_pos.x, player_pos.y, player_pos.z);
+	camera_.set_distance(player_->get_camera_distance());
 
 	//マップ更新
 	map_->Update();
@@ -55,8 +56,9 @@ void GameScene::Update() {
 	//プレイヤー更新
 	player_->Update(camera_.get_angle_w() + M_PI);
 
+
 	//ライト
-	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
+	GLfloat kLight0Pos[4] = { 0.0, 200.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 }
 
