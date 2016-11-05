@@ -35,11 +35,18 @@ private:
 	btRigidBody* cube_body3_;
 	btRigidBody* cube_body4_;
 	btRigidBody* cube_body5_;
+	btCollisionShape* m_shapes[13];
+	btRigidBody* m_bodies[13];
+	btTypedConstraint* m_joints[12];
+	btCollisionShape* a_shapes[3];
+	btRigidBody* a_bodies[3];
+	btTypedConstraint* a_joints[2];
 
-	void myinit();
-	void renderscene(int pass);
-	void render();
-	void localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
+	void Myinit();
+	void RenderScene(int pass);
+	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
+	void CreateSpider(const btVector3& position);
+	void Create(const btVector3& position);
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();

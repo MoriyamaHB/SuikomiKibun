@@ -6,6 +6,7 @@
  */
 #include "map.h"
 #include "GlutStuff.h"
+#include "LinearMath/btIDebugDraw.h"
 #include "btBulletDynamicsCommon.h"
 #include "BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h"//picking
 #include "BulletDynamics/ConstraintSolver/btGeneric6DofConstraint.h"//picking
@@ -22,7 +23,7 @@
 #include "LinearMath/btSerializer.h"
 
 
-void StageMap::myinit(void)
+void StageMap::Myinit(void)
 {
 
 	GLfloat light_ambient[] = { btScalar(0.2), btScalar(0.2), btScalar(0.2), btScalar(1.0) };
@@ -65,18 +66,17 @@ m_sundirection(btVector3(1,-2,1)*1000),
 m_defaultContactProcessingThreshold(BT_LARGE_FLOAT)
 
 {
-
 	//中心座標
 	btVector3 ground_pos = btVector3(0, 0, 0);
-	btVector3 cube_pos = btVector3(0, 6, 100);
-	btVector3 cube_pos2 = btVector3(0, 6, -100);
-	btVector3 cube_pos3 = btVector3(100, 6, 0);
-	btVector3 cube_pos4 = btVector3(-100, 6, 0);
-	btVector3 cube_pos5 = btVector3(27, 3, 50);
+	btVector3 cube_pos = btVector3(0, 100, 200);
+	btVector3 cube_pos2 = btVector3(0, 100, -200);
+	btVector3 cube_pos3 = btVector3(200, 100, 0);
+	btVector3 cube_pos4 = btVector3(-200, 100, 0);
+	btVector3 cube_pos5 = btVector3(27, 3, 55);
 
 	//大きさ
-	btVector3 ground_extents = btVector3(100, 0.00001, 100);
-	double a = 100.0, b = 6.0, c = 1.0;
+	btVector3 ground_extents = btVector3(200, 0.00001, 200);
+	double a = 200.0, b = 100.0, c = 1.0;
 	btVector3 cube_extents = btVector3(a, b, c);
 	btVector3 cube_extents2 = btVector3(c, b, a);
 	btVector3 cube_extents3 = btVector3(3, 3, 3);
@@ -137,6 +137,13 @@ m_defaultContactProcessingThreshold(BT_LARGE_FLOAT)
 	world_->addRigidBody(cube_body4_);
 	world_->addRigidBody(cube_body5_);
 
+	btVector3 positionOffset(1, 5, 0);
+
+	CreateSpider(positionOffset);
+
+	btVector3 position_a(10, 13, 10);
+
+	Create(position_a);
 
 	m_shapeDrawer = new GL_ShapeDrawer ();
 	m_shapeDrawer->enableTexture(true);
@@ -165,6 +172,38 @@ StageMap::~StageMap(){
 	delete cube_body3_;
 	delete cube_body4_;
 	delete cube_body5_;
+	int i;
+
+			// Remove all constraints
+			for ( i = 0; i < 6; ++i)
+			{
+				world_->removeConstraint(m_joints[i]);
+				delete m_joints[i]; m_joints[i] = 0;
+			}
+
+			// Remove all bodies and shapes
+			for ( i = 0; i < 13; ++i)
+			{
+				world_->removeRigidBody(m_bodies[i]);
+
+				delete m_bodies[i]->getMotionState();
+
+				delete m_bodies[i]; m_bodies[i] = 0;
+				delete m_shapes[i]; m_shapes[i] = 0;
+			}
+
+			world_->removeConstraint(a_joints[0]);
+			world_->removeConstraint(a_joints[1]);
+			delete a_joints[0]; a_joints[0] = 0;
+			delete a_joints[0]; a_joints[0] = 0;
+			for(i = 0; i < 3; i++)
+			{
+				world_->removeRigidBody(a_bodies[i]);
+				delete a_bodies[i]->getMotionState();
+				delete a_bodies[i]; a_bodies[i] = 0;
+				delete a_shapes[i]; a_shapes[i] = 0;
+			}
+
 
 }
 
@@ -177,22 +216,27 @@ void StageMap::Update(){
 void StageMap::Draw(){
 //	myinit();
 
-	glEnable(GL_CULL_FACE);
+	//`glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	world_->debugDrawWorld();
 
+	glClear(GL_STENCIL_BUFFER_BIT);
+	glEnable(GL_CULL_FACE);
+	RenderScene(0);
 
 	glDisable(GL_LIGHTING);
 	glDepthMask(GL_FALSE);
 	glDepthFunc(GL_LEQUAL);
-//	glEnable(GL_STENCIL_TEST);
+	//glEnable(GL_STENCIL_TEST);
 	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
 	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
 	glFrontFace(GL_CCW);
 	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
-	renderscene(1);
+	RenderScene(1);
 	glFrontFace(GL_CW);
 	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
-	renderscene(1);
+	RenderScene(1);
 	glFrontFace(GL_CCW);
+
 
 	glPolygonMode(GL_FRONT,GL_FILL);
 	glPolygonMode(GL_BACK,GL_FILL);
@@ -210,7 +254,9 @@ void StageMap::Draw(){
 	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
 	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
 	glDisable(GL_LIGHTING);
-	renderscene(2);
+
+	RenderScene(2);
+
 	glEnable(GL_LIGHTING);
 	glDepthFunc(GL_LESS);
 	glDisable(GL_STENCIL_TEST);
@@ -220,7 +266,7 @@ void StageMap::Draw(){
 
 }
 
-void	StageMap::renderscene(int pass)
+void	StageMap::RenderScene(int pass)
 {
 	btScalar	m[16];
 	btMatrix3x3	rot;rot.setIdentity();
@@ -264,12 +310,190 @@ void	StageMap::renderscene(int pass)
 //		printf("aabbMax=(%f,%f,%f)\n",aabbMax.getX(),aabbMax.getY(),aabbMax.getZ());
 //		m_dynamicsWorld->getDebugDrawer()->drawAabb(aabbMin,aabbMax,btVector3(1,1,1));
 
+
 		switch(pass)
 		{
+		    case	0:	m_shapeDrawer->drawOpenGL(m,colObj->getCollisionShape(),wireColor,1,aabbMin,aabbMax);break;
 			case	1:	m_shapeDrawer->drawShadow(m,m_sundirection*rot,colObj->getCollisionShape(),aabbMin,aabbMax);break;
 			case	2:	m_shapeDrawer->drawOpenGL(m,colObj->getCollisionShape(),wireColor*btScalar(0.3),0,aabbMin,aabbMax);break;
 		}
 
+
 	}
 }
+
+btRigidBody* StageMap::LocalCreateRigidBody(float mass, const btTransform& startTransform, btCollisionShape* shape)
+{
+	bool isDynamic = (mass != 0.f);
+
+	btVector3 localInertia(0,0,0);
+	if (isDynamic)
+		shape->calculateLocalInertia(mass,localInertia);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape,localInertia);
+	btRigidBody* body = new btRigidBody(rbInfo);
+
+	world_->addRigidBody(body);
+
+	return body;
+
+}
+
+void StageMap::CreateSpider(const btVector3& position)
+{
+	btVector3 vUP(0, 1, 0);
+
+		float fBodySize =0.5f;
+		float fLegLength = 5.45f;
+		float fForeLegLength = 5.75f;
+
+		m_shapes[0] = new btCapsuleShape(btScalar(fBodySize), btScalar(0.10));
+		int i;
+		for(i = 0; i < 6; i++)
+		{
+			m_shapes[1 + 2*i] = new btCapsuleShape(btScalar(0.10), btScalar(fLegLength));
+			m_shapes[2 + 2*i] = new btCapsuleShape(btScalar(0.08), btScalar(fForeLegLength));
+		}
+		float fHeight = 0.5;
+		btTransform offset; offset.setIdentity();
+		offset.setOrigin(position);
+		btVector3 vRoot = btVector3(btScalar(0.), btScalar(fHeight), btScalar(0.));
+		btTransform transform;
+		transform.setIdentity();
+		transform.setOrigin(vRoot);
+		m_bodies[0] = LocalCreateRigidBody(btScalar(1.), offset*transform, m_shapes[0]);
+
+		for(i=0; i < 6; i++)
+		{
+			float fAngle = 2 * 3.14 * i / 6;
+			float fSin = sin(fAngle);
+			float fCos = cos(fAngle);
+
+			transform.setIdentity();
+			btVector3 vBoneOrigin = btVector3(btScalar(fCos*(fBodySize+0.5*fLegLength)), btScalar(fHeight), btScalar(fSin*(fBodySize+0.5*fLegLength)));
+			transform.setOrigin(vBoneOrigin);
+
+			btVector3 vToBone = (vBoneOrigin - vRoot).normalize();
+			btVector3 vAxis = vToBone.cross(vUP);
+			transform.setRotation(btQuaternion(vAxis, 1.57));
+			m_bodies[1+2*i] = LocalCreateRigidBody(btScalar(1.), offset*transform, m_shapes[2+2*i]);
+
+			transform.setIdentity();
+			transform.setOrigin(btVector3(btScalar(fCos*(fBodySize+fLegLength)), btScalar(fHeight-0.5*fForeLegLength), btScalar(fSin*(fBodySize+fLegLength))));
+			m_bodies[2+2*i] = LocalCreateRigidBody(btScalar(1.), offset*transform, m_shapes[2+2*i]);
+		}
+
+		for(i = 0; i < 6; ++i)
+		{
+			m_bodies[i]->setDamping(0.05, 0.85);
+			m_bodies[i]->setDeactivationTime(0.8);
+			m_bodies[i]->setSleepingThresholds(0.5f, 0.5f);
+		}
+
+		btHingeConstraint* hingeC;
+		btTransform localA, localB, localC;
+
+		for(i=0; i < 6; i++)
+		{
+			float fAngle = 2 * 3.14 * i / 6;
+			float fSin = sin(fAngle);
+			float fCos = cos(fAngle);
+
+			localA.setIdentity(); localB.setIdentity();
+			localA.getBasis().setEulerZYX(0, -fAngle, 0); localA.setOrigin(btVector3(btScalar(fCos*fBodySize), btScalar(0.), btScalar(fSin*fBodySize)));
+			localB = m_bodies[1+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
+			hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[1+2*i], localA, localB);
+			hingeC->setLimit(btScalar(-0.75 * 0.78), btScalar(0.39));
+			m_joints[2*i] = hingeC;
+			world_->addConstraint(m_joints[2*i], true);
+
+			localA.setIdentity(); localB.setIdentity(); localC.setIdentity();
+			localA.getBasis().setEulerZYX(0, -fAngle, 0); localA.setOrigin(btVector3(btScalar(fCos*(fBodySize+fLegLength)), btScalar(0.), btScalar(fSin*(fBodySize+fLegLength))));
+			localB = m_bodies[1+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
+			localC = m_bodies[2+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
+			hingeC = new btHingeConstraint(*m_bodies[1+2*i], *m_bodies[2+2*i], localB, localC);
+			hingeC->setLimit(btScalar(-0.39), btScalar(0.2));
+			m_joints[1+2*i] = hingeC;
+			world_->addConstraint(m_joints[1+2*i], true);
+		}
+
+}
+
+void StageMap::Create(const btVector3& position)
+{
+	btVector3 position_a(10, 10, 10);
+	btVector3 position2(10, 14.6, 10);
+	a_shapes[0] = new btCapsuleShape(btScalar(1), btScalar(0.1));
+	btTransform offset; offset.setIdentity();
+	offset.setOrigin(position);
+	a_bodies[0] = LocalCreateRigidBody(btScalar(1.), offset, a_shapes[0]);
+	btTransform offset2; offset2.setIdentity();
+	offset2.setOrigin(position_a);
+	a_shapes[1] = new btCapsuleShape(btScalar(2), btScalar(0.1));
+	a_bodies[1] = LocalCreateRigidBody(btScalar(1), offset2, a_shapes[1]);
+
+	btTransform offset3; offset3.setIdentity();
+	offset3.setOrigin(position2);
+	a_shapes[2] = new btCapsuleShape(btScalar(0.5), btScalar(0.1));
+	a_bodies[2] = LocalCreateRigidBody(btScalar(1), offset3, a_shapes[2]);
+
+	btHingeConstraint* hingeCC;
+	btTransform localA, localB, localC;
+	localA.setIdentity(); localB.setIdentity();
+//	localA.getBasis().setEulerZYX(0, 0, 0); localA.setOrigin(btVector3(btScalar(6), btScalar(6), btScalar(6)));
+	localB = a_bodies[0]->getWorldTransform().inverse() * a_bodies[1]->getWorldTransform() * localA;
+
+		hingeCC = new btHingeConstraint(*a_bodies[0], *a_bodies[1], localB, localA);
+		hingeCC->setLimit(btScalar(0), btScalar(0));
+		a_joints[0] = hingeCC;
+		world_->addConstraint(a_joints[0], true);
+
+		localC = a_bodies[0]->getWorldTransform().inverse() * a_bodies[2]->getWorldTransform() * localA;
+
+		hingeCC = new btHingeConstraint(*a_bodies[0], *a_bodies[2], localC, localA);
+		hingeCC->setLimit(btScalar(0), btScalar(0));
+		a_joints[1] = hingeCC;
+		world_->addConstraint(a_joints[1], true);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
