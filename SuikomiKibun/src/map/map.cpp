@@ -23,57 +23,51 @@
 #include "LinearMath/btSerializer.h"
 
 
-void StageMap::Myinit(void)
-{
-
-	GLfloat light_ambient[] = { btScalar(0.2), btScalar(0.2), btScalar(0.2), btScalar(1.0) };
-	GLfloat light_diffuse[] = { btScalar(1.0), btScalar(1.0), btScalar(1.0), btScalar(1.0) };
-	GLfloat light_specular[] = { btScalar(1.0), btScalar(1.0), btScalar(1.0), btScalar(1.0 )};
-	//		light_position is NOT default value
-	GLfloat light_position0[] = { btScalar(1.0), btScalar(10.0), btScalar(1.0), btScalar(0.0 )};
-	GLfloat light_position1[] = { btScalar(-1.0), btScalar(-10.0), btScalar(-1.0), btScalar(0.0) };
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position0);
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-
-
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
-	glClearColor(btScalar(0.7),btScalar(0.7),btScalar(0.7),btScalar(0));
-
-	//  glEnable(GL_CULL_FACE);
-	//  glCullFace(GL_BACK);
-}
-
 //コンストラクタ
 StageMap::StageMap(btDynamicsWorld* world)
-	:world_(world)
-	 ,m_enableshadows(true),
+	:m_enableshadows(true),
 	 m_sundirection(btVector3(1,-2,1)*1000),
-	 m_defaultContactProcessingThreshold(BT_LARGE_FLOAT)
-
+	 m_defaultContactProcessingThreshold(BT_LARGE_FLOAT),
+	 world_(world)
 {
 	//中心座標
 	btVector3 ground_pos = btVector3(0, 0, 0);
-	btVector3 cube_pos = btVector3(0, 100, 200);
-	btVector3 cube_pos2 = btVector3(0, 100, -200);
-	btVector3 cube_pos3 = btVector3(200, 100, 0);
-	btVector3 cube_pos4 = btVector3(-200, 100, 0);
-	btVector3 cube_pos5 = btVector3(27, 3, 55);
+	btVector3 wall1_pos = btVector3(0, 100, 200);
+	btVector3 wall2_pos = btVector3(0, 100, -200);
+	btVector3 wall3_pos = btVector3(200, 100, 0);
+	btVector3 wall4_pos = btVector3(-200, 100, 0);
 
+	btTransform offset; offset.setIdentity();
+
+	//形状を設定
+	btCollisionShape *ground_shape = new btBoxShape(btVector3(200, 0.001, 200));
+	btCollisionShape *wall_shape = new btBoxShape(btVector3(200, 100, 1));
+	btCollisionShape *wall_shape2 = new btBoxShape(btVector3(1, 100, 200));
+
+	//bulletに登録
+	offset.setOrigin(ground_pos);
+	ground_body_ = LocalCreateRigidBody(btScalar(0.), offset, ground_shape);
+	offset.setIdentity(); offset.setOrigin(wall1_pos);
+	wall_body_[0] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	offset.setIdentity(); offset.setOrigin(wall2_pos);
+	wall_body_[1] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	offset.setIdentity(); offset.setOrigin(wall3_pos);
+	wall_body_[2] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape2);
+	offset.setIdentity(); offset.setOrigin(wall4_pos);
+	wall_body_[3] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape2);
+
+	//反発係数
+	btScalar ground_rest = 0.6;
+	btScalar wall_rest = 0.4;
+
+	//反発係数設定
+	ground_body_->setRestitution(ground_rest);
+	for(int i = 0; i < 4; i++)
+	{
+		wall_body_[i]->setRestitution(wall_rest);
+	}
+
+/*
 	//大きさ
 	btVector3 ground_extents = btVector3(200, 0.00001, 200);
 	double a = 200.0, b = 100.0, c = 1.0;
@@ -93,6 +87,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btVector3 ground_inertia(0, 0, 0);
 	btVector3 cube_inertia(cube_mass * (b * b + c * c) / 3.0, cube_mass * (a * a + c * c) / 3.0,
 			cube_mass * (b * b + a * a) / 3.0);
+
 	//形状を設定
 	btCollisionShape *ground_shape = new btBoxShape(ground_extents);
 	btCollisionShape *cube_shape = new btBoxShape(cube_extents);
@@ -136,62 +131,29 @@ StageMap::StageMap(btDynamicsWorld* world)
 	world_->addRigidBody(cube_body3_);
 	world_->addRigidBody(cube_body4_);
 	world_->addRigidBody(cube_body5_);
+*/
 
 	btVector3 positionOffset(1, 5, 0);
-
 	CreateSpider(positionOffset);
 
 	btVector3 position_a(10, 13, 10);
-
 	Create(position_a);
 
+	//描画
 	m_shapeDrawer = new GL_ShapeDrawer ();
 	m_shapeDrawer->enableTexture(true);
-	m_enableshadows = false;
 
 }
 
 //デストラクタ
-StageMap::~StageMap(){
-
-	delete ground_body_->getMotionState();
-	delete cube_body_->getMotionState();
-	delete cube_body2_->getMotionState();
-	delete cube_body3_->getMotionState();
-	delete cube_body4_->getMotionState();
-	delete cube_body5_->getMotionState();
-	world_->removeRigidBody(ground_body_);
-	world_->removeRigidBody(cube_body_);
-	world_->removeRigidBody(cube_body2_);
-	world_->removeRigidBody(cube_body3_);
-	world_->removeRigidBody(cube_body4_);
-	world_->removeRigidBody(cube_body5_);
-	delete ground_body_;
-	delete cube_body_;
-	delete cube_body2_;
-	delete cube_body3_;
-	delete cube_body4_;
-	delete cube_body5_;
-
-
+StageMap::~StageMap()
+{
 	int i;
 
-	// Remove all constraints
 	for ( i = 0; i < 6; ++i)
 	{
 		world_->removeConstraint(m_joints[i]);
 		delete m_joints[i]; m_joints[i] = 0;
-	}
-
-	// Remove all bodies and shapes
-	for ( i = 0; i < 13; ++i)
-	{
-		world_->removeRigidBody(m_bodies[i]);
-
-		delete m_bodies[i]->getMotionState();
-
-		delete m_bodies[i]; m_bodies[i] = 0;
-		delete m_shapes[i]; m_shapes[i] = 0;
 	}
 
 	world_->removeConstraint(a_joints[0]);
@@ -199,16 +161,18 @@ StageMap::~StageMap(){
 	delete a_joints[0]; a_joints[0] = 0;
 	delete a_joints[1]; a_joints[1] = 0;
 
-	for(i = 0; i < 3; i++)
+	//オブジェクトの破棄
+	for (i = world_->getNumCollisionObjects() - 2; i >= 0; i--)
 	{
-		world_->removeRigidBody(a_bodies[i]);
-		delete a_bodies[i]->getMotionState();
-		delete a_bodies[i]; a_bodies[i] = 0;
-		delete a_shapes[i]; a_shapes[i] = 0;
+		btCollisionObject* obj = world_->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		world_->removeCollisionObject( obj );
+		delete obj;
 	}
-
-
-
 }
 
 //更新
@@ -218,53 +182,49 @@ void StageMap::Update(){
 
 //描画
 void StageMap::Draw(){
-	//	myinit();
 
-	//`glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	world_->debugDrawWorld();
-
-	glClear(GL_STENCIL_BUFFER_BIT);
-	glEnable(GL_CULL_FACE);
-	RenderScene(0);
-
+//	glClear(GL_STENCIL_BUFFER_BIT);
+//	glEnable(GL_CULL_FACE);
+//	RenderScene(0);
+//
 	glDisable(GL_LIGHTING);
-	glDepthMask(GL_FALSE);
-	glDepthFunc(GL_LEQUAL);
-	//glEnable(GL_STENCIL_TEST);
-	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
-	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
-	glFrontFace(GL_CCW);
-	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
-	RenderScene(1);
-	glFrontFace(GL_CW);
-	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
-	RenderScene(1);
-	glFrontFace(GL_CCW);
-
-
-	glPolygonMode(GL_FRONT,GL_FILL);
-	glPolygonMode(GL_BACK,GL_FILL);
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_LIGHTING);
-	glDepthMask(GL_TRUE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
-	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-
-	glDepthFunc(GL_LEQUAL);
-	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
-	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
-	glDisable(GL_LIGHTING);
+//	glDepthMask(GL_FALSE);
+//	glDepthFunc(GL_LEQUAL);
+//	//glEnable(GL_STENCIL_TEST);
+//	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
+//	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
+//	glFrontFace(GL_CCW);
+//	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
+//	RenderScene(1);
+//	glFrontFace(GL_CW);
+//	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
+//	RenderScene(1);
+//	glFrontFace(GL_CCW);
+//
+//
+//	glPolygonMode(GL_FRONT,GL_FILL);
+//	glPolygonMode(GL_BACK,GL_FILL);
+//	glShadeModel(GL_SMOOTH);
+//	glEnable(GL_DEPTH_TEST);
+//	glDepthFunc(GL_LESS);
+//	glEnable(GL_LIGHTING);
+//	glDepthMask(GL_TRUE);
+//	glCullFace(GL_BACK);
+//	glFrontFace(GL_CCW);
+//	glEnable(GL_CULL_FACE);
+//	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+//
+//	glDepthFunc(GL_LEQUAL);
+//	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
+//	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
+//	glDisable(GL_LIGHTING);
 
 	RenderScene(2);
 
-	glEnable(GL_LIGHTING);
-	glDepthFunc(GL_LESS);
-	glDisable(GL_STENCIL_TEST);
-	glDisable(GL_CULL_FACE);
+//	glEnable(GL_LIGHTING);
+//	glDepthFunc(GL_LESS);
+//	glDisable(GL_STENCIL_TEST);
+//	glDisable(GL_CULL_FACE);
 
 	glFlush();
 
@@ -326,6 +286,7 @@ void	StageMap::RenderScene(int pass)
 	}
 }
 
+//bulletに登録
 btRigidBody* StageMap::LocalCreateRigidBody(float mass, const btTransform& startTransform, btCollisionShape* shape)
 {
 	bool isDynamic = (mass != 0.f);
@@ -341,11 +302,11 @@ btRigidBody* StageMap::LocalCreateRigidBody(float mass, const btTransform& start
 	world_->addRigidBody(body);
 
 	return body;
-
 }
 
 void StageMap::CreateSpider(const btVector3& position)
 {
+	btCollisionShape* m_shapes[13];
 	btVector3 vUP(0, 1, 0);
 
 	float fBodySize =0.5f;
@@ -366,7 +327,7 @@ void StageMap::CreateSpider(const btVector3& position)
 	btTransform transform;
 	transform.setIdentity();
 	transform.setOrigin(vRoot);
-	m_bodies[0] = LocalCreateRigidBody(btScalar(1.), offset*transform, m_shapes[0]);
+	m_bodies[0] = LocalCreateRigidBody(btScalar(0.01), offset*transform, m_shapes[0]);
 
 	for(i=0; i < 6; i++)
 	{
@@ -381,11 +342,11 @@ void StageMap::CreateSpider(const btVector3& position)
 		btVector3 vToBone = (vBoneOrigin - vRoot).normalize();
 		btVector3 vAxis = vToBone.cross(vUP);
 		transform.setRotation(btQuaternion(vAxis, 1.57));
-		m_bodies[1+2*i] = LocalCreateRigidBody(btScalar(1.), offset*transform, m_shapes[2+2*i]);
+		m_bodies[1+2*i] = LocalCreateRigidBody(btScalar(0.01), offset*transform, m_shapes[2+2*i]);
 
 		transform.setIdentity();
 		transform.setOrigin(btVector3(btScalar(fCos*(fBodySize+fLegLength)), btScalar(fHeight-0.5*fForeLegLength), btScalar(fSin*(fBodySize+fLegLength))));
-		m_bodies[2+2*i] = LocalCreateRigidBody(btScalar(1.), offset*transform, m_shapes[2+2*i]);
+		m_bodies[2+2*i] = LocalCreateRigidBody(btScalar(0.01), offset*transform, m_shapes[2+2*i]);
 	}
 
 	for(i = 0; i < 6; ++i)
@@ -424,10 +385,13 @@ void StageMap::CreateSpider(const btVector3& position)
 
 }
 
+
 void StageMap::Create(const btVector3& position)
 {
+	btCollisionShape* a_shapes[3];
 	btVector3 position_a(10, 10, 10);
 	btVector3 position2(10, 14.6, 10);
+
 	a_shapes[0] = new btCapsuleShape(btScalar(1), btScalar(0.1));
 	btTransform offset; offset.setIdentity();
 	offset.setOrigin(position);

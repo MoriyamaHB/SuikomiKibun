@@ -30,20 +30,13 @@ protected:
 private:
 	btDynamicsWorld* world_;
 	btRigidBody* ground_body_;
-	btRigidBody* cube_body_;
-	btRigidBody* cube_body2_;
-	btRigidBody* cube_body3_;
-	btRigidBody* cube_body4_;
-	btRigidBody* cube_body5_;
+	btRigidBody* wall_body_[4];
 
-	btCollisionShape* m_shapes[13];
 	btRigidBody* m_bodies[13];
 	btTypedConstraint* m_joints[12];
-	btCollisionShape* a_shapes[3];
 	btRigidBody* a_bodies[3];
 	btTypedConstraint* a_joints[2];
 
-	void Myinit();
 	void RenderScene(int pass);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
 	void CreateSpider(const btVector3& position);
