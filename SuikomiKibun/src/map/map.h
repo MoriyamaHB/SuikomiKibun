@@ -35,6 +35,7 @@ private:
 	btRigidBody* cube_body3_;
 	btRigidBody* cube_body4_;
 	btRigidBody* cube_body5_;
+
 	btCollisionShape* m_shapes[13];
 	btRigidBody* m_bodies[13];
 	btTypedConstraint* m_joints[12];
