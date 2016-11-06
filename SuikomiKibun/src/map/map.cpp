@@ -427,16 +427,16 @@ void StageMap::Create(const btVector3& position)
 	a_shapes[0] = new btCapsuleShape(btScalar(1), btScalar(0.1));
 	btTransform offset; offset.setIdentity();
 	offset.setOrigin(position);
-	a_bodies[0] = LocalCreateRigidBody(btScalar(1.), offset, a_shapes[0]);
+	a_bodies[0] = LocalCreateRigidBody(btScalar(0.01), offset, a_shapes[0]);
 	btTransform offset2; offset2.setIdentity();
 	offset2.setOrigin(position_a);
 	a_shapes[1] = new btCapsuleShape(btScalar(2), btScalar(0.1));
-	a_bodies[1] = LocalCreateRigidBody(btScalar(1), offset2, a_shapes[1]);
+	a_bodies[1] = LocalCreateRigidBody(btScalar(0.01), offset2, a_shapes[1]);
 
 	btTransform offset3; offset3.setIdentity();
 	offset3.setOrigin(position2);
 	a_shapes[2] = new btCapsuleShape(btScalar(0.5), btScalar(0.1));
-	a_bodies[2] = LocalCreateRigidBody(btScalar(1), offset3, a_shapes[2]);
+	a_bodies[2] = LocalCreateRigidBody(btScalar(0.01), offset3, a_shapes[2]);
 
 	btHingeConstraint* hingeCC;
 	btTransform localA, localB, localC;
