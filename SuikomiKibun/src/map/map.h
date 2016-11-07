@@ -32,15 +32,16 @@ private:
 	btRigidBody* ground_body_;
 	btRigidBody* wall_body_[4];
 
+	btRigidBody* box_body_[14];
+
 	btRigidBody* m_bodies[13];
-	btTypedConstraint* m_joints[12];
 	btRigidBody* a_bodies[3];
-	btTypedConstraint* a_joints[2];
 
 	void RenderScene(int pass);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
 	void CreateSpider(const btVector3& position);
 	void Create(const btVector3& position);
+	void CreatePyramid(const btVector3& position);
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();
