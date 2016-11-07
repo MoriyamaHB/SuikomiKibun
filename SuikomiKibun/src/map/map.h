@@ -19,6 +19,8 @@
 #include "../util/uGL.h"
 #include "../define.h"
 
+#define PI_ 3.1415926
+
 class StageMap{
 protected:
 	GL_ShapeDrawer*	m_shapeDrawer;
@@ -33,6 +35,8 @@ private:
 	btRigidBody* wall_body_[4];
 
 	btRigidBody* box_body_[14];
+	btRigidBody* triangle_shere_[4];
+	btRigidBody* triangle_sides_[6];
 
 	btRigidBody* m_bodies[13];
 	btRigidBody* a_bodies[3];
@@ -42,6 +46,8 @@ private:
 	void CreateSpider(const btVector3& position);
 	void Create(const btVector3& position);
 	void CreatePyramid(const btVector3& position);
+	void CreateTriangle(const btVector3& position);
+
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();

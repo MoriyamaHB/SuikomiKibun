@@ -132,7 +132,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	world_->addRigidBody(cube_body5_);
 */
 
-	btVector3 positionOffset(10, 5, 5);
+	btVector3 positionOffset(10, 10, 5);
 	CreateSpider(positionOffset);
 
 	btVector3 position_a(10, 13, 25);
@@ -140,6 +140,9 @@ StageMap::StageMap(btDynamicsWorld* world)
 
 	btVector3 position_b(10, 2.5, 40);
 	CreatePyramid(position_b);
+
+	btVector3 position_c(10, 20, 50);
+	CreateTriangle(position_c);
 
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer ();
@@ -421,8 +424,8 @@ void StageMap::Create(const btVector3& position)
 
 void StageMap::CreatePyramid(const btVector3& position)
 {
-	float cube_size = 1.1;
-	float cube_mass = 10;
+	float cube_size = 0.3;
+	float cube_mass = 0.01;
 	btTypedConstraint* joint;
 	btVector3 position1(cube_size*2, cube_size*2, cube_size*2);
 	btVector3 position2(cube_size*4, 0, 0);
@@ -610,40 +613,142 @@ void StageMap::CreatePyramid(const btVector3& position)
 	world_->addConstraint(joint, true);
 }
 
+void StageMap::CreateTriangle(const btVector3& position)
+{
+	btTypedConstraint* joints_triangel;
+	float sphere_size = 0.7;
+	float side_size = 8;
+	btTransform trans;
+	btVector3 position1(side_size/sqrt(3), -side_size*sqrt(3)/2, 0);
+	btVector3 position2(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/2, side_size/2);
+	btVector3 position3(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/2, -side_size/2);
+	btVector3 position4(side_size/sqrt(3)/2, -side_size*sqrt(3)/4, 0);
+	btVector3 position5(-side_size/(4*sqrt(3)), -side_size*sqrt(3)/4, side_size/4);
+	btVector3 position6(-side_size/(4*sqrt(3)), -side_size*sqrt(3)/4, -side_size/4);
+	btVector3 position7(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/2, 0);
+	btVector3 position8(side_size/(4*sqrt(3)), -side_size*sqrt(3)/2, side_size/4);
+	btVector3 position9(side_size/(4*sqrt(3)), -side_size*sqrt(3)/2, -side_size/4);
 
+	btCollisionShape *sphere_shape = new btSphereShape(sphere_size);
+	btCollisionShape *side_shape = new btCapsuleShape(btScalar(0.1), btScalar(side_size));
 
+	btTransform offset; offset.setIdentity();
+	btTransform offset2; offset2.setIdentity();
+	offset2.setOrigin(position1);
+	offset.setOrigin(position);
 
+	//cubeをbulletに登録
+	triangle_shere_[0] = LocalCreateRigidBody(btScalar(10), offset, sphere_shape);
+	triangle_shere_[1] = LocalCreateRigidBody(btScalar(10), offset*offset2, sphere_shape);
+	offset2.setIdentity(); offset2.setOrigin(position2);
+	triangle_shere_[2] = LocalCreateRigidBody(btScalar(10), offset*offset2, sphere_shape);
+	offset2.setIdentity(); offset2.setOrigin(position3);
+	triangle_shere_[3] = LocalCreateRigidBody(btScalar(10), offset*offset2, sphere_shape);
+	offset2.setIdentity(); offset2.setOrigin(position4);
+	offset2.setRotation(btQuaternion(0,0,PI_/6));
+	triangle_sides_[0] = LocalCreateRigidBody(btScalar(10), offset*offset2, side_shape);
+	offset2.setIdentity(); offset2.setOrigin(position5);
+	offset2.setRotation(btQuaternion(0, -PI_/6, -PI_/12));
+	triangle_sides_[1] = LocalCreateRigidBody(btScalar(10), offset*offset2, side_shape);
+	offset2.setIdentity(); offset2.setOrigin(position6);
+	offset2.setRotation(btQuaternion(0, PI_/6, -PI_/12));
+	triangle_sides_[2] = LocalCreateRigidBody(btScalar(10), offset*offset2, side_shape);
+	offset2.setIdentity(); offset2.setOrigin(position7);
+	offset2.setRotation(btQuaternion(0, PI_/2, 0));
+	triangle_sides_[3] = LocalCreateRigidBody(btScalar(10), offset*offset2, side_shape);
+	offset2.setIdentity(); offset2.setOrigin(position8);
+	offset2.setRotation(btQuaternion(0, PI_/2, PI_/3));
+	triangle_sides_[4] = LocalCreateRigidBody(btScalar(10), offset*offset2, side_shape);
+	offset2.setIdentity(); offset2.setOrigin(position9);
+	offset2.setRotation(btQuaternion(0, PI_/2, -PI_/3));
+	triangle_sides_[5] = LocalCreateRigidBody(btScalar(10), offset*offset2, side_shape);
 
+	btHingeConstraint* hingeC;
+	btTransform localA, localB, localC;
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[0]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[0], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[1]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[1], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[2]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[2], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[0]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[0], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[4]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[4], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[5], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[1]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[1], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[4]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[4], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[3]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[3], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[2]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[2], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[5], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	localA.setIdentity(); localB.setIdentity();
+	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[3]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[3], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joints_triangel = hingeC;
+	world_->addConstraint(joints_triangel, true);
+}
 
 
