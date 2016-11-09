@@ -47,6 +47,7 @@ private:
 	void Create(const btVector3& position);
 	void CreatePyramid(const btVector3& position);
 	void CreateTriangle(const btVector3& position);
+	void CreateTower(const btVector3& position);
 
 public:
 	StageMap(btDynamicsWorld* world);
