@@ -10,17 +10,14 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	//ワールド作成
 	{
 		//衝突検出方法の選択(デフォルトを選択)
-		btDefaultCollisionConfiguration *config =
-				new btDefaultCollisionConfiguration();
+		btDefaultCollisionConfiguration *config = new btDefaultCollisionConfiguration();
 		btCollisionDispatcher *dispatcher = new btCollisionDispatcher(config);
 		//ブロードフェーズ法の設定(Dynamic AABB tree method)
 		btDbvtBroadphase *broadphase = new btDbvtBroadphase();
 		//拘束(剛体間リンク)ソルバの設定
-		btSequentialImpulseConstraintSolver* solver =
-				new btSequentialImpulseConstraintSolver();
+		btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
 		//Bulletのワールド作成
-		dynamics_world_ = new btDiscreteDynamicsWorld(dispatcher, broadphase,
-				solver, config);
+		dynamics_world_ = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, config);
 		dynamics_world_->setGravity(btVector3(0, -9.8, 0));
 	}
 	//マップ作成
@@ -43,11 +40,12 @@ GameScene::~GameScene() {
 //更新
 void GameScene::Update() {
 	//bulletをすすめる
-	dynamics_world_->stepSimulation(1.0 / kFps);
+	dynamics_world_->stepSimulation(1.0 / kFps, 0);
 
 	//カメラ更新
-	Vector3 player_pos = player_->GetCenterPos();
+	Vector3 player_pos = player_->get_center_pos();
 	camera_.Update(player_pos.x, player_pos.y, player_pos.z);
+	camera_.set_distance(player_->get_camera_distance());
 
 	//マップ更新
 	map_->Update();
@@ -56,7 +54,9 @@ void GameScene::Update() {
 	player_->Update(camera_.get_angle_w() + M_PI);
 
 	//ライト
-	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
+
+	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
+
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 }
 
