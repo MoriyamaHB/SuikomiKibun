@@ -135,10 +135,10 @@ void BtDemoScene::Update() {
 	if (is_server_) {
 		server_->Update();
 	}
-	ClientData client_data;
+	ToServerContainer client_data;
 	client_data.player_data.pos = sphere_body_->getCenterOfMassPosition();
 	client_->set_send_data(client_data);
-	ServerData server_data = client_->get_receive_data();
+	ToClientContainer server_data = client_->get_receive_data();
 	pos1_ = server_data.player_data[0].pos;
 	pos2_ = server_data.player_data[1].pos;
 	client_->Update();

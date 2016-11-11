@@ -6,9 +6,13 @@
 #include <boost/thread.hpp>
 #include <iostream>
 #include <string.h>
+#include <time.h>
 
 #include "../util/uGL.h"
 #include "../gv.h"
+
+class ComClient;
+#include "server.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
@@ -20,8 +24,9 @@ private:
 	tcp::acceptor acceptor_;
 	tcp::socket socket_;
 	asio::streambuf receive_buff_;	//受信バッファ
-	ClientData receive_data_; 	//受信データ
-	ServerData send_data_;		//送信データ
+	ToServerContainer receive_data_; 	//受信データ
+	ToClientContainer send_data_;		//送信データ
+	Server *server_;		//サーバー
 	//接続タイムアウト
 	asio::deadline_timer accept_timer_;
 	asio::deadline_timer send_timer_;
@@ -44,12 +49,12 @@ private:
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
-	ComClient(asio::io_service &io_service, int port);
+	ComClient(asio::io_service &io_service, int port, Server* se);
 	~ComClient();
 	void Start();	//送受信スタート
 
-	void set_send_data(const ServerData &send_data);
-	ClientData get_receive_data() const;
+	void set_send_data(const ToClientContainer &send_data);
+	ToServerContainer get_receive_data() const;
 	bool get_has_accepted() const;
 };
 

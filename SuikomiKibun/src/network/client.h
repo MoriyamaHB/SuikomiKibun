@@ -12,6 +12,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
+#include <time.h>
 
 #include "../util/vector3.h"
 #include "../util/uGL.h"
@@ -31,8 +32,8 @@ private:
 	asio::streambuf receive_buff_;
 	tcp::socket socket_;
 	int port_; //ポート番号
-	ClientData send_data_;		//送信データ
-	ServerData receive_data_;	//受信データ
+	ToServerContainer send_data_;		//送信データ
+	ToClientContainer receive_data_;	//受信データ
 	//接続タイムアウト
 	asio::deadline_timer connect_timer_;
 	asio::deadline_timer send_timer_;
@@ -66,8 +67,8 @@ public:
 	void Update();
 	void Draw();
 
-	void set_send_data(const ClientData &send_data);
-	ServerData get_receive_data() const;
+	void set_send_data(const ToServerContainer &send_data);
+	ToClientContainer get_receive_data() const;
 };
 
 #endif

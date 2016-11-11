@@ -8,17 +8,32 @@
 
 extern OutputDisplay output_display0;
 
+//プレイヤーデータ
 typedef struct {
 	Vector3 pos;
 	double radius;
 } PlayerData;
 
-typedef struct {
-	PlayerData player_data;
-} ClientData;
+//送信するデータの種類を示す(toサーバー)
+enum CommandToServer {
+	kPlayerDataToServer
+};
 
+//送信するデータの種類を示す(toクライアント)
+enum CommandToClient {
+	kPlayerDataToClient
+};
+
+//クライアントからサーバーに送信するデータ
 typedef struct {
+	CommandToServer command; //データの種類
+	PlayerData player_data; //プレイヤーデータ
+} ToServerContainer;
+
+//サーバーからクライアントに送信するデータ
+typedef struct {
+	CommandToClient command; //データの種類
 	PlayerData player_data[2];
-} ServerData;
+} ToClientContainer;
 
 #endif /* SUIKOMIKIBUN_GV_H_ */

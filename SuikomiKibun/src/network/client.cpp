@@ -112,7 +112,7 @@ void Client::OnConnectTimeOut(const boost::system::error_code& error) {
 
 //クライアント情報送信
 void Client::Send() {
-	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ClientData)),
+	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ToServerContainer)),
 			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
@@ -128,6 +128,12 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 		return;
 	}
 	send_timer_.cancel(); // タイムアウトのタイマーを切る
+	timespec time;
+	//0.1秒を設定
+	time.tv_sec = 0;
+	time.tv_nsec = 100;
+	//データが更新されるまで待機
+	nanosleep(&time, NULL);
 	Send();
 }
 
@@ -141,7 +147,7 @@ void Client::OnSendTimeOut(const boost::system::error_code& error) {
 
 //サーバー情報受信
 void Client::StartReceive() {
-	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ServerData)),
+	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
 			boost::bind(&Client::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
@@ -157,7 +163,7 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 		return;
 	}
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
-	const ServerData* recive_data = asio::buffer_cast<const ServerData*>(receive_buff_.data());
+	const ToClientContainer* recive_data = asio::buffer_cast<const ToClientContainer*>(receive_buff_.data());
 	receive_data_ = *recive_data;
 	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
 	receive_buff_.consume(receive_buff_.size());
@@ -172,11 +178,11 @@ void Client::OnReceiveTimeOut(const boost::system::error_code& error) {
 	}
 }
 
-void Client::set_send_data(const ClientData& send_data) {
+void Client::set_send_data(const ToServerContainer& send_data) {
 	send_data_ = send_data;
 }
 
-ServerData Client::get_receive_data() const {
+ToClientContainer Client::get_receive_data() const {
 	return receive_data_;
 }
 

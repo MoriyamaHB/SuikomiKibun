@@ -1,9 +1,9 @@
 #include "../network/com_client.h"
 
-ComClient::ComClient(asio::io_service &io_service, int port) :
+ComClient::ComClient(asio::io_service &io_service, int port, Server* se) :
 		io_service_(io_service), acceptor_(io_service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket_(
 				io_service), accept_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kPort(
-				port) {
+				port), server_(se) {
 	//メンバー変数初期化
 	memset(&send_data_, 0, sizeof(send_data_));
 	memset(&receive_data_, 0, sizeof(receive_data_));
@@ -57,7 +57,14 @@ void ComClient::Start() {
 
 //送信
 void ComClient::Send() {
-	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ServerData)),
+	timespec time;
+	//0.1秒を設定
+	time.tv_sec = 0;
+	time.tv_nsec = 100000000;
+	//データが更新されるまで待機
+	while (server_->changed_player_data_ == false)
+		nanosleep(&time, NULL);
+	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ToClientContainer)),
 			bind(&ComClient::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(5));
@@ -82,7 +89,7 @@ void ComClient::OnSendTimeOut(const boost::system::error_code& error) {
 
 //受信
 void ComClient::Receive() {
-	asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ClientData)),
+	asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ToServerContainer)),
 			bind(&ComClient::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(5));
@@ -95,10 +102,11 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 		return;
 	}
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
-	const ClientData* data = asio::buffer_cast<const ClientData*>(receive_buff_.data());
+	const ToServerContainer* data = asio::buffer_cast<const ToServerContainer*>(receive_buff_.data());
 	receive_data_ = *data;
 	printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
 	receive_buff_.consume(receive_buff_.size());
+	server_->changed_player_data_ = true;
 	Receive();
 }
 
@@ -110,11 +118,11 @@ void ComClient::OnReceiveTimeOut(const boost::system::error_code& error) {
 }
 
 //getter,setter
-void ComClient::set_send_data(const ServerData& send_data) {
+void ComClient::set_send_data(const ToClientContainer& send_data) {
 	send_data_ = send_data;
 }
 
-ClientData ComClient::get_receive_data() const {
+ToServerContainer ComClient::get_receive_data() const {
 	return receive_data_;
 }
 
