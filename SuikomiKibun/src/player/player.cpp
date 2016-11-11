@@ -1,5 +1,7 @@
 #include "player.h"
 
+btRigidBody* Player::delete_body_ = NULL;
+
 //コンストラクタ
 Player::Player(btDynamicsWorld* world) :
 		world_(world) {
@@ -26,7 +28,7 @@ Player::Player(btDynamicsWorld* world) :
 	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
-	sphere_body_->setUserPointer(&m_BodyData1);  // ユーザーデータをセット
+	//sphere_body_->setUserPointer(&m_BodyData1);  // ユーザーデータをセット
 
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
@@ -108,12 +110,13 @@ void Player::Update(double angle) {
 		}
 	}
 
-	//player_radius_ += 0.01;
+	player_radius_ += 0.01;
+	PlayerSize(player_radius_);
 
-	//playerSize(player_radius_);
-	// if(sphere_body_!= NULL && m_BodyData1.count > 1) {
-//	    DeleteBody(&sphere_body_);// 削除テスト
-	  //}
+
+	 if(delete_body_!= NULL) {
+	    DeleteBody(&delete_body_);// 削除テスト
+	  }
 
 }
 
@@ -163,11 +166,11 @@ void Player::DeleteBody(btRigidBody** ppBody){
 }
 
 bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
-	//btRigidBody* pBody0 = (btRigidBody*) a;
+	delete_body_ = static_cast<btRigidBody*> (a);
 	//btRigidBody* pBody1 = (btRigidBody*) b;
 
 	//	btRigid
-	//	world_->removeRigidBody(pBody);
+//	btRigidBody* obj = world_->getCollisionObjectArray()[0];
 	//	if(pBody){
 	//		delete pBody->getMotionState();
 //		}
@@ -178,15 +181,14 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 
 
 
-
 	//TestData* pUserData0 = (TestData*) pBody0->getUserPointer();
-	//TestData* pUserData1 = (TestData*) pBody1->getUserPointer();
+//	TestData* pUserData1 = (TestData*) pBody1->getUserPointer();
 
 	// カウント
 	//if (pUserData0)
 		//pUserData0->count++;
 //	if (pUserData1)
-	//	pUserData1->count++;
+//		pUserData1->count++;
 
 
 	return true;

@@ -75,7 +75,7 @@ m_defaultContactProcessingThreshold(BT_LARGE_FLOAT)
 	btVector3 cube_pos5 = btVector3(27, 3, 50);
 
 	//大きさ
-	btVector3 ground_extents = btVector3(100, 0.00001, 100);
+	btVector3 ground_extents = btVector3(200, 0.00001, 200);
 	double a = 100.0, b = 6.0, c = 1.0;
 	btVector3 cube_extents = btVector3(a, b, c);
 	btVector3 cube_extents2 = btVector3(c, b, a);

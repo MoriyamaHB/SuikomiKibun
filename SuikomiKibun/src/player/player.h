@@ -24,10 +24,9 @@ private:
 	btRigidBody* sphere_body_;
 	btRigidBody* sphere_body2_;
 	btScalar player_radius_;
-	btRigidBody*  m_Body1;
 	TestData    m_BodyData1;
+	static btRigidBody* delete_body_;
 public:
-
 	Player(btDynamicsWorld* world);
 	~Player();
 	void Update(double angle);

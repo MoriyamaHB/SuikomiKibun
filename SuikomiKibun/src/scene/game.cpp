@@ -43,7 +43,7 @@ GameScene::~GameScene() {
 //更新
 void GameScene::Update() {
 	//bulletをすすめる
-	dynamics_world_->stepSimulation(1.0 / kFps);
+	dynamics_world_->stepSimulation(1.0 / kFps,0);
 
 	//カメラ更新
 	Vector3 player_pos = player_->get_center_pos();
