@@ -27,8 +27,12 @@ StageMap::StageMap(btDynamicsWorld* world)
 	:m_enableshadows(true),
 	 m_sundirection(btVector3(1,-2,1)*1000),
 	 m_defaultContactProcessingThreshold(BT_LARGE_FLOAT),
-	 world_(world)
+	 world_(world),
+	color_num_(0)
 {
+	//オブジェクト
+	btRigidBody* ground_body;
+	btRigidBody* wall_body[4];
 	//中心座標
 	btVector3 ground_pos = btVector3(0, 0, 0);
 	btVector3 wall1_pos = btVector3(0, 100, 200);
@@ -45,25 +49,30 @@ StageMap::StageMap(btDynamicsWorld* world)
 
 	//bulletに登録（地面＆壁）
 	offset.setOrigin(ground_pos);
-	ground_body_ = LocalCreateRigidBody(btScalar(0.), offset, ground_shape);
+	ground_body = LocalCreateRigidBody(btScalar(0.), offset, ground_shape);
+	color_[color_num_++] = btVector3(1.0, 1.0, 1.0);
 	offset.setIdentity(); offset.setOrigin(wall1_pos);
-	wall_body_[0] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	wall_body[0] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	color_[color_num_++] = btVector3(0.94, 0.94, 0.82);
 	offset.setIdentity(); offset.setOrigin(wall2_pos);
-	wall_body_[1] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	wall_body[1] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	color_[color_num_++] = btVector3(0.94, 0.94, 0.82);
 	offset.setIdentity(); offset.setOrigin(wall3_pos);
-	wall_body_[2] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape2);
+	wall_body[2] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape2);
+	color_[color_num_++] = btVector3(0.94, 0.94, 0.82);
 	offset.setIdentity(); offset.setOrigin(wall4_pos);
-	wall_body_[3] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape2);
+	wall_body[3] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape2);
+	color_[color_num_++] = btVector3(0.94, 0.94, 0.82);
 
 	//反発係数
 	btScalar ground_rest = 0.6;
 	btScalar wall_rest = 0.4;
 
 	//反発係数設定
-	ground_body_->setRestitution(ground_rest);
+	ground_body->setRestitution(ground_rest);
 	for(int i = 0; i < 4; i++)
 	{
-		wall_body_[i]->setRestitution(wall_rest);
+		wall_body[i]->setRestitution(wall_rest);
 	}
 
 /*
@@ -107,7 +116,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	ground_shape->calculateLocalInertia(ground_mass, ground_inertia);
 	cube_shape->calculateLocalInertia(cube_mass, cube_inertia);
 	//剛体オブジェクト生成
-	ground_body_ = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
+	ground_body = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
 	cube_body_ = new btRigidBody(cube_mass, cube_motion_state, cube_shape, cube_inertia);
 	cube_body2_ = new btRigidBody(cube_mass, cube_motion_state2, cube_shape, cube_inertia);
 	cube_body3_ = new btRigidBody(cube_mass, cube_motion_state3, cube_shape2, cube_inertia);
@@ -115,7 +124,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	cube_body5_ = new btRigidBody(cube_mass, cube_motion_state5, cube_shape3, cube_inertia);
 
 	//反発係数
-	ground_body_->setRestitution(ground_rest);
+	ground_body->setRestitution(ground_rest);
 	cube_body_->setRestitution(cube_rest);
 	cube_body2_->setRestitution(cube_rest);
 	cube_body3_->setRestitution(cube_rest);
@@ -124,7 +133,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 
 	//ワールドに剛体オブジェクトを追加
 
-	world_->addRigidBody(ground_body_);
+	world_->addRigidBody(ground_body);
 	world_->addRigidBody(cube_body_);
 	world_->addRigidBody(cube_body2_);
 	world_->addRigidBody(cube_body3_);
@@ -136,7 +145,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	CreateSpider(positionOffset);
 
 	btVector3 position_a(10, 13, 25);
-	Create(position_a);
+	CreateSnowman(position_a, 2);
 
 	btVector3 position_b(10, 2.5, 40);
 	CreatePyramid(position_b);
@@ -144,8 +153,10 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btVector3 position_c(10, 20, 70);
 	CreateTriangle(position_c);
 
-	btVector3 position_d(-10, 30, -10);
+	btVector3 position_d(-20, 10*sqrt(24)+2.0, -20);
 	CreateTower(position_d);
+
+	color_[color_num_++] = btVector3(1.0, 0, 0);
 
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer ();
@@ -185,43 +196,43 @@ void StageMap::Draw(){
 //	RenderScene(0);
 //
 	glDisable(GL_LIGHTING);
-//	glDepthMask(GL_FALSE);
-//	glDepthFunc(GL_LEQUAL);
-//	//glEnable(GL_STENCIL_TEST);
-//	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
-//	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
-//	glFrontFace(GL_CCW);
-//	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
-//	RenderScene(1);
-//	glFrontFace(GL_CW);
-//	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
-//	RenderScene(1);
-//	glFrontFace(GL_CCW);
-//
-//
-//	glPolygonMode(GL_FRONT,GL_FILL);
-//	glPolygonMode(GL_BACK,GL_FILL);
-//	glShadeModel(GL_SMOOTH);
-//	glEnable(GL_DEPTH_TEST);
-//	glDepthFunc(GL_LESS);
-//	glEnable(GL_LIGHTING);
-//	glDepthMask(GL_TRUE);
-//	glCullFace(GL_BACK);
-//	glFrontFace(GL_CCW);
-//	glEnable(GL_CULL_FACE);
-//	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-//
-//	glDepthFunc(GL_LEQUAL);
-//	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
-//	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
-//	glDisable(GL_LIGHTING);
+	glDepthMask(GL_FALSE);
+	glDepthFunc(GL_LEQUAL);
+	//glEnable(GL_STENCIL_TEST);
+	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
+	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
+	glFrontFace(GL_CCW);
+	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
+	RenderScene(1);
+	glFrontFace(GL_CW);
+	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
+	RenderScene(1);
+	glFrontFace(GL_CCW);
+
+
+	glPolygonMode(GL_FRONT,GL_FILL);
+	glPolygonMode(GL_BACK,GL_FILL);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_LIGHTING);
+	glDepthMask(GL_TRUE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+
+	glDepthFunc(GL_LEQUAL);
+	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
+	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
+	glDisable(GL_LIGHTING);
 
 	RenderScene(2);
 
-//	glEnable(GL_LIGHTING);
-//	glDepthFunc(GL_LESS);
-//	glDisable(GL_STENCIL_TEST);
-//	glDisable(GL_CULL_FACE);
+	glEnable(GL_LIGHTING);
+	glDepthFunc(GL_LESS);
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_CULL_FACE);
 
 	glFlush();
 
@@ -248,16 +259,8 @@ void	StageMap::RenderScene(int pass)
 			colObj->getWorldTransform().getOpenGLMatrix(m);
 			rot=colObj->getWorldTransform().getBasis();
 		}
-		btVector3 wireColor(1,1,1); //wants deactivation
 
-		if(i == 0)
-			wireColor = btVector3(0.5,0.5,0.5);
-
-		if(i > 4)
-			wireColor = btVector3(0, 0.7, 1.0);
-
-		if(i == numObjects - 1)
-			wireColor = btVector3(1.0, 0.3, 0);
+		wireColor = color_[i];
 
 		btVector3 aabbMin,aabbMax;
 		world_->getBroadphase()->getBroadphaseAabb(aabbMin,aabbMax);
@@ -296,14 +299,17 @@ btRigidBody* StageMap::LocalCreateRigidBody(float mass, const btTransform& start
 
 void StageMap::CreateSpider(const btVector3& position)
 {
+
+	btRigidBody* m_bodies[13];
 	btCollisionShape* m_shapes[13];
 	btTypedConstraint* m_joints[12];
 	btVector3 vUP(0, 1, 0);
 
 	float fBodySize =0.75f;
-	float fLegLength = 5.45f;
-	float fForeLegLength = 5.75f;
+	float fLegLength = 2.45f;
+	float fForeLegLength = 2.75f;
 
+	//形状設定
 	m_shapes[0] = new btCapsuleShape(btScalar(fBodySize), btScalar(0.10));
 	int i;
 	for(i = 0; i < 6; i++)
@@ -318,7 +324,10 @@ void StageMap::CreateSpider(const btVector3& position)
 	btTransform transform;
 	transform.setIdentity();
 	transform.setOrigin(vRoot);
-	m_bodies[0] = LocalCreateRigidBody(btScalar(0.01), offset*transform, m_shapes[0]);
+
+	//bulletに登録
+	m_bodies[0] = LocalCreateRigidBody(btScalar(0.1), offset*transform, m_shapes[0]);
+	color_[color_num_++] = btVector3(0.6, 0.35, 0);
 
 	for(i=0; i < 6; i++)
 	{
@@ -333,11 +342,13 @@ void StageMap::CreateSpider(const btVector3& position)
 		btVector3 vToBone = (vBoneOrigin - vRoot).normalize();
 		btVector3 vAxis = vToBone.cross(vUP);
 		transform.setRotation(btQuaternion(vAxis, 1.57));
-		m_bodies[1+2*i] = LocalCreateRigidBody(btScalar(0.01), offset*transform, m_shapes[2+2*i]);
+		m_bodies[1+2*i] = LocalCreateRigidBody(btScalar(0.1), offset*transform, m_shapes[2+2*i]);
+		color_[color_num_++] = btVector3(0.2, 0.4, 0.4);
 
 		transform.setIdentity();
 		transform.setOrigin(btVector3(btScalar(fCos*(fBodySize+fLegLength)), btScalar(fHeight-0.5*fForeLegLength), btScalar(fSin*(fBodySize+fLegLength))));
-		m_bodies[2+2*i] = LocalCreateRigidBody(btScalar(0.01), offset*transform, m_shapes[2+2*i]);
+		m_bodies[2+2*i] = LocalCreateRigidBody(btScalar(0.1), offset*transform, m_shapes[2+2*i]);
+		color_[color_num_++] = btVector3(0.8, 0.6, 0.2);
 	}
 
 	for(i = 0; i < 6; ++i)
@@ -377,49 +388,55 @@ void StageMap::CreateSpider(const btVector3& position)
 }
 
 
-void StageMap::Create(const btVector3& position)
+void StageMap::CreateSnowman(const btVector3& position, double size)
 {
-	btCollisionShape* a_shapes[3];
-	btTypedConstraint* a_joints[2];
-	btVector3 position_a(10, 10, 25);
-	btVector3 position2(10, 14.6, 25);
+	btRigidBody* snow_bodies[3];
+	btCollisionShape* snow_shapes[3];
+	btTypedConstraint* snow_joints[2];
+	btVector3 snow_position2(0, size*1.5, 0);
+	btVector3 snow_position3(0, size*0.9, 0);
 
-	a_shapes[0] = new btCapsuleShape(btScalar(1), btScalar(0.1));
+	//オブジェクト生成
+	snow_shapes[0] = new btCapsuleShape(btScalar(size), btScalar(0.1));
 	btTransform offset; offset.setIdentity();
 	offset.setOrigin(position);
-	a_bodies[0] = LocalCreateRigidBody(btScalar(0.01), offset, a_shapes[0]);
+	snow_bodies[0] = LocalCreateRigidBody(btScalar(0.01), offset, snow_shapes[0]);
+	color_[color_num_++] = btVector3(0.6, 0.8, 1.0);
 	btTransform offset2; offset2.setIdentity();
-	offset2.setOrigin(position_a);
-	a_shapes[1] = new btCapsuleShape(btScalar(2), btScalar(0.1));
-	a_bodies[1] = LocalCreateRigidBody(btScalar(0.01), offset2, a_shapes[1]);
-
+	offset2.setOrigin(snow_position2);
+	snow_shapes[1] = new btCapsuleShape(btScalar(size/2), btScalar(0.1));
+	snow_bodies[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, snow_shapes[1]);
+	color_[color_num_++] = btVector3(0.6, 0.8, 0.8);
 	btTransform offset3; offset3.setIdentity();
-	offset3.setOrigin(position2);
-	a_shapes[2] = new btCapsuleShape(btScalar(0.5), btScalar(0.1));
-	a_bodies[2] = LocalCreateRigidBody(btScalar(0.01), offset3, a_shapes[2]);
+	offset3.setOrigin(snow_position3);
+	snow_shapes[2] = new btCapsuleShape(btScalar(size/3), btScalar(0.1));
+	snow_bodies[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset3, snow_shapes[2]);
+	color_[color_num_++] = btVector3(1.0, 1.0, 1.0);
 
 	btHingeConstraint* hingeCC;
 	btTransform localA, localB, localC;
 	localA.setIdentity(); localB.setIdentity();
 	//	localA.getBasis().setEulerZYX(0, 0, 0); localA.setOrigin(btVector3(btScalar(6), btScalar(6), btScalar(6)));
-	localB = a_bodies[0]->getWorldTransform().inverse() * a_bodies[1]->getWorldTransform() * localA;
+	localB = snow_bodies[0]->getWorldTransform().inverse() * snow_bodies[1]->getWorldTransform() * localA;
 
-	hingeCC = new btHingeConstraint(*a_bodies[0], *a_bodies[1], localB, localA);
+	hingeCC = new btHingeConstraint(*snow_bodies[0], *snow_bodies[1], localB, localA);
 	hingeCC->setLimit(btScalar(0), btScalar(0));
-	a_joints[0] = hingeCC;
-	world_->addConstraint(a_joints[0], true);
+	snow_joints[0] = hingeCC;
+	world_->addConstraint(snow_joints[0], true);
 
-	localC = a_bodies[0]->getWorldTransform().inverse() * a_bodies[2]->getWorldTransform() * localA;
+	localC = snow_bodies[0]->getWorldTransform().inverse() * snow_bodies[2]->getWorldTransform() * localA;
 
-	hingeCC = new btHingeConstraint(*a_bodies[0], *a_bodies[2], localC, localA);
+	hingeCC = new btHingeConstraint(*snow_bodies[1], *snow_bodies[2], localC, localA);
 	hingeCC->setLimit(btScalar(0), btScalar(0));
-	a_joints[1] = hingeCC;
-	world_->addConstraint(a_joints[1], true);
+	snow_joints[1] = hingeCC;
+	world_->addConstraint(snow_joints[1], true);
 
 }
 
 void StageMap::CreatePyramid(const btVector3& position)
 {
+
+	btRigidBody* box_body[14];
 	float cube_size = 1.1;
 	float cube_mass = 0.01;
 	btTypedConstraint* joint;
@@ -444,166 +461,180 @@ void StageMap::CreatePyramid(const btVector3& position)
 	offset.setOrigin(position);
 
 	//cubeをbulletに登録
-	box_body_[0] = LocalCreateRigidBody(btScalar(cube_mass), offset, shape);
-	box_body_[1] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[0] = LocalCreateRigidBody(btScalar(cube_mass), offset, shape);
+	color_[color_num_++] = btVector3(0.71, 0, 0.48);
+	box_body[1] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0, 0.6, 0.52);
 	offset2.setOrigin(position2);
-	box_body_[2] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[2] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.22, 0.13, 0.52);
 	offset2.setOrigin(position3);
-	box_body_[3] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[3] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.88, 0.78, 0.18);
 	offset2.setOrigin(position4);
-	box_body_[4] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[4] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0., 0.61, 0.77);
 	offset2.setOrigin(position5);
-	box_body_[5] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[5] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.77, 0.78, 0.16);
 	offset2.setOrigin(position6);
-	box_body_[6] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[6] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.58, 0, 0.49);
 	offset2.setOrigin(position7);
-	box_body_[7] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[7] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.84, 0.52, 0.69);
 	offset2.setOrigin(position8);
-	box_body_[8] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[8] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.93, 0.4, 0.9);
 	offset2.setOrigin(position9);
-	box_body_[9] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[9] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.87, 0.31, 0.08);
 	offset2.setOrigin(position10);
-	box_body_[10] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[10] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.72, 0.05, 0.23);
 	offset2.setOrigin(position11);
-	box_body_[11] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[11] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0, 0.47, 0.73);
 	offset2.setOrigin(position12);
-	box_body_[12] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[12] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.62, 0.76, 0.22);
 	offset2.setOrigin(position13);
-	box_body_[13] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[13] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	color_[color_num_++] = btVector3(0.8, 0.32, 0.57);
 
 	//cubeを繋げる
 	btHingeConstraint* hingeC;
 	btTransform localA, localB, localC;
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[0]->getWorldTransform().inverse() * box_body_[1]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[0], *box_body_[1], localB, localA);
+	localB = box_body[0]->getWorldTransform().inverse() * box_body[1]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[0], *box_body[1], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[1]->getWorldTransform().inverse() * box_body_[2]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[1], *box_body_[2], localB, localA);
+	localB = box_body[1]->getWorldTransform().inverse() * box_body[2]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[1], *box_body[2], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[1]->getWorldTransform().inverse() * box_body_[3]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[1], *box_body_[3], localB, localA);
+	localB = box_body[1]->getWorldTransform().inverse() * box_body[3]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[1], *box_body[3], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[1]->getWorldTransform().inverse() * box_body_[4]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[1], *box_body_[4], localB, localA);
+	localB = box_body[1]->getWorldTransform().inverse() * box_body[4]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[1], *box_body[4], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[2]->getWorldTransform().inverse() * box_body_[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[2], *box_body_[5], localB, localA);
+	localB = box_body[2]->getWorldTransform().inverse() * box_body[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[2], *box_body[5], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[4]->getWorldTransform().inverse() * box_body_[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[4], *box_body_[5], localB, localA);
+	localB = box_body[4]->getWorldTransform().inverse() * box_body[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[4], *box_body[5], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[5]->getWorldTransform().inverse() * box_body_[6]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[5], *box_body_[6], localB, localA);
+	localB = box_body[5]->getWorldTransform().inverse() * box_body[6]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[5], *box_body[6], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[5]->getWorldTransform().inverse() * box_body_[7]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[5], *box_body_[7], localB, localA);
+	localB = box_body[5]->getWorldTransform().inverse() * box_body[7]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[5], *box_body[7], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[3]->getWorldTransform().inverse() * box_body_[8]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[3], *box_body_[8], localB, localA);
+	localB = box_body[3]->getWorldTransform().inverse() * box_body[8]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[3], *box_body[8], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[4]->getWorldTransform().inverse() * box_body_[8]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[4], *box_body_[8], localB, localA);
+	localB = box_body[4]->getWorldTransform().inverse() * box_body[8]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[4], *box_body[8], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[8]->getWorldTransform().inverse() * box_body_[9]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[8], *box_body_[9], localB, localA);
+	localB = box_body[8]->getWorldTransform().inverse() * box_body[9]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[8], *box_body[9], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[8]->getWorldTransform().inverse() * box_body_[10]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[8], *box_body_[10], localB, localA);
+	localB = box_body[8]->getWorldTransform().inverse() * box_body[10]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[8], *box_body[10], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[4]->getWorldTransform().inverse() * box_body_[11]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[4], *box_body_[11], localB, localA);
+	localB = box_body[4]->getWorldTransform().inverse() * box_body[11]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[4], *box_body[11], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[10]->getWorldTransform().inverse() * box_body_[11]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[10], *box_body_[11], localB, localA);
+	localB = box_body[10]->getWorldTransform().inverse() * box_body[11]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[10], *box_body[11], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[11]->getWorldTransform().inverse() * box_body_[12]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[11], *box_body_[12], localB, localA);
+	localB = box_body[11]->getWorldTransform().inverse() * box_body[12]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[11], *box_body[12], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[1]->getWorldTransform().inverse() * box_body_[13]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[1], *box_body_[13], localB, localA);
+	localB = box_body[1]->getWorldTransform().inverse() * box_body[13]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[1], *box_body[13], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[5]->getWorldTransform().inverse() * box_body_[13]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[5], *box_body_[13], localB, localA);
+	localB = box_body[5]->getWorldTransform().inverse() * box_body[13]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[5], *box_body[13], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[8]->getWorldTransform().inverse() * box_body_[13]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[8], *box_body_[13], localB, localA);
+	localB = box_body[8]->getWorldTransform().inverse() * box_body[13]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[8], *box_body[13], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = box_body_[11]->getWorldTransform().inverse() * box_body_[13]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*box_body_[11], *box_body_[13], localB, localA);
+	localB = box_body[11]->getWorldTransform().inverse() * box_body[13]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*box_body[11], *box_body[13], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
@@ -611,9 +642,11 @@ void StageMap::CreatePyramid(const btVector3& position)
 
 void StageMap::CreateTriangle(const btVector3& position)
 {
+	btRigidBody* triangle_sphere[4];
+	btRigidBody* triangle_sides[6];
 	btTypedConstraint* joints_triangel;
-	float sphere_size = 1.0;
-	float side_size = 20;
+	float sphere_size = 0.5;
+	float side_size = 5;
 	btTransform trans;
 	btVector3 position1(side_size/sqrt(3), -side_size*sqrt(3)/2, 0);
 	btVector3 position2(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/2, side_size/2);
@@ -634,138 +667,163 @@ void StageMap::CreateTriangle(const btVector3& position)
 	offset.setOrigin(position);
 
 	//cubeをbulletに登録
-	triangle_shere_[0] = LocalCreateRigidBody(btScalar(0.01), offset, sphere_shape);
-	triangle_shere_[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	triangle_sphere[0] = LocalCreateRigidBody(btScalar(0.01), offset, sphere_shape);
+	color_[color_num_++] = btVector3(0.73, 0, 0);
+	triangle_sphere[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(1.0, 0.8, 0);
 	offset2.setIdentity(); offset2.setOrigin(position2);
-	triangle_shere_[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	triangle_sphere[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.5);
 	offset2.setIdentity(); offset2.setOrigin(position3);
-	triangle_shere_[3] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	triangle_sphere[3] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.4, 0.65, 0.9);
+
+	//ここからside
 	offset2.setIdentity(); offset2.setOrigin(position4);
 	offset2.setRotation(btQuaternion(0,0,PI_/6));
-	triangle_sides_[0] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	triangle_sides[0] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.9, 0.84, 0.71);
 	offset2.setIdentity(); offset2.setOrigin(position5);
 	offset2.setRotation(btQuaternion(0, -PI_/6, -PI_/12));
-	triangle_sides_[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	triangle_sides[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.9, 0.84, 0.71);
 	offset2.setIdentity(); offset2.setOrigin(position6);
 	offset2.setRotation(btQuaternion(0, PI_/6, -PI_/12));
-	triangle_sides_[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	triangle_sides[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.9, 0.84, 0.71);
 	offset2.setIdentity(); offset2.setOrigin(position7);
 	offset2.setRotation(btQuaternion(0, PI_/2, 0));
-	triangle_sides_[3] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	triangle_sides[3] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.9, 0.84, 0.71);
 	offset2.setIdentity(); offset2.setOrigin(position8);
 	offset2.setRotation(btQuaternion(0, PI_/2, PI_/3));
-	triangle_sides_[4] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	triangle_sides[4] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.9, 0.84, 0.71);
 	offset2.setIdentity(); offset2.setOrigin(position9);
 	offset2.setRotation(btQuaternion(0, PI_/2, -PI_/3));
-	triangle_sides_[5] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	triangle_sides[5] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.9, 0.84, 0.71);
 
 	btHingeConstraint* hingeC;
 	btTransform localA, localB, localC;
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[0]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[0], localB, localA);
+	localB = triangle_sphere[0]->getWorldTransform().inverse() * triangle_sides[0]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[0], *triangle_sides[0], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[1]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[1], localB, localA);
+	localB = triangle_sphere[0]->getWorldTransform().inverse() * triangle_sides[1]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[0], *triangle_sides[1], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[2]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[2], localB, localA);
+	localB = triangle_sphere[0]->getWorldTransform().inverse() * triangle_sides[2]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[0], *triangle_sides[2], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[0]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[0], localB, localA);
+	localB = triangle_sphere[1]->getWorldTransform().inverse() * triangle_sides[0]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[1], *triangle_sides[0], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[4]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[4], localB, localA);
+	localB = triangle_sphere[1]->getWorldTransform().inverse() * triangle_sides[4]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[1], *triangle_sides[4], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[5], localB, localA);
+	localB = triangle_sphere[1]->getWorldTransform().inverse() * triangle_sides[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[1], *triangle_sides[5], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[1]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[1], localB, localA);
+	localB = triangle_sphere[2]->getWorldTransform().inverse() * triangle_sides[1]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[2], *triangle_sides[1], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[4]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[4], localB, localA);
+	localB = triangle_sphere[2]->getWorldTransform().inverse() * triangle_sides[4]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[2], *triangle_sides[4], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[3]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[3], localB, localA);
+	localB = triangle_sphere[2]->getWorldTransform().inverse() * triangle_sides[3]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[2], *triangle_sides[3], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[2]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[2], localB, localA);
+	localB = triangle_sphere[3]->getWorldTransform().inverse() * triangle_sides[2]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[3], *triangle_sides[2], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[5], localB, localA);
+	localB = triangle_sphere[3]->getWorldTransform().inverse() * triangle_sides[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[3], *triangle_sides[5], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 
 	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[3]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[3], localB, localA);
+	localB = triangle_sphere[3]->getWorldTransform().inverse() * triangle_sides[3]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*triangle_sphere[3], *triangle_sides[3], localB, localA);
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joints_triangel = hingeC;
 	world_->addConstraint(joints_triangel, true);
 }
 
 void StageMap::CreateTower(const btVector3& position)
-{
-	btTypedConstraint* joints_triangel;
-	float sphere_size = 0.7;
+  {
+	btRigidBody* tower_sphere[13];
+	btRigidBody* tower_sides[18];
+//	btTypedConstraint* joints_triangel;
+	float sphere_size = 2;
 	float side_size = 10;
 	btTransform trans;
-	btVector3 position1(side_size/sqrt(3), -side_size*sqrt(3)/1, 0);
-	btVector3 position2(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/1, side_size/2);
-	btVector3 position3(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/1, -side_size/2);
-	btVector3 position4(side_size/sqrt(3)/2, -side_size*sqrt(3)/2, 0);
-	btVector3 position5(-side_size/(4*sqrt(3)), -side_size*sqrt(3)/2, side_size/4);
-	btVector3 position6(-side_size/(4*sqrt(3)), -side_size*sqrt(3)/2, -side_size/4);
-	btVector3 position7(-side_size/(2*sqrt(3)), -side_size*sqrt(3)/1, 0);
-	btVector3 position8(side_size/(4*sqrt(3)), -side_size*sqrt(3)/1, side_size/4);
-	btVector3 position9(side_size/(4*sqrt(3)), -side_size*sqrt(3)/1, -side_size/4);
+	//各オブジェクトの位置を決める
+	btVector3 position1(side_size, -side_size*sqrt(24), 0);
+	btVector3 position2(-side_size, -side_size*sqrt(24), 0);
+	btVector3 position3(side_size/2, -side_size*sqrt(24), side_size*sqrt(3)/2);
+	btVector3 position4(-side_size/2, -side_size*sqrt(24), side_size*sqrt(3)/2);
+	btVector3 position5(side_size/2, -side_size*sqrt(24), -side_size*sqrt(3)/2);
+	btVector3 position6(-side_size/2, -side_size*sqrt(24), -side_size*sqrt(3)/2);
+	btVector3 position7(0, -side_size*sqrt(24), side_size*sqrt(3));
+	btVector3 position8(0, -side_size*sqrt(24), -side_size*sqrt(3));
+	btVector3 position9(side_size*3/2, -side_size*sqrt(24), side_size*sqrt(3)/2);
+	btVector3 position10(-side_size*3/2, -side_size*sqrt(24), side_size*sqrt(3)/2);
+	btVector3 position11(side_size*3/2, -side_size*sqrt(24), -side_size*sqrt(3)/2);
+	btVector3 position12(-side_size*3/2, -side_size*sqrt(24), -side_size*sqrt(3)/2);
+	btVector3 position13(0, -side_size*sqrt(24), side_size*sqrt(3)/2);
+	btVector3 position14(0, -side_size*sqrt(24), -side_size*sqrt(3)/2);
+	btVector3 position15(side_size*3/4, -side_size*sqrt(24), side_size*sqrt(3)/4);
+	btVector3 position16(-side_size*3/4, -side_size*sqrt(24), side_size*sqrt(3)/4);
+	btVector3 position17(side_size*3/4, -side_size*sqrt(24), -side_size*sqrt(3)/4);
+	btVector3 position18(-side_size*3/4, -side_size*sqrt(24), -side_size*sqrt(3)/4);
 
+	//形状設定
 	btCollisionShape *sphere_shape = new btSphereShape(sphere_size);
-	btCollisionShape *side_shape = new btCapsuleShape(btScalar(0.1), btScalar(side_size*1.95));
-	btCollisionShape *side_shape2 = new btCapsuleShape(btScalar(0.1), btScalar(side_size));
+	btCollisionShape *side_shape = new btCapsuleShape(btScalar(1.6), btScalar(side_size*5));
+	btCollisionShape *side_shape2 = new btCapsuleShape(btScalar(1.0), btScalar(side_size*3));
 
 	btTransform offset; offset.setIdentity();
 	btTransform offset2; offset2.setIdentity();
@@ -773,116 +831,216 @@ void StageMap::CreateTower(const btVector3& position)
 	offset.setOrigin(position);
 
 	//cubeをbulletに登録
-	triangle_shere_[0] = LocalCreateRigidBody(btScalar(0.01), offset, sphere_shape);
-	triangle_shere_[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	tower_sphere[0] = LocalCreateRigidBody(btScalar(0.), offset, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
+	tower_sphere[1] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position2);
-	triangle_shere_[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	tower_sphere[2] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position3);
-	triangle_shere_[3] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, sphere_shape);
+	tower_sphere[3] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position4);
-	offset2.setRotation(btQuaternion(0,0,PI_/12));
-	triangle_sides_[0] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+//	offset2.setRotation(btQuaternion(0,0,PI_/12));
+	tower_sphere[4] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position5);
-	offset2.setRotation(btQuaternion(0, -PI_/12, -PI_/24));
-	triangle_sides_[1] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+//	offset2.setRotation(btQuaternion(0, -PI_/12, -PI_/24));
+	tower_sphere[5] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position6);
-	offset2.setRotation(btQuaternion(0, PI_/12, -PI_/24));
-	triangle_sides_[2] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape);
+//	offset2.setRotation(btQuaternion(0, PI_/12, -PI_/24));
+	tower_sphere[6] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position7);
-	offset2.setRotation(btQuaternion(0, PI_/2, 0));
-	triangle_sides_[3] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape2);
+	tower_sphere[7] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position8);
-	offset2.setRotation(btQuaternion(0, PI_/2, PI_/3));
-	triangle_sides_[4] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape2);
+	tower_sphere[8] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
 	offset2.setIdentity(); offset2.setOrigin(position9);
-	offset2.setRotation(btQuaternion(0, PI_/2, -PI_/3));
-	triangle_sides_[5] = LocalCreateRigidBody(btScalar(0.01), offset*offset2, side_shape2);
+	tower_sphere[9] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
+	offset2.setIdentity(); offset2.setOrigin(position10);
+	tower_sphere[10] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
+	offset2.setIdentity(); offset2.setOrigin(position11);
+	tower_sphere[11] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
+	offset2.setIdentity(); offset2.setOrigin(position12);
+	tower_sphere[12] = LocalCreateRigidBody(btScalar(0.), offset*offset2, sphere_shape);
+	color_[color_num_++] = btVector3(0.39, 0.05, 0);
+	//sideをbulletに登録
+	offset2.setIdentity(); offset2.setOrigin(position1/2);
+	offset2.setRotation(btQuaternion(0, 0, 12 * PI_/ 180.0));
+	tower_sides[0] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.01, 0.66, 0.66);
+	offset2.setIdentity(); offset2.setOrigin(position2/2);
+	offset2.setRotation(btQuaternion(0, 0, -12 * PI_/ 180.0));
+	tower_sides[1] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0.95, 0.75, 0.49);
+	offset2.setIdentity(); offset2.setOrigin(position3/2);
+	offset2.setRotation(btQuaternion(0, -10 * PI_ / 180.0, 6 * PI_/ 180.0));
+	tower_sides[2] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position4/2);
+	offset2.setRotation(btQuaternion(0, -10 * PI_ / 180.0, -6 * PI_/ 180.0));
+	tower_sides[3] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position5/2);
+	offset2.setRotation(btQuaternion(0, 10 * PI_ / 180.0, 6 * PI_/ 180.0));
+	tower_sides[4] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position6/2);
+	offset2.setRotation(btQuaternion(0, 10 * PI_ / 180.0, -6 * PI_/ 180.0));
+	tower_sides[5] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position7/2);
+	offset2.setRotation(btQuaternion(0, -20 * PI_ / 180.0, 0));
+	tower_sides[6] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position8/2);
+	offset2.setRotation(btQuaternion(0, 20 * PI_ / 180.0, 0));
+	tower_sides[7] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position9/2);
+	offset2.setRotation(btQuaternion(0, -10 * PI_ / 180.0, 17 * PI_ / 180.0));
+	tower_sides[8] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position10/2);
+	offset2.setRotation(btQuaternion(0, -10 * PI_ / 180.0, -17 * PI_ / 180.0));
+	tower_sides[9] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position11/2);
+	offset2.setRotation(btQuaternion(0, 10 * PI_ / 180.0, 17 * PI_ / 180.0));
+	tower_sides[10] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position12/2);
+	offset2.setRotation(btQuaternion(0, 10 * PI_ / 180.0, -17 * PI_ / 180.0));
+	tower_sides[11] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position13);
+	offset2.setRotation(btQuaternion(0, 0, PI_ / 2));
+	tower_sides[12] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position14);
+	offset2.setRotation(btQuaternion(0, 0, PI_ / 2));
+	tower_sides[13] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position15);
+	offset2.setRotation(btQuaternion(PI_ / 3 , 0, PI_/ 2));
+	tower_sides[14] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position16);
+	offset2.setRotation(btQuaternion(-PI_ / 3 , 0, PI_/ 2));
+	tower_sides[15] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position17);
+	offset2.setRotation(btQuaternion(PI_ * 2 /3  , 0, PI_/ 2));
+	tower_sides[16] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
+	offset2.setIdentity(); offset2.setOrigin(position18);
+	offset2.setRotation(btQuaternion(-PI_ * 2 /3  , 0, PI_/ 2));
+	tower_sides[17] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+	color_[color_num_++] = btVector3(0, 0, 0.8);
 
-	btHingeConstraint* hingeC;
-	btTransform localA, localB, localC;
+//	offset2.setIdentity(); offset2.setOrigin(position7);
+//	offset2.setRotation(btQuaternion(0, PI_/2, 0));
+//	triangle_sides[3] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+//	offset2.setIdentity(); offset2.setOrigin(position8);
+//	offset2.setRotation(btQuaternion(0, PI_/2, PI_/3));
+//	triangle_sides[4] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
+//	offset2.setIdentity(); offset2.setOrigin(position9);
+//	offset2.setRotation(btQuaternion(0, PI_/2, -PI_/3));
+//	triangle_sides[5] = LocalCreateRigidBody(btScalar(0.), offset*offset2, side_shape2);
 
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[0]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[0], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
+//	btHingeConstraint* hingeC;
+//	btTransform localA, localB, localC;
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[0]->getWorldTransform().inverse() * triangle_sides[0]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[0], *triangle_sides[0], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[0]->getWorldTransform().inverse() * triangle_sides[1]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[0], *triangle_sides[1], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[0]->getWorldTransform().inverse() * triangle_sides[2]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[0], *triangle_sides[2], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[1]->getWorldTransform().inverse() * triangle_sides[0]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[1], *triangle_sides[0], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[1]->getWorldTransform().inverse() * triangle_sides[4]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[1], *triangle_sides[4], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[1]->getWorldTransform().inverse() * triangle_sides[5]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[1], *triangle_sides[5], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[2]->getWorldTransform().inverse() * triangle_sides[1]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[2], *triangle_sides[1], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[2]->getWorldTransform().inverse() * triangle_sides[4]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[2], *triangle_sides[4], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[2]->getWorldTransform().inverse() * triangle_sides[3]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[2], *triangle_sides[3], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[3]->getWorldTransform().inverse() * triangle_sides[2]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[3], *triangle_sides[2], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[3]->getWorldTransform().inverse() * triangle_sides[5]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[3], *triangle_sides[5], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = triangle_sphere[3]->getWorldTransform().inverse() * triangle_sides[3]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*triangle_sphere[3], *triangle_sides[3], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_triangel = hingeC;
+//	world_->addConstraint(joints_triangel, true);
 
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[1]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[1], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[0]->getWorldTransform().inverse() * triangle_sides_[2]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[0], *triangle_sides_[2], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[0]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[0], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[4]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[4], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[1]->getWorldTransform().inverse() * triangle_sides_[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[1], *triangle_sides_[5], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[1]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[1], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[4]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[4], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[2]->getWorldTransform().inverse() * triangle_sides_[3]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[2], *triangle_sides_[3], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[2]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[2], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[5], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = triangle_shere_[3]->getWorldTransform().inverse() * triangle_sides_[3]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*triangle_shere_[3], *triangle_sides_[3], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_triangel = hingeC;
-	world_->addConstraint(joints_triangel, true);
 }
 

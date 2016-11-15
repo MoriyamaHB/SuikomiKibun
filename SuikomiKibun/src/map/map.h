@@ -31,20 +31,15 @@ protected:
 
 private:
 	btDynamicsWorld* world_;
-	btRigidBody* ground_body_;
-	btRigidBody* wall_body_[4];
 
-	btRigidBody* box_body_[14];
-	btRigidBody* triangle_shere_[4];
-	btRigidBody* triangle_sides_[6];
 
-	btRigidBody* m_bodies[13];
-	btRigidBody* a_bodies[3];
+	int color_num_;
+	btVector3 color_[200];
 
 	void RenderScene(int pass);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
 	void CreateSpider(const btVector3& position);
-	void Create(const btVector3& position);
+	void CreateSnowman(const btVector3& position, double size);
 	void CreatePyramid(const btVector3& position);
 	void CreateTriangle(const btVector3& position);
 	void CreateTower(const btVector3& position);
