@@ -42,6 +42,8 @@ GameScene::~GameScene() {
 
 //更新
 void GameScene::Update() {
+
+
 	//bulletをすすめる
 	dynamics_world_->stepSimulation(1.0 / kFps,0);
 

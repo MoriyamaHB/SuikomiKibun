@@ -34,6 +34,7 @@ public:
 	Vector3 get_center_pos();
 	double get_camera_distance();
 	void PlayerSize(double size);
+	void PlayerMove(btVector3 pos);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
 	void DeleteBody(btRigidBody** ppBody);
 };
