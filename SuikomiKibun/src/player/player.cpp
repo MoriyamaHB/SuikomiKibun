@@ -53,98 +53,11 @@ void Player::Update(double angle) {
 	btVector3 impulse;
 	static btVector3 pos;
 	double t = 0.1;
-	//btTransform xform;
-	//sphere_body_->getMotionState()->getWorldTransform(xform);
-	if (input::get_special_keyboard_frame(GLUT_KEY_SHIFT_L) >= 1) {
-		if (input::get_keyboard_frame('w') >= 1) {
-			pos[0] += (t * cos(angle))/100;
-			pos[2] += (t * sin(angle))/100;
 
-//			sphere_body_->activate(true);
-//						static float angle = 0.1f;
-//						angle += 1.0f;
-//						btTransform xform;
-//						sphere_body_->getMotionState()->getWorldTransform(xform);
-//						xform.setRotation(btQuaternion(btVector3(0.0, 1.0, 0.0), angle));
-//
-//						btVector3 forwardDir = xform.getBasis()[2];
-//						btVector3 walkDirection = btVector3(0.0, 0.0, 0.0);
-//
-//						walkDirection = forwardDir;
-//
-//						btVector3 pos = sphere_body_->getCenterOfMassPosition();
-//						pos[2] += 0.01;
-//						sphere_body_->setCenterOfMassTransform(xform);
-
-//			sphere_body_->activate(true);
-//			static float tr = 0.f;
-//			tr += 0.01f;
-//			sphere_body_->translate(btVector3(0,0,tr));
-//			btTransform tr;
-//
-//			sphere_body_->getMotionState()->getWorldTransform(tr);
-//			static float angle = 0.f;
-//			angle += 0.01f;
-//			tr.setRotation(btQuaternion(btVector3(0, 0, 1), angle));
-//			sphere_body_->getMotionState()->setWorldTransform(tr);
-			/*sphere_body_->activate(true);
-			 impulse.setValue(t * cos(angle), 0, t * sin(angle));
-			 sphere_body_->applyCentralForce(impulse);*/
-		}
-		if (input::get_keyboard_frame('s') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame('a') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
-					t * sin(angle - M_PI / 2.0));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame('d') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
-					t * sin(angle + M_PI / 2.0));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame(' ') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(0, 0.3, 0);
-			sphere_body_->applyCentralForce(impulse);
-		}
-	} else {
 		if (input::get_keyboard_frame('w') == 1) {
-			pos = sphere_body_->getCenterOfMassPosition();
-			pos[0] += (t * cos(angle))/100;
-			pos[2] += (t * sin(angle))/100;
-//			sphere_body_->activate(true);
-//			static float angle = 0.1f;
-//			angle += 0.01f;
-//			btTransform xform;
-//			sphere_body_->getMotionState()->getWorldTransform(xform);
-//			xform.setRotation(btQuaternion(btVector3(0.0, 1.0, 0.0), angle));
-//
-//			btVector3 forwardDir = xform.getBasis()[2];
-//			btVector3 walkDirection = btVector3(0.0, 0.0, 0.0);
-//
-//			walkDirection = forwardDir;
-//
-//			btVector3 pos = sphere_body_->getCenterOfMassPosition();
-//			pos[2] += 0.01;
-//			sphere_body_->setCenterOfMassTransform(xform);
-//			static float tr = 0.f;
-//			tr += 0.01f;
-//			sphere_body_->translate(btVector3(0,0,tr));
-
-			/*btTransform tr =
-			 world_->getCollisionObjectArray()[1]->getWorldTransform();
-			 static float angle = 0.f;
-			 angle += 0.01f;*/
-			//tr.setRotation(btQuaternion(btVector3(0, 0, 1), angle));
-			//world_->getCollisionObjectArray()[1]->setWorldTransform(tr);
-			/*impulse.setValue(t * cos(angle), 0, t * sin(angle));
-			 sphere_body_->applyCentralImpulse(impulse);*/
+			sphere_body_->activate(true);
+			impulse.setValue(t * cos(angle), 0, t * sin(angle));
+			sphere_body_->applyCentralImpulse(impulse);
 		}
 		if (input::get_keyboard_frame('s') == 1) {
 			sphere_body_->activate(true);
@@ -168,11 +81,11 @@ void Player::Update(double angle) {
 			impulse.setValue(0, t, 0);
 			sphere_body_->applyCentralImpulse(impulse);
 		}
-	}
+	//}
 
 	//player_radius_ += 0.01;
 	//PlayerSize(player_radius_);
-	PlayerMove(pos);
+	//PlayerMove(pos);
 
 	int i;
 	btCollisionObject* obj;
@@ -244,27 +157,6 @@ void Player::DeleteBody(btRigidBody** ppBody) {
 
 bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	delete_body_ = static_cast<btRigidBody*>(a);
-	//btRigidBody* pBody1 = (btRigidBody*) b;
-
-	//	btRigid
-//	btRigidBody* obj = world_->getCollisionObjectArray()[0];
-	//	if(pBody){
-	//		delete pBody->getMotionState();
-//		}
-	//	delete pBody;
-	//	pBody0 = NULL;
-
-//	DeleteBody(pBody0);
-
-	//TestData* pUserData0 = (TestData*) pBody0->getUserPointer();
-//	TestData* pUserData1 = (TestData*) pBody1->getUserPointer();
-
-	// カウント
-	//if (pUserData0)
-	//pUserData0->count++;
-//	if (pUserData1)
-//		pUserData1->count++;
-
 	return true;
 }
 
