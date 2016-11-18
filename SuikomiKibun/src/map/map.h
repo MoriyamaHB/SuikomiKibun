@@ -32,9 +32,10 @@ protected:
 private:
 	btDynamicsWorld* world_;
 
-
-	int color_num_;
+	int num_;
 	btVector3 color_[200];
+	int object_[200];
+	int object_num_;
 
 	void RenderScene(int pass);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
@@ -49,7 +50,7 @@ public:
 	~StageMap();
 	void Update();
 	void Draw();
-
+	void DestroyObject(int num);
 };
 
 
