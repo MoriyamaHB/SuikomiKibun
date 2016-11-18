@@ -54,7 +54,7 @@ void GameScene::Update() {
 	map_->Update();
 
 	//プレイヤー更新
-	player_->Update(camera_.get_angle_w() + M_PI);
+	player_->Update(camera_.get_angle_w() + M_PI, map_);
 
 
 	//ライト

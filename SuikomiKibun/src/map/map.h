@@ -19,6 +19,8 @@
 #include "../util/uGL.h"
 #include "../define.h"
 
+#define PI_ 3.1415926
+
 class StageMap{
 protected:
 	GL_ShapeDrawer*	m_shapeDrawer;
@@ -29,23 +31,26 @@ protected:
 
 private:
 	btDynamicsWorld* world_;
-	btRigidBody* ground_body_;
-	btRigidBody* cube_body_;
-	btRigidBody* cube_body2_;
-	btRigidBody* cube_body3_;
-	btRigidBody* cube_body4_;
-	btRigidBody* cube_body5_;
 
-	void myinit();
-	void renderscene(int pass);
-	void render();
-	void localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
+	int num_;
+	btVector3 color_[200];
+	int object_[200];
+	int object_num_;
+
+	void RenderScene(int pass);
+	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
+	void CreateSpider(const btVector3& position);
+	void CreateSnowman(const btVector3& position, double size);
+	void CreatePyramid(const btVector3& position);
+	void CreateTriangle(const btVector3& position);
+	void CreateTower(const btVector3& position);
+
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();
 	void Update();
 	void Draw();
-
+	void DestroyObject(int num);
 };
 
 

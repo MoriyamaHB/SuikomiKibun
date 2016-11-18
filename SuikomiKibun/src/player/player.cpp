@@ -1,6 +1,7 @@
 #include "player.h"
 
 btRigidBody* Player::delete_body_ = NULL;
+btRigidBody* Player::delete_body2_ = NULL;
 
 //コンストラクタ
 Player::Player(btDynamicsWorld* world) :
@@ -42,45 +43,49 @@ Player::Player(btDynamicsWorld* world) :
 //デストラクタ
 Player::~Player() {
 	//オブジェクト破壊
-	delete sphere_body_->getMotionState();
-	world_->removeRigidBody(sphere_body_);
-	delete sphere_body_;
+//	delete sphere_body_->getMotionState();
+//	world_->removeRigidBody(sphere_body_);
+//	delete sphere_body_;
 }
 
 //更新
-void Player::Update(double angle) {
+void Player::Update(double angle, StageMap* map) {
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
 	double t = 0.1;
+	static int pcount = 5;
 
-		if (input::get_keyboard_frame('w') == 1) {
+	if (input::get_keyboard_frame('w') == 1) {
+		if (pcount > 0) {
 			sphere_body_->activate(true);
 			impulse.setValue(t * cos(angle), 0, t * sin(angle));
 			sphere_body_->applyCentralImpulse(impulse);
+			//pcount--;
 		}
-		if (input::get_keyboard_frame('s') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
-			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame('a') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
-					t * sin(angle - M_PI / 2.0));
-			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame('d') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
-					t * sin(angle + M_PI / 2.0));
-			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame(' ') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(0, t, 0);
-			sphere_body_->applyCentralImpulse(impulse);
-		}
+	}
+	if (input::get_keyboard_frame('s') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('a') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
+				t * sin(angle - M_PI / 2.0));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('d') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
+				t * sin(angle + M_PI / 2.0));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame(' ') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(0, t, 0);
+		sphere_body_->applyCentralImpulse(impulse);
+	}
 	//}
 
 	//player_radius_ += 0.01;
@@ -90,15 +95,23 @@ void Player::Update(double angle) {
 	int i;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	if (delete_body_ != NULL) {
-		for (i = world_->getNumCollisionObjects() - 2; i >= 5; i--) {
-			obj = world_->getCollisionObjectArray()[i];
-			body = btRigidBody::upcast(obj);
-			if (delete_body_ == body)
-				DeleteBody(&delete_body_);	// 削除テスト
+	if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
+		if (sphere_body_ == delete_body_)
+			delete_body_ = delete_body2_;
+
+		if (delete_body_ != NULL) {
+			for (i = world_->getNumCollisionObjects() - 1; i > 59; i--) {
+				obj = world_->getCollisionObjectArray()[i];
+				body = btRigidBody::upcast(obj);
+				if (delete_body_ == body)
+					map->DestroyObject(i);
+				//		DeleteBody(&delete_body_);	// 削除テスト
+			}
+
 		}
 	}
-
+	delete_body_ = NULL;
+	delete_body2_ = NULL;
 }
 
 //描画
@@ -157,6 +170,7 @@ void Player::DeleteBody(btRigidBody** ppBody) {
 
 bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	delete_body_ = static_cast<btRigidBody*>(a);
+	delete_body2_ = static_cast<btRigidBody*>(b);
 	return true;
 }
 

@@ -9,6 +9,7 @@
 #include "../util/uGL.h"
 #include "../define.h"
 #include "../input/input.h"
+#include "../map/map.h"
 
 //衝突コールバック
 extern ContactProcessedCallback gContactProcessedCallback;
@@ -26,10 +27,11 @@ private:
 	btScalar player_radius_;
 	TestData    m_BodyData1;
 	static btRigidBody* delete_body_;
+	static btRigidBody* delete_body2_;
 public:
 	Player(btDynamicsWorld* world);
 	~Player();
-	void Update(double angle);
+	void Update(double angle, StageMap* map);
 	void Draw() const;
 	Vector3 get_center_pos();
 	double get_camera_distance();
