@@ -47,8 +47,8 @@ protected:
 	double distance_;
 
 	//カメラの角度限度
-	const static double kMinWrapAngleH = -M_PI / 2 + 0.001;
-	const static double kMaxWrapAngleH = M_PI / 2 - 0.001;
+	constexpr static double kMinWrapAngleH = -M_PI / 2 + 0.001;
+	constexpr static double kMaxWrapAngleH = M_PI / 2 - 0.001;
 	//カメラの感度
 	const static int kCameraRotatePx = 4000;
 
