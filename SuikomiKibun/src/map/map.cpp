@@ -420,30 +420,6 @@ StageMap::StageMap(btDynamicsWorld* world)
 	world_->addRigidBody(cube_body5_);
 */
 
-	btVector3 position_z(30 * cos(0), 10, 30 * sin(0));
-	CreateSpider(position_z);
-	btVector3 position_y(30 * cos(PI_ / 6), 10, 30 * sin(PI_ / 6));
-	CreateSpider(position_y);
-	btVector3 position_x(30 * cos(PI_ * 2 / 6), 10, 30 * sin(PI_ * 2 / 6));
-	CreateSpider(position_x);
-	btVector3 position_w(30 * cos(PI_ * 3 / 6), 10, 30 * sin(PI_ * 3 / 6));
-	CreateSpider(position_w);
-	btVector3 position_v(30 * cos(PI_ * 4 / 6), 10, 30 * sin(PI_ * 4 / 6));
-	CreateSpider(position_v);
-	btVector3 position_u(30 * cos(PI_ * 5 / 6), 10, 30 * sin(PI_ * 5 / 6));
-	CreateSpider(position_u);
-	btVector3 position_t(30 * cos(PI_ * 6 / 6), 10, 30 * sin(PI_ * 6 / 6));
-	CreateSpider(position_t);
-	btVector3 position_s(30 * cos(PI_ * 7 / 6), 10, 30 * sin(PI_ * 7 / 6));
-	CreateSpider(position_s);
-	btVector3 position_r(30 * cos(PI_ * 8 / 6), 10, 30 * sin(PI_ * 8 / 6));
-	CreateSpider(position_r);
-	btVector3 position_q(30 * cos(PI_ * 9 / 6), 10, 30 * sin(PI_ * 9 / 6));
-	CreateSpider(position_q);
-	btVector3 position_p(30 * cos(PI_ * 10 / 6), 10, 30 * sin(PI_ * 10 / 6));
-	CreateSpider(position_p);
-	btVector3 position_o(30 * cos(PI_ * 11 / 6), 10, 30 * sin(PI_ * 11 / 6));
-	CreateSpider(position_o);
 
 //
 //	btVector3 position_a(10, 13, 25);
