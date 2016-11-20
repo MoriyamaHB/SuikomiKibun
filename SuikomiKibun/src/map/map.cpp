@@ -53,7 +53,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btTransform offset; offset.setIdentity();
 	btTransform offset2; offset2.setIdentity();
 	//形状を設定
-	btCollisionShape *ground_shape = new btBoxShape(btVector3(200, 0.01, 200));
+	btCollisionShape *ground_shape = new btBoxShape(btVector3(1000, 0.01, 1000));
 	btCollisionShape *ground_shape2 = new btBoxShape(btVector3(4, 0.01, 4));
 	btCollisionShape *stairs = new btBoxShape(btVector3(4 , 0.01, 2));
 	btCollisionShape *slide = new btBoxShape(btVector3(4 , 0.01, 150));
@@ -222,7 +222,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btVector3 position_b(10, 2.5, 40);
 	CreatePyramid(position_b);
 
-	btVector3 position_c(10, 20, 70);
+	btVector3 position_c(10, 5, 70);
 	CreateTriangle(position_c);
 
 	btVector3 position_d(-20, 10*sqrt(24)+2.0, -20);
@@ -1178,11 +1178,13 @@ void StageMap::CreateTower(const btVector3& position)
 
 void StageMap::DestroyObject(int num){
 	int i;
-	 btCollisionObject* obj;
-	 btRigidBody* body;
-	 btVector3 vec = btVector3(0.0,0.0,0.0);
-	 btQuaternion qrot;
-	static btDefaultMotionState *motion = new btDefaultMotionState(btTransform(qrot,vec));
+	static int pos = 1000;
+	btCollisionObject* obj;
+	btRigidBody* body;
+	btVector3 vec = btVector3(pos,10,pos);
+	btTransform ten;
+	ten.setOrigin(vec);
+	btDefaultMotionState *motion = new btDefaultMotionState(ten);
 
 	obj = world_->getCollisionObjectArray()[num];
 	body = btRigidBody::upcast(obj);
@@ -1193,24 +1195,32 @@ void StageMap::DestroyObject(int num){
 	body->setMotionState(motion);
 
 
-	for(i = 1; i < num_; i++){
+	for(i = 1; num+i <= num_; i++){
 		if(object_[num] == object_[num+i]){
 			obj = world_->getCollisionObjectArray()[num+i];
 			body = btRigidBody::upcast(obj);
-//				if (body && body->getMotionState())
+			pos += 1;
+			vec = btVector3(pos, 10, pos);
+			ten.setOrigin(vec);
+			btDefaultMotionState *motion = new btDefaultMotionState(ten);
+	//			if (body && body->getMotionState())
 //				{
 //					delete body->getMotionState();
 //				}
-			body->setMotionState(motion);
+		body->setMotionState(motion);
 			//world_->removeCollisionObject( obj );
 		}else
 			break;
 	}
 
-	for(i = 1; i < num_;i++){
+	for(i = 1; num - i > 0;i++){
 		if(object_[num] == object_[num-i]){
 			obj = world_->getCollisionObjectArray()[num-i];
 			body = btRigidBody::upcast(obj);
+			pos += 1;
+			vec = btVector3(pos, 10, pos);
+			ten.setOrigin(vec);
+			btDefaultMotionState *motion = new btDefaultMotionState(ten);
 //			if (body && body->getMotionState())
 //			{
 //				delete body->getMotionState();
@@ -1221,5 +1231,6 @@ void StageMap::DestroyObject(int num){
 		else
 			break;
 	}
+	pos += 1;
 }
 
