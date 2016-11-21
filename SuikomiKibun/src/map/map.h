@@ -33,8 +33,8 @@ private:
 	btDynamicsWorld* world_;
 
 	int num_;
-	btVector3 color_[2000];
-	int object_[2000];
+	btVector3 color_[1000];
+	int object_[1000];
 	int object_num_;
 
 	void RenderScene(int pass);
