@@ -419,32 +419,32 @@ StageMap::StageMap(btDynamicsWorld* world)
 	world_->addRigidBody(cube_body4_);
 	world_->addRigidBody(cube_body5_);
 */
-	int t;
-	t = 25;
-	btVector3 posision_q(t * cos(PI_ / 6), 10, t * sin(PI_ / 6));
-	CreateSpider(posision_q);
-	btVector3 posision_w(t * cos(PI_ * 2 / 6), 10, t * sin(PI_ * 2 / 6));
-	CreateSpider(posision_w);
-	btVector3 posision_r(t * cos(PI_ * 3/ 6), 10, t * sin(PI_ * 3 / 6));
-	CreateSpider(posision_r);
-	btVector3 posision_t(t * cos(PI_ * 4 / 6), 10, t * sin(PI_ * 4 / 6));
-	CreateSpider(posision_t);
-	btVector3 posision_y(t * cos(PI_ * 5 / 6), 10, t * sin(PI_ * 5 / 6));
-	CreateSpider(posision_y);
-	btVector3 posision_u(t * cos(PI_ * 6 / 6), 10, t * sin(PI_ * 6 / 6));
-	CreateSpider(posision_u);
-	btVector3 posision_i(t * cos(PI_ * 7 / 6), 10, t * sin(PI_ * 7 / 6));
-	CreateSpider(posision_i);
-	btVector3 posision_o(t * cos(PI_ * 8 / 6), 10, t * sin(PI_ * 8 / 6));
-	CreateSpider(posision_o);
-	btVector3 posision_p(t * cos(PI_ * 9 / 6), 10, t * sin(PI_ * 9 / 6));
-	CreateSpider(posision_p);
-	btVector3 posision_l(t * cos(PI_ * 10 / 6), 10, t * sin(PI_ * 10 / 6));
-	CreateSpider(posision_l);
-	btVector3 posision_k(t * cos(PI_ * 11 / 6), 10, t * sin(PI_ * 11 / 6));
-	CreateSpider(posision_k);
-	btVector3 posision_j(t * cos(PI_ * 12 / 6), 10, t * sin(PI_ * 12 / 6));
-	CreateSpider(posision_j);
+//	int t;
+//	t = 25;
+//	btVector3 posision_q(t * cos(PI_ / 6), 10, t * sin(PI_ / 6));
+//	CreateSpider(posision_q);
+//	btVector3 posision_w(t * cos(PI_ * 2 / 6), 10, t * sin(PI_ * 2 / 6));
+//	CreateSpider(posision_w);
+//	btVector3 posision_r(t * cos(PI_ * 3/ 6), 10, t * sin(PI_ * 3 / 6));
+//	CreateSpider(posision_r);
+//	btVector3 posision_t(t * cos(PI_ * 4 / 6), 10, t * sin(PI_ * 4 / 6));
+//	CreateSpider(posision_t);
+//	btVector3 posision_y(t * cos(PI_ * 5 / 6), 10, t * sin(PI_ * 5 / 6));
+//	CreateSpider(posision_y);
+//	btVector3 posision_u(t * cos(PI_ * 6 / 6), 10, t * sin(PI_ * 6 / 6));
+//	CreateSpider(posision_u);
+//	btVector3 posision_i(t * cos(PI_ * 7 / 6), 10, t * sin(PI_ * 7 / 6));
+//	CreateSpider(posision_i);
+//	btVector3 posision_o(t * cos(PI_ * 8 / 6), 10, t * sin(PI_ * 8 / 6));
+//	CreateSpider(posision_o);
+//	btVector3 posision_p(t * cos(PI_ * 9 / 6), 10, t * sin(PI_ * 9 / 6));
+//	CreateSpider(posision_p);
+//	btVector3 posision_l(t * cos(PI_ * 10 / 6), 10, t * sin(PI_ * 10 / 6));
+//	CreateSpider(posision_l);
+//	btVector3 posision_k(t * cos(PI_ * 11 / 6), 10, t * sin(PI_ * 11 / 6));
+//	CreateSpider(posision_k);
+//	btVector3 posision_j(t * cos(PI_ * 12 / 6), 10, t * sin(PI_ * 12 / 6));
+//	CreateSpider(posision_j);
 
 
 //
@@ -456,7 +456,7 @@ StageMap::StageMap(btDynamicsWorld* world)
 //
 //	btVector3 position_c(10, 20, 70);
 //	CreateTriangle(position_c);
-//
+
 	//タワー
 	btVector3 position_d(40, 10*sqrt(24)+2.0, 150);
 	CreateTower(position_d);
