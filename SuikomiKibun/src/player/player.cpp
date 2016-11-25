@@ -1,5 +1,8 @@
 #include "player.h"
 
+btRigidBody* Player::delete_body_ = NULL;
+btRigidBody* Player::delete_body2_ = NULL;
+
 //コンストラクタ
 Player::Player(btDynamicsWorld* world) :
 		world_(world) {
@@ -17,129 +20,178 @@ Player::Player(btDynamicsWorld* world) :
 	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
 	//球体の初期位置、姿勢
 	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, sphere_pos));
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
+			btTransform(qrot, sphere_pos));
 
 	//慣性モーメントの計算
 	sphere_shape->calculateLocalInertia(sphere_mass, sphere_inertia);
 
 	//剛体オブジェクト生成
-	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,sphere_shape, sphere_inertia);
+	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,
+			sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
-	sphere_body_->setUserPointer(&m_BodyData1);  // ユーザーデータをセット
 
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
 
-
 	// 衝突のコールバック関数をセット
 	gContactProcessedCallback = Player::HandleContactProcess;
+
+	//撃力を加える回数最大数をセット
+	pcount = 5;
+}
+
+PlayerTeki::PlayerTeki(btDynamicsWorld* world,btVector3 pos) :
+		world_(world) {
+	//中心座標
+	//btVector3 sphere_pos = pos;
+	//大きさ
+	player_radius_ = 1.0;
+	//質量
+	//btScalar sphere_mass = 0.03
+	//反発係数
+	//btScalar sphere_rest = 0.8;
+	//慣性モーメント
+	//btVector3 sphere_inertia(0,0,0);
+	//剛体オブジェクト生成
+
 }
 
 //デストラクタ
 Player::~Player() {
 	//オブジェクト破壊
-	delete sphere_body_->getMotionState();
-	world_->removeRigidBody(sphere_body_);
-	delete sphere_body_;
+//	delete sphere_body_->getMotionState();
+//	world_->removeRigidBody(sphere_body_);
+//	delete sphere_body_;
 }
 
 //更新
-void Player::Update(double angle) {
+void Player::Update(double angle, StageMap* map) {
 	//撃力を加える
 	btVector3 impulse;
-
+	static btVector3 pos;
 	double t = 0.1;
-	if (input::get_special_keyboard_frame(GLUT_KEY_SHIFT_L) >= 1) {
-		if (input::get_keyboard_frame('w') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle), 0, t * sin(angle));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame('s') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame('a') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
-					t * sin(angle - M_PI / 2.0));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame('d') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
-					t * sin(angle + M_PI / 2.0));
-			sphere_body_->applyCentralForce(impulse);
-		}
-		if (input::get_keyboard_frame(' ') >= 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(0, 0.3, 0);
-			sphere_body_->applyCentralForce(impulse);
-		}
-	} else {
-		if (input::get_keyboard_frame('w') == 1) {
+	static int upcount = 0;
+	static int pflug = 1;
+
+	if (input::get_keyboard_frame('w') == 1) {
+		if (pcount > 0 && pflug == 1) {
 			sphere_body_->activate(true);
 			impulse.setValue(t * cos(angle), 0, t * sin(angle));
 			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame('s') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
-			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame('a') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
-					t * sin(angle - M_PI / 2.0));
-			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame('d') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
-					t * sin(angle + M_PI / 2.0));
-			sphere_body_->applyCentralImpulse(impulse);
-		}
-		if (input::get_keyboard_frame(' ') == 1) {
-			sphere_body_->activate(true);
-			impulse.setValue(0, t, 0);
-			sphere_body_->applyCentralImpulse(impulse);
+			pcount--;
+			upcount = 0;
 		}
 	}
+	if (input::get_keyboard_frame('s') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('a') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
+				t * sin(angle - M_PI / 2.0));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame('d') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
+				t * sin(angle + M_PI / 2.0));
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	if (input::get_keyboard_frame(' ') == 1) {
+		sphere_body_->activate(true);
+		impulse.setValue(0, t, 0);
+		sphere_body_->applyCentralImpulse(impulse);
+	}
+	//}
 
-	//player_radius_ += 0.01;
+	//player_radius_ += 0.011;
+	//PlayerSize(player_radius_);
+	//PlayerMove(pos);
+	if (pflug == 0)
+		upcount++;
 
-	//playerSize(player_radius_);
-	// if(sphere_body_!= NULL && m_BodyData1.count > 1) {
-//	    DeleteBody(&sphere_body_);// 削除テスト
-	  //}
+	if (pcount <= 0)
+		pflug = 0;
+	if (upcount == 10) {
+		upcount = 0;
+		if (pcount < 5)
+			pcount++;
+		if (pcount == 5)
+			pflug = 1;
+	}
 
+	int i;
+	btCollisionObject* obj;
+	btRigidBody* body;
+	if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
+		if (sphere_body_ == delete_body_)
+			delete_body_ = delete_body2_;
+
+		if (delete_body_ != NULL) {
+			for (i = world_->getNumCollisionObjects() - 1; i > 59; i--) {
+				obj = world_->getCollisionObjectArray()[i];
+				body = btRigidBody::upcast(obj);
+				if (delete_body_ == body)
+					map->DestroyObject(i);
+				//		DeleteBody(&delete_body_);	// 削除テスト
+			}
+
+		}
+	}
+	delete_body_ = NULL;
+	delete_body2_ = NULL;
 }
 
 //描画
 void Player::Draw() const {
 
+	for (int i = 0; i < pcount; i++) {
+		u3Dto2D();
+		glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+		glTranslatef(0, 0, 1);
+		glBegin(GL_QUADS);
+		glNormal3d(0.0, 1.0, 0.0);
+		glVertex3f(50 * i, 30, 0);
+		glVertex3f(50 * i, 50, 0);
+		glVertex3f(20 + 50 * i, 50, 0);
+		glVertex3f(20 + 50 * i, 30, 0);
+		glEnd();
+		u2Dto3D();
+	}
+
 	//球
 	/*
-	btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	glPushMatrix();
-	glTranslatef(pos[0], pos[1], pos[2]);
-	btScalar player_radius;
-	player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
-	glScalef(player_radius, player_radius, player_radius);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
-	glPopMatrix();
-	*/
+	 btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	 glPushMatrix();
+	 glTranslatef(pos[0], pos[1], pos[2]);
+	 btScalar player_radius;
+	 player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
+	 glScalef(player_radius, player_radius, player_radius);
+	 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
+	 glutSolidSphere(1.0, 20, 20);
+	 glPopMatrix();
+	 */
 }
-
 
 void Player::PlayerSize(double size) {
 	//形状を設定
 	btCollisionShape *new_sphere_shape = new btSphereShape(size);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
+}
+
+void Player::PlayerMove(btVector3 pos) {
+	btVector3 t_pos = sphere_body_->getCenterOfMassPosition();
+	btVector3 i_pos = sphere_body_->getCenterOfMassPosition();
+	t_pos[0] = pos[0] - i_pos[0];
+	t_pos[1] = i_pos[1] = 0;
+	t_pos[2] = pos[2] - i_pos[2];
+	sphere_body_->translate(pos);
+
 }
 
 Vector3 Player::get_center_pos() {
@@ -152,10 +204,10 @@ double Player::get_camera_distance() {
 	return player_radius_ * 3;
 }
 
-void Player::DeleteBody(btRigidBody** ppBody){
+void Player::DeleteBody(btRigidBody** ppBody) {
 	btRigidBody* pBody = *ppBody;
 	world_->removeRigidBody(pBody);
-	if(pBody){
+	if (pBody) {
 		delete pBody->getMotionState();
 	}
 	delete pBody;
@@ -163,32 +215,8 @@ void Player::DeleteBody(btRigidBody** ppBody){
 }
 
 bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
-	//btRigidBody* pBody0 = (btRigidBody*) a;
-	//btRigidBody* pBody1 = (btRigidBody*) b;
-
-	//	btRigid
-	//	world_->removeRigidBody(pBody);
-	//	if(pBody){
-	//		delete pBody->getMotionState();
-//		}
-	//	delete pBody;
-	//	pBody0 = NULL;
-
-//	DeleteBody(pBody0);
-
-
-
-
-	//TestData* pUserData0 = (TestData*) pBody0->getUserPointer();
-	//TestData* pUserData1 = (TestData*) pBody1->getUserPointer();
-
-	// カウント
-	//if (pUserData0)
-		//pUserData0->count++;
-//	if (pUserData1)
-	//	pUserData1->count++;
-
-
+	delete_body_ = static_cast<btRigidBody*>(a);
+	delete_body2_ = static_cast<btRigidBody*>(b);
 	return true;
 }
 

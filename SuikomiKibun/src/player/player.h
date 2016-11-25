@@ -9,6 +9,7 @@
 #include "../util/uGL.h"
 #include "../define.h"
 #include "../input/input.h"
+#include "../map/map.h"
 
 //衝突コールバック
 extern ContactProcessedCallback gContactProcessedCallback;
@@ -24,19 +25,33 @@ private:
 	btRigidBody* sphere_body_;
 	btRigidBody* sphere_body2_;
 	btScalar player_radius_;
-	btRigidBody*  m_Body1;
 	TestData    m_BodyData1;
+	static btRigidBody* delete_body_;
+	static btRigidBody* delete_body2_;
+	int pcount;
 public:
-
 	Player(btDynamicsWorld* world);
 	~Player();
-	void Update(double angle);
+	void Update(double angle, StageMap* map);
 	void Draw() const;
 	Vector3 get_center_pos();
 	double get_camera_distance();
 	void PlayerSize(double size);
+	void PlayerMove(btVector3 pos);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
 	void DeleteBody(btRigidBody** ppBody);
+};
+
+class PlayerTeki{
+private:
+	btDynamicsWorld* world_;
+	btRigidBody* sphere_body_;
+	btScalar player_radius_;
+	static btRigidBody* delete_body_;
+	static btRigidBody* delete_body2_;
+public:
+	PlayerTeki(btDynamicsWorld* world,btVector3 pos);
+	~PlayerTeki();
 };
 
 
