@@ -26,7 +26,8 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 		std::cout << "port:";
 		std::cin >> port;
 	}
-	client_ = new Client(server_ip, port);
+	client_ = new ClientUdp(server_ip, port);
+	client_->Connect();
 
 	//衝突検出方法の選択(デフォルトを選択)
 	btDefaultCollisionConfiguration *config = new btDefaultCollisionConfiguration();

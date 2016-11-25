@@ -27,7 +27,7 @@ private:
 
 	//ネットワーク
 	Server *server_;
-	Client *client_;
+	ClientUdp *client_;
 	bool is_server_;
 	Vector3 pos1_;
 	Vector3 pos2_;

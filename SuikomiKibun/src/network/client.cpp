@@ -1,19 +1,19 @@
 #include "../network/client.h"
 
 Client::Client(std::string ip_adress, int start_port) :
-		socket_(io_service_), connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(
-				ip_adress) {
+		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(ip_adress) {
 	//メンバー変数初期化
 	port_ = start_port;
 	has_conected_ = false;
 	state_ = kConnectWait;
 	memset(&send_data_, 0, sizeof(send_data_));
 	memset(&receive_data_, 0, sizeof(receive_data_));
-	//接続を登録
-	Connect();
-	//接続を別スレッドで実行
-	boost::thread thd(&Client::ThRun, this);
-	conect_thread_.swap(thd);
+	socket_ = NULL; //Connectで作成
+}
+
+ClientUdp::ClientUdp(std::string ip_adress, int start_port) :
+		Client(ip_adress, start_port) {
+	socket_ = NULL;
 }
 
 Client::~Client() {
@@ -22,7 +22,7 @@ Client::~Client() {
 	send_timer_.cancel();
 	receive_timer_.cancel();
 	//接続を切る
-	socket_.close();
+	socket_->close();
 	//io_serviceを止める
 	io_service_.stop();
 	//スレッド終了まで待機
@@ -30,6 +30,9 @@ Client::~Client() {
 		conect_thread_.join();
 	if (run_thread_.joinable())
 		run_thread_.join();
+}
+
+ClientUdp::~ClientUdp() {
 }
 
 void Client::Update() {
@@ -84,11 +87,26 @@ void Client::ThRun() {
 
 //接続
 void Client::Connect() {
-	socket_.async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), port_),
+	//ソケット作成
+	socket_ = new tcp::socket(io_service_);
+	//接続登録
+	socket_->async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), port_),
 			boost::bind(&Client::OnConnect, this, asio::placeholders::error));
 	//5秒でタイムアウト
 	connect_timer_.expires_from_now(boost::posix_time::seconds(5));
 	connect_timer_.async_wait(boost::bind(&Client::OnConnectTimeOut, this, _1));
+	//接続を別スレッドで実行
+	boost::thread thd(&Client::ThRun, this);
+	conect_thread_.swap(thd);
+}
+
+void ClientUdp::Connect() {
+	//ソケット作成
+	socket_ = new udp::socket(io_service_, udp::endpoint(asio::ip::udp::v4(), port_));
+	//登録完了
+	printf("client(%d):登録完了\n", port_);
+	connect_timer_.cancel(); // タイムアウトのタイマーを切る
+	has_conected_ = true;
 }
 
 //接続完了
@@ -112,11 +130,19 @@ void Client::OnConnectTimeOut(const boost::system::error_code& error) {
 
 //クライアント情報送信
 void Client::Send() {
-	asio::async_write(socket_, asio::buffer(&send_data_, sizeof(ToServerContainer)),
+	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToServerContainer)),
 			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
 	send_timer_.async_wait(boost::bind(&Client::OnSendTimeOut, this, _1));
+}
+
+void ClientUdp::Send() {
+	socket_->async_send(asio::buffer(&send_data_, sizeof(ToServerContainer)),
+			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+	//60秒でタイムアウト
+	send_timer_.expires_from_now(boost::posix_time::seconds(60));
+	send_timer_.async_wait(boost::bind(&ClientUdp::OnSendTimeOut, this, _1));
 }
 
 //送信完了
@@ -147,11 +173,19 @@ void Client::OnSendTimeOut(const boost::system::error_code& error) {
 
 //サーバー情報受信
 void Client::StartReceive() {
-	boost::asio::async_read(socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
+	boost::asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
 			boost::bind(&Client::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
 	receive_timer_.async_wait(boost::bind(&Client::OnReceiveTimeOut, this, _1));
+}
+
+void ClientUdp::StartReceive() {
+	socket_->async_receive(asio::buffer(&receive_data_, sizeof(ToClientContainer)),
+			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+	//60秒でタイムアウト
+	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
+	receive_timer_.async_wait(boost::bind(&ClientUdp::OnReceiveTimeOut, this, _1));
 }
 
 // 受信完了
