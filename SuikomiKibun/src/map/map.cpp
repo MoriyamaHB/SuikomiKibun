@@ -503,7 +503,7 @@ void StageMap::Draw(){
 //	glEnable(GL_CULL_FACE);
 //	RenderScene(0);
 //
-//	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 //	glDepthMask(GL_FALSE);
 //	glDepthFunc(GL_LEQUAL);
 //	//glEnable(GL_STENCIL_TEST);
@@ -511,7 +511,7 @@ void StageMap::Draw(){
 //	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
 //	glFrontFace(GL_CCW);
 //	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
-	RenderScene(1);
+//	RenderScene(1);
 //	glFrontFace(GL_CW);
 //	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
 //	RenderScene(1);
@@ -534,8 +534,8 @@ void StageMap::Draw(){
 //	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
 //	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
 //	glDisable(GL_LIGHTING);
-//
-//	RenderScene(2);
+
+	RenderScene(2);
 //
 //	glEnable(GL_LIGHTING);
 //	glDepthFunc(GL_LESS);
@@ -548,6 +548,7 @@ void StageMap::Draw(){
 
 void	StageMap::RenderScene(int pass)
 {
+	static int test = 0;
 	btScalar	m[16];
 	btMatrix3x3	rot;rot.setIdentity();
 	const int	numObjects=world_->getNumCollisionObjects();
@@ -584,7 +585,9 @@ void	StageMap::RenderScene(int pass)
 			case	1:	m_shapeDrawer->drawShadow(m,m_sundirection*rot,colObj->getCollisionShape(),aabbMin,aabbMax);break;
 			case	2:	m_shapeDrawer->drawOpenGL(m,colObj->getCollisionShape(),wireColor*btScalar(0.3),0,aabbMin,aabbMax);break;
 		}
+
 	}
+
 }
 
 //bulletに登録
@@ -1312,100 +1315,100 @@ void StageMap::CreateTower(const btVector3& position)
 	color_[num_++] = btVector3(0, 0.6, 1.0);
 
 
-	btHingeConstraint* hingeC;
-	btTransform localA, localB, localC;
-	btTypedConstraint* joints_tower;
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[0]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[0], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[1]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[1], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[2]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[2], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[3]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[3], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[4]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[4], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[5]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[5], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[6]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[6], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[7]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[7], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[8]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[8], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[9]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[9], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[10]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[10], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[11]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[11], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
-
-	localA.setIdentity(); localB.setIdentity();
-	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[12]->getWorldTransform() * localA;
-	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[12], localB, localA);
-	hingeC->setLimit(btScalar(0), btScalar(0));
-	joints_tower = hingeC;
-	world_->addConstraint(joints_tower, true);
+//	btHingeConstraint* hingeC;
+//	btTransform localA, localB, localC;
+//	btTypedConstraint* joints_tower;
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[0]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[0], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[1]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[1], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[2]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[2], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[3]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[3], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[4]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[4], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[5]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[5], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[6]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[6], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[7]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[7], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[8]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[8], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[9]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[9], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[10]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[10], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[11]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[11], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
+//
+//	localA.setIdentity(); localB.setIdentity();
+//	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[12]->getWorldTransform() * localA;
+//	hingeC = new btHingeConstraint(*tower_sphere[0], *tower_sides[12], localB, localA);
+//	hingeC->setLimit(btScalar(0), btScalar(0));
+//	joints_tower = hingeC;
+//	world_->addConstraint(joints_tower, true);
 
 //	localA.setIdentity(); localB.setIdentity();
 //	localB = tower_sphere[0]->getWorldTransform().inverse() * tower_sides[13]->getWorldTransform() * localA;
