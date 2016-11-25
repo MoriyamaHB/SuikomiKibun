@@ -28,6 +28,7 @@ private:
 	TestData    m_BodyData1;
 	static btRigidBody* delete_body_;
 	static btRigidBody* delete_body2_;
+	int pcount;
 public:
 	Player(btDynamicsWorld* world);
 	~Player();
@@ -39,6 +40,18 @@ public:
 	void PlayerMove(btVector3 pos);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
 	void DeleteBody(btRigidBody** ppBody);
+};
+
+class PlayerTeki{
+private:
+	btDynamicsWorld* world_;
+	btRigidBody* sphere_body_;
+	btScalar player_radius_;
+	static btRigidBody* delete_body_;
+	static btRigidBody* delete_body2_;
+public:
+	PlayerTeki(btDynamicsWorld* world,btVector3 pos);
+	~PlayerTeki();
 };
 
 

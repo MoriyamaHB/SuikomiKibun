@@ -31,13 +31,31 @@ Player::Player(btDynamicsWorld* world) :
 			sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
-	//sphere_body_->setUserPointer(&m_BodyData1);  // ユーザーデータをセット
 
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
 
 	// 衝突のコールバック関数をセット
 	gContactProcessedCallback = Player::HandleContactProcess;
+
+	//撃力を加える回数最大数をセット
+	pcount = 5;
+}
+
+PlayerTeki::PlayerTeki(btDynamicsWorld* world,btVector3 pos) :
+		world_(world) {
+	//中心座標
+	//btVector3 sphere_pos = pos;
+	//大きさ
+	player_radius_ = 1.0;
+	//質量
+	//btScalar sphere_mass = 0.03
+	//反発係数
+	//btScalar sphere_rest = 0.8;
+	//慣性モーメント
+	//btVector3 sphere_inertia(0,0,0);
+	//剛体オブジェクト生成
+
 }
 
 //デストラクタ
@@ -54,14 +72,16 @@ void Player::Update(double angle, StageMap* map) {
 	btVector3 impulse;
 	static btVector3 pos;
 	double t = 0.1;
-	static int pcount = 5;
+	static int upcount = 0;
+	static int pflug = 1;
 
 	if (input::get_keyboard_frame('w') == 1) {
-		if (pcount > 0) {
+		if (pcount > 0 && pflug == 1) {
 			sphere_body_->activate(true);
 			impulse.setValue(t * cos(angle), 0, t * sin(angle));
 			sphere_body_->applyCentralImpulse(impulse);
-			//pcount--;
+			pcount--;
+			upcount = 0;
 		}
 	}
 	if (input::get_keyboard_frame('s') == 1) {
@@ -88,9 +108,21 @@ void Player::Update(double angle, StageMap* map) {
 	}
 	//}
 
-	//player_radius_ += 0.01;
+	//player_radius_ += 0.011;
 	//PlayerSize(player_radius_);
 	//PlayerMove(pos);
+	if (pflug == 0)
+		upcount++;
+
+	if (pcount <= 0)
+		pflug = 0;
+	if (upcount == 10) {
+		upcount = 0;
+		if (pcount < 5)
+			pcount++;
+		if (pcount == 5)
+			pflug = 1;
+	}
 
 	int i;
 	btCollisionObject* obj;
@@ -116,6 +148,20 @@ void Player::Update(double angle, StageMap* map) {
 
 //描画
 void Player::Draw() const {
+
+	for (int i = 0; i < pcount; i++) {
+		u3Dto2D();
+		glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+		glTranslatef(0, 0, 1);
+		glBegin(GL_QUADS);
+		glNormal3d(0.0, 1.0, 0.0);
+		glVertex3f(50 * i, 30, 0);
+		glVertex3f(50 * i, 50, 0);
+		glVertex3f(20 + 50 * i, 50, 0);
+		glVertex3f(20 + 50 * i, 30, 0);
+		glEnd();
+		u2Dto3D();
+	}
 
 	//球
 	/*
