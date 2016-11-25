@@ -13,7 +13,7 @@ Player::Player(btDynamicsWorld* world) :
 	//質量
 	btScalar sphere_mass = 0.03;
 	//反発係数
-	btScalar sphere_rest = 0.8;
+	btScalar sphere_rest = 0.2;
 	//慣性モーメント
 	btVector3 sphere_inertia(0, 0, 0);
 	//形状を設定
@@ -42,20 +42,31 @@ Player::Player(btDynamicsWorld* world) :
 	pcount = 5;
 }
 
-PlayerTeki::PlayerTeki(btDynamicsWorld* world,btVector3 pos) :
+PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 		world_(world) {
 	//中心座標
-	//btVector3 sphere_pos = pos;
+	btVector3 sphere_pos = pos;
 	//大きさ
 	player_radius_ = 1.0;
 	//質量
-	//btScalar sphere_mass = 0.03
+	btScalar sphere_mass = 0.03;
 	//反発係数
-	//btScalar sphere_rest = 0.8;
+	btScalar sphere_rest = 0.2;
 	//慣性モーメント
-	//btVector3 sphere_inertia(0,0,0);
+	btVector3 sphere_inertia(0, 0, 0);
+	//形状を設定
+	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
+	//球体の初期位置、姿勢
+	btQuaternion qrot(0, 0, 0, 1);
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
+			btTransform(qrot, sphere_pos));
 	//剛体オブジェクト生成
-
+	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,
+			sphere_shape, sphere_inertia);
+	//反発係数
+	sphere_body_->setRestitution(sphere_rest);
+	//ワールドに剛体オブジェクトを追加
+	world_->addRigidBody(sphere_body_);
 }
 
 //デストラクタ
@@ -64,6 +75,10 @@ Player::~Player() {
 //	delete sphere_body_->getMotionState();
 //	world_->removeRigidBody(sphere_body_);
 //	delete sphere_body_;
+}
+
+PlayerTeki::~PlayerTeki() {
+
 }
 
 //更新
@@ -146,6 +161,11 @@ void Player::Update(double angle, StageMap* map) {
 	delete_body2_ = NULL;
 }
 
+//プレイヤー敵データ更新
+void PlayerTeki::Update(btVector3 pos) {
+	PlayerTekiMove(pos);
+}
+
 //描画
 void Player::Draw() const {
 
@@ -182,6 +202,12 @@ void Player::PlayerSize(double size) {
 	btCollisionShape *new_sphere_shape = new btSphereShape(size);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
+}
+
+void PlayerTeki::PlayerTekiMove(btVector3 pos) {
+	btQuaternion qrot(0, 0, 0, 1);
+		btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot,pos));
+		sphere_body_->setMotionState(sphere_motion_state);
 }
 
 void Player::PlayerMove(btVector3 pos) {

@@ -23,6 +23,8 @@ private:
 	Camera3D3P camera_;
 	StageMap* map_;
 	Player *player_;
+	PlayerTeki *playerteki1_;
+	PlayerTeki *playerteki2_;
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();

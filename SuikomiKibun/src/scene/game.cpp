@@ -27,6 +27,9 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	map_ = new StageMap(dynamics_world_);
 	//プレイヤー作成
 	player_ = new Player(dynamics_world_);
+	//敵プレイヤー作成
+	playerteki1_ = new PlayerTeki(dynamics_world_,btVector3(1,1,0));
+	playerteki2_ = new PlayerTeki(dynamics_world_,btVector3(10,10,2));
 }
 
 //デストラクタ
@@ -55,7 +58,9 @@ void GameScene::Update() {
 
 	//プレイヤー更新
 	player_->Update(camera_.get_angle_w() + M_PI, map_);
-
+	//敵プレイヤー更新
+	playerteki1_->Update(btVector3(1,5,0));
+	playerteki2_->Update(btVector3(20,5,0));
 
 	//ライト
 
