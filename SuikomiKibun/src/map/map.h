@@ -22,29 +22,23 @@
 #define PI_ 3.1415926
 
 class StageMap{
-protected:
-	GL_ShapeDrawer*	m_shapeDrawer;
-	bool	 m_enableshadows;
-	btVector3	m_sundirection;
-	btScalar	m_defaultContactProcessingThreshold;
-	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
-
 private:
+	GL_ShapeDrawer*	m_shapeDrawer;
 	btDynamicsWorld* world_;
 
 	int num_;
-	btVector3 color_[1000];
-	int object_[1000];
+	btVector3 color_[2000];
+	int object_[2000];
 	int object_num_;
 
-	void RenderScene(int pass);
+	void RenderScene(void);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
 	void CreateSpider(const btVector3& position);
 	void CreateSnowman(const btVector3& position, double size);
 	void CreatePyramid(const btVector3& position);
 	void CreateTriangle(const btVector3& position);
 	void CreateTower(const btVector3& position);
-
+	void CreatePonde(const btVector3& position);
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();

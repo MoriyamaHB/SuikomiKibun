@@ -24,9 +24,9 @@
 
 //コンストラクタ
 StageMap::StageMap(btDynamicsWorld* world)
-	:m_enableshadows(true),
-	 m_sundirection(btVector3(1,-2,1)*1000),
-	 m_defaultContactProcessingThreshold(BT_LARGE_FLOAT),
+	:
+//	 m_sundirection(btVector3(1,-2,1)*1000),
+//	 m_defaultContactProcessingThreshold(BT_LARGE_FLOAT),
 	 world_(world)
 {
 	num_ = 0;
@@ -463,6 +463,10 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btVector3 position_e(-40, 10*sqrt(24)+2.0, -150);
 	CreateTower(position_e);
 
+	btVector3 position_f(20, 20, 20);
+	CreatePonde(position_f);
+
+	//プレイヤー
 	object_[num_] = ++object_num_;
 	color_[num_++] = btVector3(1.0, 0, 0);
 
@@ -535,7 +539,7 @@ void StageMap::Draw(){
 //	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
 //	glDisable(GL_LIGHTING);
 
-	RenderScene(2);
+	RenderScene();
 //
 //	glEnable(GL_LIGHTING);
 //	glDepthFunc(GL_LESS);
@@ -546,9 +550,8 @@ void StageMap::Draw(){
 
 }
 
-void	StageMap::RenderScene(int pass)
+void	StageMap::RenderScene()
 {
-	static int test = 0;
 	btScalar	m[16];
 	btMatrix3x3	rot;rot.setIdentity();
 	const int	numObjects=world_->getNumCollisionObjects();
@@ -576,15 +579,9 @@ void	StageMap::RenderScene(int pass)
 
 		aabbMin-=btVector3(BT_LARGE_FLOAT,BT_LARGE_FLOAT,BT_LARGE_FLOAT);
 		aabbMax+=btVector3(BT_LARGE_FLOAT,BT_LARGE_FLOAT,BT_LARGE_FLOAT);
-		//		printf("aabbMin=(%f,%f,%f)\n",aabbMin.getX(),aabbMin.getY(),aabbMin.getZ());
-		//		printf("aabbMax=(%f,%f,%f)\n",aabbMax.getX(),aabbMax.getY(),aabbMax.getZ());
-		//		m_dynamicsWorld->getDebugDrawer()->drawAabb(aabbMin,aabbMax,btVector3(1,1,1));
 
-		switch(pass)
-		{
-			case	1:	m_shapeDrawer->drawShadow(m,m_sundirection*rot,colObj->getCollisionShape(),aabbMin,aabbMax);break;
-			case	2:	m_shapeDrawer->drawOpenGL(m,colObj->getCollisionShape(),wireColor*btScalar(0.3),0,aabbMin,aabbMax);break;
-		}
+		m_shapeDrawer->drawOpenGL(m,colObj->getCollisionShape(),wireColor*btScalar(0.3),0,aabbMin,aabbMax);
+
 
 	}
 
@@ -1621,6 +1618,112 @@ void StageMap::CreateTower(const btVector3& position)
 //	world_->addConstraint(joints_triangel, true);
 
 }
+
+void StageMap::CreatePonde(const btVector3& position)
+{
+	btRigidBody* ponde_sphere[13];
+	double r = 1.12;
+	double size = 0.5;
+	btTypedConstraint* joint;
+
+	//位置を設定
+	btVector3 position1(r * cos(PI_ * 0 / 4), 0, r * sin(PI_ * 0 / 4));
+	btVector3 position2(r * cos(PI_ * 1 / 4), 0, r * sin(PI_ * 1 / 4));
+	btVector3 position3(r * cos(PI_ * 2 / 4), 0, r * sin(PI_ * 2 / 4));
+	btVector3 position4(r * cos(PI_ * 3 / 4), 0, r * sin(PI_ * 3 / 4));
+	btVector3 position5(r * cos(PI_ * 4 / 4), 0, r * sin(PI_ * 4 / 4));
+	btVector3 position6(r * cos(PI_ * 5 / 4), 0, r * sin(PI_ * 5 / 4));
+	btVector3 position7(r * cos(PI_ * 6 / 4), 0, r * sin(PI_ * 6 / 4));
+	btVector3 position8(r * cos(PI_ * 7 / 4), 0, r * sin(PI_ * 7 / 4));
+
+	//形状設定
+	btCollisionShape *sphere_shape = new btSphereShape(size);
+
+	//bulletに登
+	btTransform offset; offset.setIdentity();
+	btTransform offset2; offset2.setIdentity();
+	offset.setOrigin(position);
+	offset2.setOrigin(position1);
+	ponde_sphere[0] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = ++object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position2);
+	ponde_sphere[1] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position3);
+	ponde_sphere[2] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position4);
+	ponde_sphere[3] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position5);
+	ponde_sphere[4] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position6);
+	ponde_sphere[5] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position7);
+	ponde_sphere[6] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+	offset2.setOrigin(position8);
+	ponde_sphere[7] = LocalCreateRigidBody(btScalar(0.01), offset * offset2, sphere_shape);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(0.97, 0.84, 0.52);
+
+	//オブジェクトを繋げる
+	btHingeConstraint* hingeC;
+	btTransform localA, localB, localC;
+
+	localA.setIdentity(); localB.setIdentity();
+	localB = ponde_sphere[0]->getWorldTransform().inverse() * ponde_sphere[1]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[0], *ponde_sphere[1], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[1]->getWorldTransform().inverse() * ponde_sphere[2]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[1], *ponde_sphere[2], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[2]->getWorldTransform().inverse() * ponde_sphere[3]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[2], *ponde_sphere[3], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[3]->getWorldTransform().inverse() * ponde_sphere[4]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[3], *ponde_sphere[4], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[4]->getWorldTransform().inverse() * ponde_sphere[5]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[4], *ponde_sphere[5], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[5]->getWorldTransform().inverse() * ponde_sphere[6]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[5], *ponde_sphere[6], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[6]->getWorldTransform().inverse() * ponde_sphere[7]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[6], *ponde_sphere[7], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+	localB = ponde_sphere[7]->getWorldTransform().inverse() * ponde_sphere[0]->getWorldTransform() * localA;
+	hingeC = new btHingeConstraint(*ponde_sphere[7], *ponde_sphere[0], localB, localA);
+	hingeC->setLimit(btScalar(0), btScalar(0));
+	joint = hingeC;
+	world_->addConstraint(joint, true);
+
+}
+
 
 void StageMap::DestroyObject(int num){
 	int i;
