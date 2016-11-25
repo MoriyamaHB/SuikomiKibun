@@ -30,6 +30,8 @@ Client::~Client() {
 		conect_thread_.join();
 	if (run_thread_.joinable())
 		run_thread_.join();
+	//開放
+	delete socket_;
 }
 
 ClientUdp::~ClientUdp() {
@@ -101,8 +103,13 @@ void Client::Connect() {
 }
 
 void ClientUdp::Connect() {
+	//endpoint設定
+	udp::resolver resolver(io_service_);
+	udp::resolver::query query(udp::v4(), kIpAdress, uToStr (port_));
+	receiver_endpoint_ = *resolver.resolve(query);
 	//ソケット作成
 	socket_ = new udp::socket(io_service_, udp::endpoint(asio::ip::udp::v4(), port_));
+	socket_->open(udp::v4());
 	//登録完了
 	printf("client(%d):登録完了\n", port_);
 	connect_timer_.cancel(); // タイムアウトのタイマーを切る
@@ -138,7 +145,7 @@ void Client::Send() {
 }
 
 void ClientUdp::Send() {
-	socket_->async_send(asio::buffer(&send_data_, sizeof(ToServerContainer)),
+	socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToServerContainer)), receiver_endpoint_,
 			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));

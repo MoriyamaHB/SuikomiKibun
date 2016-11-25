@@ -76,6 +76,7 @@ class ClientUdp: public Client {
 private:
 	//ソケット(override)
 	udp::socket *socket_;
+	udp::endpoint receiver_endpoint_;
 
 	//送信
 	void Send();

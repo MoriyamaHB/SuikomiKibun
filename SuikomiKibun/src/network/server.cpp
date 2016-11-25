@@ -11,6 +11,7 @@ Server::Server(int start_port, int client_num) :
 		io_service_.push_back(new asio::io_service());
 		//クライアント作成
 		client_.push_back(new ComClient(*io_service_[i], start_port + i, this));
+		client_[i]->StartAccept();
 		//スレッド作成,実行
 		thread_.push_back(new boost::thread());
 		boost::thread thd(&Server::ThRun, this, io_service_[i]);
