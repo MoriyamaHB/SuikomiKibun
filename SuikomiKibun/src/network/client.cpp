@@ -121,7 +121,6 @@ void ClientUdp::Connect() {
 	send_socket_->open(udp::v4());
 	//登録完了
 	printf("client(%d):登録完了\n", port_);
-	connect_timer_.cancel(); // タイムアウトのタイマーを切る
 	has_conected_ = true;
 }
 
