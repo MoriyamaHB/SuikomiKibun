@@ -52,19 +52,19 @@ protected:
 	void OnConnect(const boost::system::error_code& error);
 	void OnConnectTimeOut(const boost::system::error_code& error);
 	//送信
-	void Send();
+	virtual void Send();
 	void OnSend(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnSendTimeOut(const boost::system::error_code& error);
 	//受信
-	void StartReceive();
+	virtual void StartReceive();
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun();
 public:
 	Client(std::string ip_adress, int start_port);
-	void Connect();	//接続開始
-	~Client();
+	virtual void Connect();	//接続開始
+	virtual ~Client();
 	void Update();
 	void Draw();
 

@@ -42,17 +42,17 @@ protected:
 	void OnAccept(const boost::system::error_code& error);
 	void OnAcceptTimeOut(const boost::system::error_code& error);
 	//送信
-	void Send();
+	virtual void Send();
 	void OnSend(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnSendTimeOut(const boost::system::error_code& error);
 	//受信
-	void Receive();
+	virtual void Receive();
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
 	ComClient(asio::io_service &io_service, int port, Server* se);
-	void StartAccept();	//接続待機
-	~ComClient();
+	virtual void StartAccept();	//接続待機
+	virtual ~ComClient();
 	void Start();	//送受信スタート
 
 	void set_send_data(const ToClientContainer &send_data);
