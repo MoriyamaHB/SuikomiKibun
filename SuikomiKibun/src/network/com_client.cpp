@@ -111,15 +111,8 @@ void ComClient::Send() {
 }
 
 void ComClientUdp::Send() {
-	timespec time;
-	//0.1秒を設定
-	time.tv_sec = 0;
-	time.tv_nsec = 100000000;
-	//データが更新されるまで待機
-	while (server_->changed_player_data_ == false)
-		nanosleep(&time, NULL);
-//	asio::socket_base::send_buffer_size size(sizeof(ToClientContainer));
-//	socket_->set_option(size);
+	asio::socket_base::send_buffer_size size(sizeof(ToClientContainer));
+	send_socket_->set_option(size);
 	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToClientContainer)), send_endpoint_,
 			boost::bind(&ComClientUdp::OnSend, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
