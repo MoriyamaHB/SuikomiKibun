@@ -27,7 +27,7 @@ private:
 
 	//通信
 	std::vector<asio::io_service*> io_service_;
-	std::vector<ComClient*> client_;
+	std::vector<ComClientUdp*> client_;
 	//スレッド
 	std::vector<boost::thread*> thread_;
 	//状態

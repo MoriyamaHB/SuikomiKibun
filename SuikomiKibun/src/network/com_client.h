@@ -12,6 +12,7 @@
 #include "../gv.h"
 
 class ComClient;
+class ComClientUdp;
 #include "server.h"
 
 namespace asio = boost::asio;
