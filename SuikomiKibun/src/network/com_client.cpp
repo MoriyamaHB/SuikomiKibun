@@ -27,10 +27,11 @@ ComClient::~ComClient() {
 	send_timer_.cancel();
 	receive_timer_.cancel();
 	//接続を切る
-	if (socket_)
+	if (socket_ != NULL)
 		socket_->close();
 	//アクセプターを切る
-	acceptor_->close();
+	if (acceptor_ != NULL)
+		acceptor_->close();
 	//開放
 	delete acceptor_;
 	delete socket_;
@@ -111,8 +112,8 @@ void ComClient::Send() {
 }
 
 void ComClientUdp::Send() {
-	asio::socket_base::send_buffer_size size(sizeof(ToClientContainer));
-	send_socket_->set_option(size);
+//	asio::socket_base::send_buffer_size size(sizeof(ToClientContainer));
+//	send_socket_->set_option(size);
 	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToClientContainer)), send_endpoint_,
 			boost::bind(&ComClientUdp::OnSend, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
@@ -162,6 +163,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
 		return;
 	}
+	if (bytes_transferred != asio::error::message_size)
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ToServerContainer* data = asio::buffer_cast<const ToServerContainer*>(receive_buff_.data());
 	receive_data_ = *data;
