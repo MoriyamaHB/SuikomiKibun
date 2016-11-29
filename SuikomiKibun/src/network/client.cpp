@@ -1,7 +1,8 @@
 #include "../network/client.h"
 
 Client::Client(std::string ip_adress, int start_port) :
-		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(ip_adress) {
+		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(
+				ip_adress) {
 	//メンバー変数初期化
 	port_ = start_port;
 	has_conected_ = false;
@@ -146,7 +147,8 @@ void Client::OnConnectTimeOut(const boost::system::error_code& error) {
 //クライアント情報送信
 void Client::Send() {
 	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToServerContainer)),
-			boost::bind(&Client::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnSend, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
 	send_timer_.async_wait(boost::bind(&Client::OnSendTimeOut, this, _1));
@@ -156,7 +158,8 @@ void ClientUdp::Send() {
 //	asio::socket_base::send_buffer_size size(sizeof(ToServerContainer));
 //	send_socket_->set_option(size);
 	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToServerContainer)), send_endpoint_,
-			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
 	send_timer_.async_wait(boost::bind(&ClientUdp::OnSendTimeOut, this, _1));
@@ -185,7 +188,8 @@ void Client::OnSendTimeOut(const boost::system::error_code& error) {
 //サーバー情報受信
 void Client::StartReceive() {
 	boost::asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
-			boost::bind(&Client::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&Client::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
 	receive_timer_.async_wait(boost::bind(&Client::OnReceiveTimeOut, this, _1));
@@ -194,7 +198,8 @@ void Client::StartReceive() {
 void ClientUdp::StartReceive() {
 	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)),
 			remote_endpoint_,
-			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
 	receive_timer_.async_wait(boost::bind(&ClientUdp::OnReceiveTimeOut, this, _1));
@@ -210,8 +215,10 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 	}
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ToClientContainer* recive_data = asio::buffer_cast<const ToClientContainer*>(receive_buff_.data());
-	receive_data_ = *recive_data;
-	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
+	if ((*recive_data).player_data[0].pos.x != 0.0) {
+		receive_data_ = *recive_data;
+		printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
+	}
 	receive_buff_.consume(receive_buff_.size());
 	StartReceive();
 }

@@ -164,10 +164,12 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 		return;
 	}
 	if (bytes_transferred != asio::error::message_size)
-	receive_timer_.cancel(); // タイムアウトのタイマーを切る
+		receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ToServerContainer* data = asio::buffer_cast<const ToServerContainer*>(receive_buff_.data());
-	receive_data_ = *data;
-	printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
+	if ((*data).player_data.pos.x != 0.0) {
+		receive_data_ = *data;
+		printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
+	}
 	receive_buff_.consume(receive_buff_.size());
 	server_->changed_player_data_ = true;
 	Receive();
