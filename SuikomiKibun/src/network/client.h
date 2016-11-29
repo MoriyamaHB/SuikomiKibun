@@ -75,7 +75,8 @@ public:
 class ClientUdp: public Client {
 private:
 	//ソケット(override)
-	udp::socket *socket_;
+	udp::socket *send_socket_;
+	udp::socket *receive_socket_;
 	udp::endpoint remote_endpoint_;
 	udp::endpoint send_endpoint_;
 
@@ -87,7 +88,7 @@ private:
 public:
 	ClientUdp(std::string ip_adress, int start_port);
 	void Connect();	//接続開始
-	virtual ~ClientUdp();
+	~ClientUdp();
 };
 
 #endif

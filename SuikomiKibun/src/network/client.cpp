@@ -13,7 +13,8 @@ Client::Client(std::string ip_adress, int start_port) :
 
 ClientUdp::ClientUdp(std::string ip_adress, int start_port) :
 		Client(ip_adress, start_port) {
-	socket_ = NULL;
+	send_socket_ = NULL;
+	receive_socket_ = NULL;
 }
 
 Client::~Client() {
@@ -22,7 +23,8 @@ Client::~Client() {
 	send_timer_.cancel();
 	receive_timer_.cancel();
 	//接続を切る
-	socket_->close();
+	if (socket_)
+		socket_->close();
 	//io_serviceを止める
 	io_service_.stop();
 	//スレッド終了まで待機
@@ -35,6 +37,12 @@ Client::~Client() {
 }
 
 ClientUdp::~ClientUdp() {
+	//接続を切る
+	send_socket_->close();
+	receive_socket_->close();
+	//開放
+	delete send_socket_;
+	delete receive_socket_;
 }
 
 void Client::Update() {
@@ -107,8 +115,9 @@ void ClientUdp::Connect() {
 	udp::endpoint endpoint(boost::asio::ip::udp::v4(), port_ + 10 /*ポート番号*/);
 	send_endpoint_ = udp::endpoint(asio::ip::address::from_string("127.0.0.1"), port_);
 	//ソケット作成
-	socket_ = new udp::socket(io_service_, endpoint);
-	socket_->open(udp::v4());
+	receive_socket_ = new udp::socket(io_service_, endpoint);
+	send_socket_ = new udp::socket(io_service_);
+	send_socket_->open(udp::v4());
 	//登録完了
 	printf("client(%d):登録完了\n", port_);
 	connect_timer_.cancel(); // タイムアウトのタイマーを切る
@@ -144,7 +153,7 @@ void Client::Send() {
 }
 
 void ClientUdp::Send() {
-	socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToServerContainer)), send_endpoint_,
+	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToServerContainer)), send_endpoint_,
 			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
@@ -187,7 +196,8 @@ void Client::StartReceive() {
 }
 
 void ClientUdp::StartReceive() {
-	socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)), remote_endpoint_,
+	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)),
+			remote_endpoint_,
 			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));

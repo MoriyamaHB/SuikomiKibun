@@ -62,7 +62,8 @@ public:
 
 class ComClientUdp: public ComClient {
 private:
-	udp::socket *socket_;
+	udp::socket *send_socket_;
+	udp::socket *receive_socket_;
 	udp::endpoint remote_endpoint_;
 	udp::endpoint send_endpoint_;
 
@@ -73,7 +74,7 @@ private:
 public:
 	ComClientUdp(asio::io_service &io_service, int port, Server* se);
 	void StartAccept();	//接続
-	virtual ~ComClientUdp();
+	~ComClientUdp();
 };
 
 #endif
