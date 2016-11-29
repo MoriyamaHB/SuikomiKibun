@@ -63,7 +63,8 @@ public:
 class ComClientUdp: public ComClient {
 private:
 	udp::socket *socket_;
-	udp::endpoint receiver_endpoint_;
+	udp::endpoint remote_endpoint_;
+	udp::endpoint send_endpoint_;
 
 	//送信
 	void Send();

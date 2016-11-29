@@ -51,11 +51,10 @@ void ComClient::StartAccept() {
 
 void ComClientUdp::StartAccept() {
 	//endpoint設定
-	udp::resolver resolver(io_service_);
-	udp::resolver::query query(udp::v4(), "localhost", uToStr(kPort));
-	receiver_endpoint_ = *resolver.resolve(query);
+	udp::endpoint endpoint(boost::asio::ip::udp::v4(), kPort /*ポート番号*/);
+	send_endpoint_ = udp::endpoint(asio::ip::address::from_string("127.0.0.1"), kPort + 10);
 	//ソケット作成
-	socket_ = new udp::socket(io_service_, udp::endpoint(asio::ip::udp::v4(), kPort));
+	socket_ = new udp::socket(io_service_, endpoint);
 	socket_->open(udp::v4());
 	//登録完了
 	has_accepted_ = true;
@@ -110,8 +109,11 @@ void ComClientUdp::Send() {
 	//データが更新されるまで待機
 	while (server_->changed_player_data_ == false)
 		nanosleep(&time, NULL);
-	socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToClientContainer)), receiver_endpoint_,
-			boost::bind(&ComClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+//	asio::socket_base::send_buffer_size size(sizeof(ToClientContainer));
+//	socket_->set_option(size);
+	socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToClientContainer)), send_endpoint_,
+			boost::bind(&ComClientUdp::OnSend, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(5));
 	send_timer_.async_wait(boost::bind(&ComClientUdp::OnSendTimeOut, this, _1));
@@ -136,14 +138,15 @@ void ComClient::OnSendTimeOut(const boost::system::error_code& error) {
 //受信
 void ComClient::Receive() {
 	asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToServerContainer)),
-			bind(&ComClient::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			bind(&ComClient::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(5));
 	receive_timer_.async_wait(boost::bind(&ComClient::OnReceiveTimeOut, this, _1));
 }
 
 void ComClientUdp::Receive() {
-	socket_->async_receive(asio::buffer(&receive_data_, sizeof(ToServerContainer)),
+	socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToServerContainer)), remote_endpoint_,
 			boost::bind(&ComClientUdp::OnReceive, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
