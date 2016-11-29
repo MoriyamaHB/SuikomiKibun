@@ -171,12 +171,6 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 		return;
 	}
 	send_timer_.cancel(); // タイムアウトのタイマーを切る
-	timespec time;
-	//0.1秒を設定
-	time.tv_sec = 0;
-	time.tv_nsec = 100;
-	//データが更新されるまで待機
-	nanosleep(&time, NULL);
 	Send();
 }
 
