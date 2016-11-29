@@ -114,7 +114,7 @@ void Client::Connect() {
 void ClientUdp::Connect() {
 	//endpoint設定
 	udp::endpoint endpoint(boost::asio::ip::udp::v4(), port_ + 10 /*ポート番号*/);
-	send_endpoint_ = udp::endpoint(asio::ip::address::from_string("127.0.0.1"), port_);
+	send_endpoint_ = udp::endpoint(asio::ip::address::from_string(kIpAdress), port_);
 	//ソケット作成
 	receive_socket_ = new udp::socket(io_service_, endpoint);
 	send_socket_ = new udp::socket(io_service_);
