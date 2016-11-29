@@ -159,19 +159,22 @@ void ComClientUdp::Receive() {
 }
 
 void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
+	//エラー時
 	if (error && error != asio::error::eof) {
 		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
 		return;
 	}
-	if (bytes_transferred != asio::error::message_size)
-		receive_timer_.cancel(); // タイムアウトのタイマーを切る
+	//再度受信準備
+	receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ToServerContainer* data = asio::buffer_cast<const ToServerContainer*>(receive_buff_.data());
-	if ((*data).player_data.pos.x != 0.0) {
+	receive_buff_.consume(receive_buff_.size());
+	//正常に届いた時
+	if (bytes_transferred == asio::error::message_size) {
 		receive_data_ = *data;
 		printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
+		server_->changed_player_data_ = true;
 	}
-	receive_buff_.consume(receive_buff_.size());
-	server_->changed_player_data_ = true;
+	//再度受信
 	Receive();
 }
 

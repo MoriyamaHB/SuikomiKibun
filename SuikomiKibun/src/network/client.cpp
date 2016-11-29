@@ -209,17 +209,21 @@ void ClientUdp::StartReceive() {
 // error : エラー情報
 // bytes_transferred : 受信したバイト数
 void Client::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
+	//エラー時
 	if (error && error != boost::asio::error::eof) {
 		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
 		return;
 	}
+	//再度受信準備
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
 	const ToClientContainer* recive_data = asio::buffer_cast<const ToClientContainer*>(receive_buff_.data());
-	if ((*recive_data).player_data[0].pos.x != 0.0) {
+	receive_buff_.consume(receive_buff_.size());
+	//正常に届いた時
+	if (bytes_transferred == asio::error::message_size) {
 		receive_data_ = *recive_data;
 		printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
 	}
-	receive_buff_.consume(receive_buff_.size());
+	//再度受信
 	StartReceive();
 }
 
