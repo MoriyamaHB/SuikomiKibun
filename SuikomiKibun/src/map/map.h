@@ -34,7 +34,7 @@ private:
 	void RenderScene(void);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
 	void CreateSpider(const btVector3& position);
-	void CreateSnowman(const btVector3& position, double size);
+	void CreateSnowman(const btVector3& position, float size);
 	void CreatePyramid(const btVector3& position);
 	void CreateTriangle(const btVector3& position);
 	void CreateTower(const btVector3& position);
