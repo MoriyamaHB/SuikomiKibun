@@ -75,7 +75,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 pole_pos12 = btVector3(0, 50, -199);
 	btVector3 kan_pos = btVector3(-210, 100, 0);
 	btVector3 kan_pos2 = btVector3(-210, 100, 0);
-	btVector3 kan_pos3 = btVector3(-199.5, 150, 15);
+	btVector3 kan_pos3 = btVector3(-197.5, 150, 15);
 	btVector3 cube_pos = btVector3(190, 35.2, 50);
 	btVector3 cube_pos2 = btVector3(2, 0, 0);
 	btVector3 cube_pos3 = btVector3(225, 30.3, 0);
@@ -101,7 +101,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 cube_pos23 = btVector3(214, 35.1, 33);
 	btVector3 cube_pos24 = btVector3(205, 35.1, 39);
 	btVector3 cube_pos25 = btVector3(170, 30, -59);
-	btVector3 cube_pos26 = btVector3(132, 30, -97);
+	btVector3 cube_pos26 = btVector3(132, 15, -97);
 	btVector3 cube_pos27 = btVector3(205, 35.1, 39);
 	btVector3 cube_pos28 = btVector3(205, 35.1, 39);
 	btVector3 cube_pos29 = btVector3(205, 35.1, 39);
@@ -121,7 +121,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *wall_shape = new btBoxShape(btVector3(250, 250, 0.1));
 	btCollisionShape *wall_shape2 = new btBoxShape(btVector3(100, 50, 0.1));
 	btCollisionShape *wall_shape3 = new btBoxShape(btVector3(50, 50, 0.1));
-	btCollisionShape *kan_shape = new btBoxShape(btVector3(10, 7, 90));
+	btCollisionShape *kan_shape = new btBoxShape(btVector3(12, 7, 90));
 	btCollisionShape *kan_shape2 = new btBoxShape(btVector3(1, 1, 1));
 	btCollisionShape *cube_shape = new btBoxShape(btVector3(1, 40, 30));
 	btCollisionShape *cube_shape2 = new btBoxShape(btVector3(15, 60, 150));
@@ -133,7 +133,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *cube_shape8 = new btBoxShape(btVector3(31, 5, 51));
 	btCollisionShape *cube_shape9 = new btBoxShape(btVector3(0.1, 62, 15));
 	btCollisionShape *cube_shape10 = new btBoxShape(btVector3(19, 30, 19));
-	btCollisionShape *cube_shape11 = new btBoxShape(btVector3(19, 15, 19));
+	btCollisionShape *cube_shape11 = new btBoxShape(btVector3(19, 15, 50));
 
 	//bulletに登録（地面＆壁4
 	offset.setOrigin(ground_pos);
@@ -218,13 +218,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 		color_[num_++] = btVector3(1.0, 0.0, 0.0);
 		offset = offset * offset2;
 	}
-	for (int ten = 0; ten < 300; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-		ground_body2 = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-		offset = offset * offset2;
-	}
+//	for (int ten = 0; ten < 300; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+//		ground_body2 = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		color_[num_++] = btVector3(1.0, 0.0, 0.0);
+//		offset = offset * offset2;
+//	}
 
 //	黄階段
 	offset.setOrigin(stairs_pos4);
@@ -246,13 +246,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 		color_[num_++] = btVector3(0.0, 0.0, 1.0);
 		offset = offset * offset2;
 	}
-	for (int ten = 0; ten < 300; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-		ground_body2 = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		color_[num_++] = btVector3(0.0, 0.0, 1.0);
-		offset = offset * offset2;
-	}
+//	for (int ten = 0; ten < 300; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+//		ground_body2 = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		color_[num_++] = btVector3(0.0, 0.0, 1.0);
+//		offset = offset * offset2;
+//	}
 
 // 	緑階段
 	offset.setOrigin(stairs_pos6);
@@ -549,12 +549,12 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset.setRotation(btQuaternion(0, 0, 0));
 	kan_body[0] = LocalCreateRigidBody(btScalar(100), offset, kan_shape);
 	object_[num_] = object_num_;
-	color_[num_++] = btVector3(0.5, 0.5, 0.5);
+	color_[num_++] = btVector3(1, 0, 1);
 	offset.setIdentity(); offset.setOrigin(kan_pos2);
 	offset.setRotation(btQuaternion(0, PI_ / 2, 0));
 	kan_body[1] = LocalCreateRigidBody(btScalar(100), offset, kan_shape);
 	object_[num_] = object_num_;
-	color_[num_++] = btVector3(0.5, 0.5, 0.5);
+	color_[num_++] = btVector3(1, 0, 1);
 	btHingeConstraint* hingeC;
 	btTransform localA, localB, localC;
 	btTypedConstraint* joint;
@@ -580,10 +580,12 @@ StageMap::StageMap(btDynamicsWorld* world) :
 
 //反発係数
 	btScalar ground_rest = 0.6;
+	btScalar ground_rest2 = 2.0;
 	btScalar wall_rest = 0.4;
 
 	//反発係数設定
 	ground_body->setRestitution(ground_rest);
+	ground_body2->setRestitution(ground_rest2);
 	for (int i = 0; i < 4; i++) {
 		wall_body[i]->setRestitution(wall_rest);
 	}
@@ -671,10 +673,29 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 position_c(-50, 20, -10);
 	CreateTriangle(position_c);
 
+	btVector3 position_g(160, 0, 150);
+	CreateMush(position_g, 19);
+	btVector3 position_h(115, 0, 85);
+	CreateMush(position_h, 16);
+	btVector3 position_i(80, 0, 130);
+	CreateMush(position_i, 13);
+	btVector3 position_j(50, 0, 100);
+	CreateMush(position_j, 10);
+	btVector3 position_k(25, 0, 120);
+	CreateMush(position_k, 7);
+	btVector3 position_l(10, 0, 105);
+	CreateMush(position_l, 4);
+	btVector3 position_m(0, 0, 110);
+	CreateMush(position_m, 2);
+	btVector3 position_n(-5, 0, 110);
+	CreateMush(position_n, 1);
+	btVector3 position_o(-7, 0, 110);
+	CreateMush(position_o, 0.5);
+
 //タワー
-	btVector3 position_d(-50, 10 * sqrt(24) + 2.0, -80);
+	btVector3 position_d(-50, 10 * sqrt(24) + 2.0, -200);
 	CreateTower(position_d);
-	btVector3 position_e(-50, 10 * sqrt(24) + 2.0, 80);
+	btVector3 position_e(-50, 10 * sqrt(24) + 2.0, 200);
 	CreateTower(position_e);
 
 	btVector3 position_f(-50, 20, -20);
@@ -2181,6 +2202,71 @@ void StageMap::CreatePonde(const btVector3& position) {
 	hingeC->setLimit(btScalar(0), btScalar(0));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
+
+}
+
+void StageMap::CreateMush(const btVector3 &position, float size)
+{
+	btRigidBody* cube_body[20];
+	//位置を設定
+	btVector3 position1(0, size * 1.5, 0);
+	btVector3 position2(0, size * 2.5, 0);
+	btVector3 position3(size , size * 2.5, 0);
+	btVector3 position4(-size , size * 2.5, 0);
+	btVector3 position5(size * 3.5, 0, 0);
+
+	//形状設定
+	btCollisionShape *cube_shape = new btBoxShape(btVector3(size / 4, size * 1.5,  size / 4));
+	btCollisionShape *cube_shape3 = new btBoxShape(btVector3(size / 5, size - size / 5, size - size / 5));
+
+	//bulletに登
+	btTransform offset;
+	offset.setIdentity();
+	btTransform offset2;
+	offset2.setIdentity();
+	offset.setOrigin(position);
+	offset2.setOrigin(position1);
+	cube_body[0] = LocalCreateRigidBody(btScalar(0.0), offset * offset2,
+			cube_shape);
+	object_[num_] = ++object_num_;
+	color_[num_++] = btVector3(1, 1, 0);
+	offset2.setIdentity();
+	offset2.setOrigin(position3);
+	cube_body[1] = LocalCreateRigidBody(btScalar(0.0), offset * offset2,
+			cube_shape3);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(1, 0, 0);
+	offset2.setIdentity();
+	offset2.setOrigin(position4);
+	cube_body[2] = LocalCreateRigidBody(btScalar(0.0), offset * offset2,
+			cube_shape3);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(1, 0, 0);
+	offset.setRotation(btQuaternion(PI_/ 2, 0, 0));
+	offset2.setOrigin(position3);
+	cube_body[3] = LocalCreateRigidBody(btScalar(0.0), offset * offset2,
+			cube_shape3);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(1, 0, 0);
+	offset2.setOrigin(position4);
+	cube_body[4] = LocalCreateRigidBody(btScalar(0.0), offset * offset2,
+			cube_shape3);
+	object_[num_] = object_num_;
+	color_[num_++] = btVector3(1, 0, 0);
+	offset.setIdentity();
+	offset.setOrigin(position);
+	offset.setRotation(btQuaternion(0, 0, PI_ / 2));
+	offset2.setOrigin(position5);
+	cube_body[5] = LocalCreateRigidBody(btScalar(0.0), offset * offset2,
+			cube_shape3);
+	object_[num_] = ++object_num_;
+	color_[num_++] = btVector3(1, 0, 0);
+
+	//反発係数
+	btScalar cube_rest = 1.8;
+
+	//反発係数設定
+	cube_body[5]->setRestitution(cube_rest);
 
 }
 

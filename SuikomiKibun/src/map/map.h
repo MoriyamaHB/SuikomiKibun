@@ -39,6 +39,7 @@ private:
 	void CreateTriangle(const btVector3& position);
 	void CreateTower(const btVector3& position);
 	void CreatePonde(const btVector3& position);
+	void CreateMush(const btVector3& position, float size);
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();
