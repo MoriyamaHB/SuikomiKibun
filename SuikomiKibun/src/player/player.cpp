@@ -49,20 +49,29 @@ Player::Player(btDynamicsWorld* world) :
 	color_[1] = btVector3(0, 1, 0);
 	color_[2] = btVector3(0, 0, 1);
 	color_judge_ = 0;
+
+	player_num_ = world_->getNumCollisionObjects() - 1;
+
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
 }
 
+//デストラクタ
+Player::~Player() {
+	//オブジェクト破壊
+//	delete sphere_body_->getMotionState();
+//	world_->removeRigidBody(sphere_body_);
+//	delete sphere_body_;
+}
+
 void Player::RenderScene() {
 	btScalar m[16];
 	btMatrix3x3 rot;
 	rot.setIdentity();
-	const int numObjects = world_->getNumCollisionObjects();
 	btVector3 wireColor(1, 0, 0);
-	for (int i = numObjects - 3; i < numObjects; i++) {
-		btCollisionObject* colObj = world_->getCollisionObjectArray()[i];
+		btCollisionObject* colObj = world_->getCollisionObjectArray()[player_num_];
 		btRigidBody* body = btRigidBody::upcast(colObj);
 		if (body && body->getMotionState()) {
 			btDefaultMotionState* myMotionState =
@@ -90,47 +99,9 @@ void Player::RenderScene() {
 		m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),
 				wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
 
-	}
 }
 
-PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
-		world_(world) {
-	//中心座標
-	btVector3 sphere_pos = pos;
-	//大きさ
-	player_radius_ = 1.0;
-	//質量
-	btScalar sphere_mass = 0.03;
-	//反発係数
-	btScalar sphere_rest = 0.2;
-	//慣性モーメント
-	btVector3 sphere_inertia(0, 0, 0);
-	//形状を設定
-	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
-	//球体の初期位置、姿勢
-	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
-			btTransform(qrot, sphere_pos));
-	//剛体オブジェクト生成
-	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,
-			sphere_shape, sphere_inertia);
-	//反発係数
-	sphere_body_->setRestitution(sphere_rest);
-	//ワールドに剛体オブジェクトを追加
-	world_->addRigidBody(sphere_body_);
-}
 
-//デストラクタ
-Player::~Player() {
-	//オブジェクト破壊
-//	delete sphere_body_->getMotionState();
-//	world_->removeRigidBody(sphere_body_);
-//	delete sphere_body_;
-}
-
-PlayerTeki::~PlayerTeki() {
-
-}
 
 //更新
 void Player::Update(double angle, StageMap* map) {
@@ -194,6 +165,7 @@ void Player::Update(double angle, StageMap* map) {
 			delete_body_ = delete_body2_;
 
 
+
 		if (delete_body_ != NULL) {
 			for (i = world_->getNumCollisionObjects() - 1; i > 59; i--) {
 				obj = world_->getCollisionObjectArray()[i];
@@ -213,11 +185,6 @@ void Player::Update(double angle, StageMap* map) {
 
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
-}
-
-//プレイヤー敵データ更新
-void PlayerTeki::Update(btVector3 pos) {
-	PlayerTekiMove(pos);
 }
 
 //描画
@@ -395,13 +362,6 @@ void Player::PlayerSize(double size) {
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
 	player_radius_ = size;
-}
-
-void PlayerTeki::PlayerTekiMove(btVector3 pos) {
-	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
-			btTransform(qrot, pos));
-	sphere_body_->setMotionState(sphere_motion_state);
 }
 
 void Player::PlayerMove(btVector3 pos) {

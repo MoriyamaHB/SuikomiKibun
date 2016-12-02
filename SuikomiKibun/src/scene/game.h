@@ -14,6 +14,7 @@
 #include "../gv.h"
 #include "../map/map.h"
 #include "../player/player.h"
+#include "../player/playerteki.h"
 #include "../network/server.h"
 #include "../network/client.h"
 
@@ -25,6 +26,7 @@ private:
 	Player *player_;
 	PlayerTeki *playerteki1_;
 	PlayerTeki *playerteki2_;
+
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();

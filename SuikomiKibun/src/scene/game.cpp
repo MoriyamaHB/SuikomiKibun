@@ -74,4 +74,6 @@ void GameScene::Draw() const {
 	map_->Draw();
 	//プレイヤー描画
 	player_->Draw();
+	playerteki1_->Draw();
+	playerteki2_->Draw();
 }
