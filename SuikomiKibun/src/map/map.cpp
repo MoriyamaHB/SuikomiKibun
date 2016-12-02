@@ -228,9 +228,10 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btVector3 position_d(-20, 10*sqrt(24)+2.0, -20);
 	CreateTower(position_d);
 
-//	object_[num_] = ++object_num_;
-	object_[num_] = 500;
-	color_[num_++] = btVector3(1.0, 0, 0);
+	//プレイヤー登録
+	object_[num_] = ++object_num_;
+	object_[num_++] = ++object_num_;
+	object_[num_++] = ++object_num_;
 
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer ();
@@ -318,7 +319,7 @@ void	StageMap::RenderScene(int pass)
 	btMatrix3x3	rot;rot.setIdentity();
 	const int	numObjects=world_->getNumCollisionObjects();
 	btVector3 wireColor(1,0,0);
-	for(int i=0;i<numObjects;i++)
+	for(int i=0;i<numObjects - 3;i++)
 	{
 		btCollisionObject*	colObj=world_->getCollisionObjectArray()[i];
 		btRigidBody*		body=btRigidBody::upcast(colObj);

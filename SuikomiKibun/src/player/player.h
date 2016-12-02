@@ -11,6 +11,9 @@
 #include "../input/input.h"
 #include "../map/map.h"
 
+#include "../map/GL_ShapeDrawer.h"
+
+
 //衝突コールバック
 extern ContactProcessedCallback gContactProcessedCallback;
 
@@ -29,11 +32,14 @@ private:
 	static btRigidBody* delete_body_;
 	static btRigidBody* delete_body2_;
 	int pcount;
+	GL_ShapeDrawer*	m_shapeDrawer;
+	btVector3 color_[3];
+	void RenderScene();
 public:
 	Player(btDynamicsWorld* world);
 	~Player();
 	void Update(double angle, StageMap* map);
-	void Draw() const;
+	void Draw();
 	Vector3 get_center_pos();
 	double get_camera_distance();
 	void PlayerSize(double size);

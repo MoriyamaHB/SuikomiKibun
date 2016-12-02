@@ -16,8 +16,7 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 		//ブロードフェーズ法の設定(Dynamic AABB tree method)
 		btDbvtBroadphase *broadphase = new btDbvtBroadphase();
 		//拘束(剛体間リンク)ソルバの設定
-		btSequentialImpulseConstraintSolver* solver =
-				new btSequentialImpulseConstraintSolver();
+		btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
 		//Bulletのワールド作成
 		dynamics_world_ = new btDiscreteDynamicsWorld(dispatcher, broadphase,
 				solver, config);
@@ -58,12 +57,12 @@ void GameScene::Update() {
 
 	//プレイヤー更新
 	player_->Update(camera_.get_angle_w() + M_PI, map_);
+
 	//敵プレイヤー更新
-	playerteki1_->Update(btVector3(1,5,0));
-	playerteki2_->Update(btVector3(20,5,0));
+	playerteki1_->Update(btVector3(1,2,0));
+	playerteki2_->Update(btVector3(5,2,0));
 
 	//ライト
-
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
