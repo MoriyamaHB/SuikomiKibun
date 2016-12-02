@@ -10,6 +10,8 @@ ComClient::ComClient(asio::io_service &io_service, int port, Server* se) :
 	//StartAcceptで作成
 	socket_ = NULL;
 	acceptor_ = NULL;
+	//状態
+	is_tcp_ = true;
 }
 
 ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se) :
@@ -19,6 +21,8 @@ ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se) :
 	receive_socket_ = NULL;
 	//使用しない
 	acceptor_ = NULL;
+	//状態
+	is_tcp_ = false;
 }
 
 ComClient::~ComClient() {
@@ -122,13 +126,6 @@ void ComClient::Start() {
 
 //送信
 void ComClient::Send() {
-	timespec time;
-	//0.1秒を設定
-	time.tv_sec = 0;
-	time.tv_nsec = 100000000;
-	//データが更新されるまで待機
-	while (server_->changed_player_data_ == false)
-		nanosleep(&time, NULL);
 	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToClientContainer)),
 			bind(&ComClient::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
@@ -189,7 +186,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	const ToServerContainer* data = asio::buffer_cast<const ToServerContainer*>(receive_buff_.data());
 	receive_buff_.consume(receive_buff_.size());
 	//正常に届いた時
-	if (bytes_transferred == asio::error::message_size) {
+	if (bytes_transferred == asio::error::message_size || is_tcp_) {
 		receive_data_ = *data;
 		printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
 		server_->changed_player_data_ = true;

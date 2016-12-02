@@ -36,7 +36,8 @@ protected:
 	//定数
 	const int kPort;			//ポート番号
 	//状態変数
-	bool has_accepted_;
+	bool has_accepted_;	//接続済みか
+	bool is_tcp_;	//tcpであるか
 
 	//接続
 	void OnAccept(const boost::system::error_code& error);

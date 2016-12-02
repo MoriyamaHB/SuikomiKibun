@@ -45,8 +45,9 @@ protected:
 	//定数
 	const std::string kIpAdress; //サーバーのIPアドレス
 	//状態
-	bool has_conected_;
-	State state_;
+	bool has_conected_;	//接続済みか
+	State state_;	//遷移管理
+	bool is_tcp_;	//tcpか
 
 	//接続
 	void OnConnect(const boost::system::error_code& error);

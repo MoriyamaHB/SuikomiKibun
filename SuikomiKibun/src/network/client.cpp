@@ -9,12 +9,16 @@ Client::Client(std::string ip_adress, int start_port) :
 	memset(&send_data_, 0, sizeof(send_data_));
 	memset(&receive_data_, 0, sizeof(receive_data_));
 	socket_ = NULL; //Connectで作成
+	//状態
+	is_tcp_ = true;
 }
 
 ClientUdp::ClientUdp(std::string ip_adress, int start_port) :
 		Client(ip_adress, start_port) {
 	send_socket_ = NULL;
 	receive_socket_ = NULL;
+	//状態
+	is_tcp_ = false;
 }
 
 Client::~Client() {
@@ -210,7 +214,7 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 	const ToClientContainer* recive_data = asio::buffer_cast<const ToClientContainer*>(receive_buff_.data());
 	receive_buff_.consume(receive_buff_.size());
 	//正常に届いた時
-	if (bytes_transferred == asio::error::message_size) {
+	if (bytes_transferred == asio::error::message_size || is_tcp_) {
 		receive_data_ = *recive_data;
 		printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
 	}
