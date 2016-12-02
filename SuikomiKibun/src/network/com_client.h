@@ -47,7 +47,7 @@ protected:
 	void OnSendTimeOut(const boost::system::error_code& error);
 	//受信
 	virtual void Receive();
-	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
+	virtual void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
 	ComClient(asio::io_service &io_service, int port, Server* se);
@@ -71,6 +71,10 @@ private:
 	void Send();
 	//受信
 	void Receive();
+
+	//初期時の処理
+	void IniReceive();
+	void OnIniReceive(const boost::system::error_code& error, size_t bytes_transferred);
 public:
 	ComClientUdp(asio::io_service &io_service, int port, Server* se);
 	void StartAccept();	//接続
