@@ -63,10 +63,10 @@ void ComClientUdp::StartAccept() {
 	udp::endpoint endpoint(boost::asio::ip::udp::v4(), kPort /*ポート番号*/);
 	//ソケット作成
 	receive_socket_ = new udp::socket(io_service_, endpoint);
-
 	//クライアントからの送信待ち
 	IniReceive();
 }
+
 void ComClientUdp::IniReceive() {
 	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToServerContainer)), remote_endpoint_,
 			boost::bind(&ComClientUdp::OnIniReceive, this, asio::placeholders::error,
@@ -137,8 +137,6 @@ void ComClient::Send() {
 }
 
 void ComClientUdp::Send() {
-//	asio::socket_base::send_buffer_size size(sizeof(ToClientContainer));
-//	send_socket_->set_option(size);
 	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToClientContainer)), send_endpoint_,
 			boost::bind(&ComClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト

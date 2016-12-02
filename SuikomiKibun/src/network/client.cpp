@@ -152,12 +152,10 @@ void Client::Send() {
 }
 
 void ClientUdp::Send() {
-//	asio::socket_base::send_buffer_size size(sizeof(ToServerContainer));
-//	send_socket_->set_option(size);
 	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToServerContainer)), send_endpoint_,
 			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
-	//360秒でタイムアウト
-	send_timer_.expires_from_now(boost::posix_time::seconds(360));
+	//60秒でタイムアウト
+	send_timer_.expires_from_now(boost::posix_time::seconds(60));
 	send_timer_.async_wait(boost::bind(&ClientUdp::OnSendTimeOut, this, _1));
 }
 
@@ -193,8 +191,8 @@ void Client::StartReceive() {
 void ClientUdp::StartReceive() {
 	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)), remote_endpoint_,
 			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
-	//360秒でタイムアウト
-	receive_timer_.expires_from_now(boost::posix_time::seconds(360));
+	//60秒でタイムアウト
+	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
 	receive_timer_.async_wait(boost::bind(&ClientUdp::OnReceiveTimeOut, this, _1));
 }
 
