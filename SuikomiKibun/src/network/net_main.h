@@ -15,9 +15,35 @@
 #include <string.h>
 
 #include "server.h"
+#include "client.h"
 #include "../util/uGL.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
-#endif /* SUIKOMIKIBUN_NET_NET_H_ */
+class NetMain {
+private:
+	//状態変数
+	int client_num_;
+	//クライアント
+	ClientUdp *client_;
+	ToServerContainer client_data_;
+	//サーバー
+	Server *server_;
+	bool is_server_;
+	ToClientContainer server_data_;
+public:
+	NetMain();
+	~NetMain();
+	void Update();
+	void Draw() const;
+
+	//getter
+	int get_enemy_num() const;
+	btVector3 GetEnemyPos(int num) const;
+
+	//setter
+	void SetMePos(btVector3 pos);
+};
+
+#endif /* SUIKOMIKIBUN_NET_NETMAIN_H_ */

@@ -7,27 +7,8 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	input::Init();
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
 
-	//ネットワーク初期化
-	char is_server;
-	std::string server_ip;
-	int port;
-	std::cout << "s/c?";
-	std::cin >> is_server;
-	if (is_server == 's') {
-		server_ = new Server(31600, 3);
-		is_server_ = true;
-		server_ip = "127.0.0.1";
-		port = 31600;
-	} else {
-		server_ = NULL;
-		is_server_ = false;
-		std::cout << "server_ip:";
-		std::cin >> server_ip;
-		std::cout << "port:";
-		std::cin >> port;
-	}
-	client_ = new ClientUdp(server_ip, port);
-	client_->Connect();
+	//net_main初期化
+	net_main_ = new NetMain();
 
 	//衝突検出方法の選択(デフォルトを選択)
 	btDefaultCollisionConfiguration *config = new btDefaultCollisionConfiguration();
@@ -102,11 +83,8 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 
 //デストラクタ
 BtDemoScene::~BtDemoScene() {
-
-	//ネットワーク
-	if (is_server_)
-		delete server_;
-	delete client_;
+	//ネットワーク削除
+	delete net_main_;
 
 	//オブジェクト破壊
 	delete sphere_body_->getMotionState();
@@ -132,29 +110,19 @@ BtDemoScene::~BtDemoScene() {
 
 //更新
 void BtDemoScene::Update() {
-	//ネットワーク
-	if (is_server_) {
-		server_->Update();
-	}
-	ToServerContainer client_data;
-	client_data.player_data.pos = sphere_body_->getCenterOfMassPosition();
-	client_->set_send_data(client_data);
-	ToClientContainer server_data = client_->get_receive_data();
-	pos1_ = server_data.player_data[0].pos;
-	pos2_ = server_data.player_data[1].pos;
-	client_->Update();
+	//ネットワーク更新
+	net_main_->SetMePos(sphere_body_->getCenterOfMassPosition());
+	net_main_->Update();
 
 	//ほかプレイヤー情報を反映
 	btQuaternion qrot(0, 0, 0, 1);
 	//1
-	btVector3 pos1(pos1_.x, pos1_.y, pos1_.z);
+	btVector3 pos1 = net_main_->GetEnemyPos(0);
 	btDefaultMotionState* sphere_motion_state1 = new btDefaultMotionState(btTransform(qrot, pos1));
-//	delete sphere_body1_->getMotionState();//何故かコアダンプ
 	sphere_body1_->setMotionState(sphere_motion_state1);
 //	//2
-	btVector3 pos2(pos2_.x, pos2_.y, pos2_.z);
+	btVector3 pos2 = net_main_->GetEnemyPos(1);
 	btDefaultMotionState* sphere_motion_state2 = new btDefaultMotionState(btTransform(qrot, pos2));
-//	delete sphere_body2_->getMotionState();//何故かコアダンプ
 	sphere_body2_->setMotionState(sphere_motion_state2);
 
 	//bulletをすすめる
@@ -162,7 +130,7 @@ void BtDemoScene::Update() {
 
 	//カメラ更新
 	btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	camera.Update(pos[0], pos[1], pos[2]);
+	camera_.Update(pos[0], pos[1], pos[2]);
 
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
@@ -170,7 +138,7 @@ void BtDemoScene::Update() {
 
 	//撃力を加える
 	btVector3 impulse;
-	const double ang = camera.get_angle_w() + M_PI;
+	const double ang = camera_.get_angle_w() + M_PI;
 	double t = 0.1;
 	if (input::get_special_keyboard_frame(GLUT_KEY_SHIFT_L) >= 1) {
 		if (input::get_keyboard_frame('w') >= 1) {
@@ -229,11 +197,8 @@ void BtDemoScene::Update() {
 
 //描画
 void BtDemoScene::Draw() const {
-	//ネットワーク
-	if (is_server_)
-		server_->Draw();
-	client_->Draw();
-
+	//ネットワーク描画
+	net_main_->Draw();
 	btVector3 pos;
 	//地面
 	glPushMatrix();

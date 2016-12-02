@@ -14,6 +14,7 @@
 #include "../gv.h"
 #include "../network/server.h"
 #include "../network/client.h"
+#include "../network/net_main.h"
 
 class BtDemoScene: public BaseScene {
 private:
@@ -23,14 +24,11 @@ private:
 	btRigidBody* sphere_body2_;
 	btRigidBody* ground_body_;
 	btRigidBody* cube_body_;
-	Camera3D3P camera;
+	Camera3D3P camera_;
 
 	//ネットワーク
-	Server *server_;
-	ClientUdp *client_;
-	bool is_server_;
-	Vector3 pos1_;
-	Vector3 pos2_;
+	NetMain *net_main_;
+
 public:
 	BtDemoScene(ISceneChanger* changer, SceneParam param);
 	~BtDemoScene();

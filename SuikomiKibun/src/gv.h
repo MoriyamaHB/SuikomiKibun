@@ -32,6 +32,9 @@ typedef struct {
 
 //サーバーからクライアントに送信するデータ
 typedef struct {
+private:
+
+public:
 	CommandToClient command; //データの種類
 	PlayerData player_data[2];
 } ToClientContainer;
