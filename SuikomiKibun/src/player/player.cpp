@@ -6,6 +6,10 @@ btRigidBody* Player::delete_body2_ = NULL;
 //コンストラクタ
 Player::Player(btDynamicsWorld* world) :
 		world_(world) {
+
+	//プレイヤーレベル
+	level_ = 1;
+
 	//中心座標
 	btVector3 sphere_pos = btVector3(-1, 5, 0);
 	//大きさ
@@ -44,7 +48,7 @@ Player::Player(btDynamicsWorld* world) :
 	color_[0] = btVector3(1, 0, 0);
 	color_[1] = btVector3(0, 1, 0);
 	color_[2] = btVector3(0, 0, 1);
-
+	color_judge_ = 0;
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
@@ -70,7 +74,12 @@ void Player::RenderScene() {
 			rot = colObj->getWorldTransform().getBasis();
 		}
 
-		wireColor = color_[i - numObjects + 3];
+		if (color_judge_ == 1)
+			wireColor = color_[0];
+		else if (color_judge_ == 2)
+			wireColor = color_[1];
+		else
+			wireColor = color_[2];
 
 		btVector3 aabbMin, aabbMax;
 		world_->getBroadphase()->getBroadphaseAabb(aabbMin, aabbMax);
@@ -163,11 +172,7 @@ void Player::Update(double angle, StageMap* map) {
 		impulse.setValue(0, t, 0);
 		sphere_body_->applyCentralImpulse(impulse);
 	}
-	//}
 
-	//player_radius_ += 0.011;
-	//PlayerSize(player_radius_);
-	//PlayerMove(pos);
 	if (pflug == 0)
 		upcount++;
 
@@ -188,17 +193,24 @@ void Player::Update(double angle, StageMap* map) {
 		if (sphere_body_ == delete_body_)
 			delete_body_ = delete_body2_;
 
+
 		if (delete_body_ != NULL) {
 			for (i = world_->getNumCollisionObjects() - 1; i > 59; i--) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
-				if (delete_body_ == body)
+				if (delete_body_ == body) {
 					map->DestroyObject(i);
+					level_+= 1;
+				}
 				//		DeleteBody(&delete_body_);	// 削除テスト
 			}
 
 		}
 	}
+
+	if(player_radius_ <= level_)
+		PlayerSize(player_radius_+= 0.05);
+
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
 }
@@ -214,21 +226,20 @@ void Player::Draw() {
 	float x, y, r = 80, r2 = 110, r3 = 76;
 	double rate;
 
-
 	//中心円作成
-		u3Dto2D();
-		glBegin(GL_POLYGON); // ポリゴンの描画
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		// 円を描画
-		for (i = 0; i < n; i++) {
-			// 座標を計算
-			rate = (double) i / n;
-			x = r3 * cos(2.0 * M_PI * rate) + 110;
-			y = r3 * sin(2.0 * M_PI * rate) + 110;
-			glVertex3f(x, y, 0); // 頂点座標を指定
-		}
-		glEnd(); // ポリゴンの描画終了
-		u2Dto3D();
+	u3Dto2D();
+	glBegin(GL_POLYGON); // ポリゴンの描画
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	// 円を描画
+	for (i = 0; i < n; i++) {
+		// 座標を計算
+		rate = (double) i / n;
+		x = r3 * cos(2.0 * M_PI * rate) + 110;
+		y = r3 * sin(2.0 * M_PI * rate) + 110;
+		glVertex3f(x, y, 0); // 頂点座標を指定
+	}
+	glEnd(); // ポリゴンの描画終了
+	u2Dto3D();
 
 	//中心円作成
 	u3Dto2D();
@@ -244,7 +255,6 @@ void Player::Draw() {
 	}
 	glEnd(); // ポリゴンの描画終了
 	u2Dto3D();
-
 
 	u3Dto2D();
 	for (i = 0; i < pcount; i++) {
@@ -271,28 +281,10 @@ void Player::Draw() {
 			glBegin(GL_POLYGON); // ポリゴンの描画
 			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 			for (i = 0; i < n; i++) {
-							// 座標を計算
-							rate = (double) i / n;
-			if (2.0 * M_PI * rate >= M_PI * 2 / 9
-					&& 2.0 * M_PI * rate <= M_PI * 2)
-				r2 = 0;
-			else
-				r2 = 110;
-
-			x = r2 * cos(2.0 * M_PI * rate) + 110;
-			y = r2 * sin(2.0 * M_PI * rate) + 110;
-			glVertex3f(x, y, 0); // 頂点座標を指定
-			}
-		glEnd(); // ポリゴンの描画終了
-	}
-		if (pcount == 5 || pcount == 4 || pcount == 3) {
-				glBegin(GL_POLYGON); // ポリゴンの描画
-				glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
-				for (i = 0; i < n; i++) {
-								// 座標を計算
-								rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2  * 7 / 36
-						&& 2.0 * M_PI * rate <= M_PI * 2) || (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 2 / 9))
+				// 座標を計算
+				rate = (double) i / n;
+				if (2.0 * M_PI * rate >= M_PI * 2 / 9
+						&& 2.0 * M_PI * rate <= M_PI * 2)
 					r2 = 0;
 				else
 					r2 = 110;
@@ -300,47 +292,70 @@ void Player::Draw() {
 				x = r2 * cos(2.0 * M_PI * rate) + 110;
 				y = r2 * sin(2.0 * M_PI * rate) + 110;
 				glVertex3f(x, y, 0); // 頂点座標を指定
-				}
+			}
+			glEnd(); // ポリゴンの描画終了
+		}
+		if (pcount == 5 || pcount == 4 || pcount == 3) {
+			glBegin(GL_POLYGON); // ポリゴンの描画
+			glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+			for (i = 0; i < n; i++) {
+				// 座標を計算
+				rate = (double) i / n;
+				if ((2.0 * M_PI * rate >= M_PI * 2 * 7 / 36
+						&& 2.0 * M_PI * rate <= M_PI * 2)
+						|| (2.0 * M_PI * rate >= 0
+								&& 2.0 * M_PI * rate <= M_PI * 2 / 9))
+					r2 = 0;
+				else
+					r2 = 110;
+
+				x = r2 * cos(2.0 * M_PI * rate) + 110;
+				y = r2 * sin(2.0 * M_PI * rate) + 110;
+				glVertex3f(x, y, 0); // 頂点座標を指定
+			}
 			glEnd(); // ポリゴンの描画終了
 		}
 		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2) {
-						glBegin(GL_POLYGON); // ポリゴンの描画
-						glColor4f(1.0f, 0.5f, 0.0f, 1.0f);
-						for (i = 0; i < n; i++) {
-										// 座標を計算
-										rate = (double) i / n;
-						if ((2.0 * M_PI * rate >= M_PI * 2 * 47 / 180
-								&& 2.0 * M_PI * rate <= M_PI * 2) || (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 2 * 7 / 36))
-							r2 = 0;
-						else
-							r2 = 110;
+			glBegin(GL_POLYGON); // ポリゴンの描画
+			glColor4f(1.0f, 0.5f, 0.0f, 1.0f);
+			for (i = 0; i < n; i++) {
+				// 座標を計算
+				rate = (double) i / n;
+				if ((2.0 * M_PI * rate >= M_PI * 2 * 47 / 180
+						&& 2.0 * M_PI * rate <= M_PI * 2)
+						|| (2.0 * M_PI * rate >= 0
+								&& 2.0 * M_PI * rate <= M_PI * 2 * 7 / 36))
+					r2 = 0;
+				else
+					r2 = 110;
 
-						x = r2 * cos(2.0 * M_PI * rate) + 110;
-						y = r2 * sin(2.0 * M_PI * rate) + 110;
-						glVertex3f(x, y, 0); // 頂点座標を指定
-						}
-					glEnd(); // ポリゴンの描画終了
-				}
-		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2 || pcount == 1 ) {
-								glBegin(GL_POLYGON); // ポリゴンの描画
-								glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-								for (i = 0; i < n; i++) {
-												// 座標を計算
-												rate = (double) i / n;
-								if ((2.0 * M_PI * rate >= M_PI * 2 * 57 / 180
-										&& 2.0 * M_PI * rate <= M_PI * 2) || (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI* 2 * 47 / 180))
-									r2 = 0;
-								else
-									r2 = 110;
+				x = r2 * cos(2.0 * M_PI * rate) + 110;
+				y = r2 * sin(2.0 * M_PI * rate) + 110;
+				glVertex3f(x, y, 0); // 頂点座標を指定
+			}
+			glEnd(); // ポリゴンの描画終了
+		}
+		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2
+				|| pcount == 1) {
+			glBegin(GL_POLYGON); // ポリゴンの描画
+			glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+			for (i = 0; i < n; i++) {
+				// 座標を計算
+				rate = (double) i / n;
+				if ((2.0 * M_PI * rate >= M_PI * 2 * 57 / 180
+						&& 2.0 * M_PI * rate <= M_PI * 2)
+						|| (2.0 * M_PI * rate >= 0
+								&& 2.0 * M_PI * rate <= M_PI * 2 * 47 / 180))
+					r2 = 0;
+				else
+					r2 = 110;
 
-								x = r2 * cos(2.0 * M_PI * rate) + 110;
-								y = r2 * sin(2.0 * M_PI * rate) + 110;
-								glVertex3f(x, y, 0); // 頂点座標を指定
-								}
-							glEnd(); // ポリゴンの描画終了
-						}
-
-
+				x = r2 * cos(2.0 * M_PI * rate) + 110;
+				y = r2 * sin(2.0 * M_PI * rate) + 110;
+				glVertex3f(x, y, 0); // 頂点座標を指定
+			}
+			glEnd(); // ポリゴンの描画終了
+		}
 	}
 	u2Dto3D();
 
@@ -358,68 +373,70 @@ void Player::Draw() {
 //}
 
 //球
-/*
- btVector3 pos = sphere_body_->getCenterOfMassPosition();
- glPushMatrix();
- glTranslatef(pos[0], pos[1], pos[2]);
- btScalar player_radius;
- player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
- glScalef(player_radius, player_radius, player_radius);
- glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
- glutSolidSphere(1.0, 20, 20);
- glPopMatrix();
- */
+	/*
+	 btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	 glPushMatrix();
+	 glTranslatef(pos[0], pos[1], pos[2]);
+	 btScalar player_radius;
+	 player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
+	 glScalef(player_radius, player_radius, player_radius);
+	 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
+	 glutSolidSphere(1.0, 20, 20);
+	 glPopMatrix();
+	 */
 
-RenderScene();
+	glDisable(GL_LIGHTING);
+	RenderScene();
 }
 
 void Player::PlayerSize(double size) {
 //形状を設定
-btCollisionShape *new_sphere_shape = new btSphereShape(size);
-delete sphere_body_->getCollisionShape();
-sphere_body_->setCollisionShape(new_sphere_shape);
+	btCollisionShape *new_sphere_shape = new btSphereShape(size);
+	delete sphere_body_->getCollisionShape();
+	sphere_body_->setCollisionShape(new_sphere_shape);
+	player_radius_ = size;
 }
 
 void PlayerTeki::PlayerTekiMove(btVector3 pos) {
-btQuaternion qrot(0, 0, 0, 1);
-btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
-		btTransform(qrot, pos));
-sphere_body_->setMotionState(sphere_motion_state);
+	btQuaternion qrot(0, 0, 0, 1);
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
+			btTransform(qrot, pos));
+	sphere_body_->setMotionState(sphere_motion_state);
 }
 
 void Player::PlayerMove(btVector3 pos) {
-btVector3 t_pos = sphere_body_->getCenterOfMassPosition();
-btVector3 i_pos = sphere_body_->getCenterOfMassPosition();
-t_pos[0] = pos[0] - i_pos[0];
-t_pos[1] = i_pos[1] = 0;
-t_pos[2] = pos[2] - i_pos[2];
-sphere_body_->translate(pos);
+	btVector3 t_pos = sphere_body_->getCenterOfMassPosition();
+	btVector3 i_pos = sphere_body_->getCenterOfMassPosition();
+	t_pos[0] = pos[0] - i_pos[0];
+	t_pos[1] = i_pos[1] = 0;
+	t_pos[2] = pos[2] - i_pos[2];
+	sphere_body_->translate(pos);
 
 }
 
 Vector3 Player::get_center_pos() {
-btVector3 pos = sphere_body_->getCenterOfMassPosition();
-Vector3 rpos(pos[0], pos[1], pos[2]);
-return rpos;
+	btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	Vector3 rpos(pos[0], pos[1], pos[2]);
+	return rpos;
 }
 
 double Player::get_camera_distance() {
-return player_radius_ * 3;
+	return player_radius_ * 3;
 }
 
 void Player::DeleteBody(btRigidBody** ppBody) {
-btRigidBody* pBody = *ppBody;
-world_->removeRigidBody(pBody);
-if (pBody) {
-	delete pBody->getMotionState();
-}
-delete pBody;
-*ppBody = NULL;
+	btRigidBody* pBody = *ppBody;
+	world_->removeRigidBody(pBody);
+	if (pBody) {
+		delete pBody->getMotionState();
+	}
+	delete pBody;
+	*ppBody = NULL;
 }
 
 bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
-delete_body_ = static_cast<btRigidBody*>(a);
-delete_body2_ = static_cast<btRigidBody*>(b);
-return true;
+	delete_body_ = static_cast<btRigidBody*>(a);
+	delete_body2_ = static_cast<btRigidBody*>(b);
+	return true;
 }
 

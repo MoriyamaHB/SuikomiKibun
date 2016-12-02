@@ -32,7 +32,9 @@ private:
 	static btRigidBody* delete_body_;
 	static btRigidBody* delete_body2_;
 	int pcount;
+	double level_;
 	GL_ShapeDrawer*	m_shapeDrawer;
+	int color_judge_;
 	btVector3 color_[3];
 	void RenderScene();
 public:
