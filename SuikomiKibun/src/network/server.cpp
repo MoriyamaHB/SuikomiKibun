@@ -71,7 +71,7 @@ void Server::Update() {
 			ToClientContainer server_data;
 			for (int j = 0, cnt = 0; j < kClientNum; j++) {
 				if (i != j) {
-					server_data.player_data[cnt].pos = client_[j]->get_receive_data().player_data.pos;
+					server_data.player_data[cnt] = client_[j]->get_receive_data().player_data;
 					cnt++;
 				}
 			}

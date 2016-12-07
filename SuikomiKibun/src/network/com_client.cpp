@@ -186,7 +186,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	const ToServerContainer* data = asio::buffer_cast<const ToServerContainer*>(receive_buff_.data());
 	receive_buff_.consume(receive_buff_.size());
 	//正常に届いた時
-	if (bytes_transferred == asio::error::message_size || is_tcp_) {
+	if (bytes_transferred == asio::error::eof || is_tcp_) {
 		receive_data_ = *data;
 		printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.radius);
 		server_->changed_player_data_ = true;

@@ -242,7 +242,7 @@ void BtDemoScene::Draw() const {
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(static_cast<btSphereShape*>(sphere_body1_->getCollisionShape())->getRadius(), 20, 20);
 	glPopMatrix();
 
 	//球2
@@ -250,6 +250,6 @@ void BtDemoScene::Draw() const {
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(static_cast<btSphereShape*>(sphere_body2_->getCollisionShape())->getRadius(), 20, 20);
 	glPopMatrix();
 }
