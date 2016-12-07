@@ -142,7 +142,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	ground_body = LocalCreateRigidBody(btScalar(0.), offset, ground_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 1.0, 1.0);
+	color_[num_++] = btVector3(0, 0, 1);
 	offset.setIdentity();
 	offset.setOrigin(ten_pos);
 	ground_body2 = LocalCreateRigidBody(btScalar(0.), offset, ten_shape);
@@ -1010,11 +1010,33 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	btVector3 position_c(-50, 20, -10);
 //	CreateTriangle(position_c, 5);
 ////きのこ
-//	btVector3 position_g(160, 0, 150);
-//	CreateMush(position_g, 5);
+	btVector3 position_ma(235, 102, 65);
+	CreateMush(position_ma, 4);
+	btVector3 position_mb(100, 2, 200);
+	CreateMush(position_mb, 5);
+	btVector3 position_mc(100, 2, 170);
+	CreateMush(position_mc, 4);
+	btVector3 position_md(100, 2, 150);
+	CreateMush(position_md, 3);
+	btVector3 position_me(100, 2, 140);
+	CreateMush(position_me, 2);
+	btVector3 position_mf(100, 2, 135);
+	CreateMush(position_mf, 1);
 ////りんご
-//	btVector3 position_h(10, 10, 10);
-//	CreateApple(position_h, 5);
+	btVector3 position_aa(230, 102, -55);
+	CreateApple(position_aa, 4);
+	btVector3 position_ab(100, 2, -200);
+	CreateApple(position_ab, 5);
+	btVector3 position_ac(100, 2, -170);
+	CreateApple(position_ac, 4);
+	btVector3 position_ad(100, 2, -150);
+	CreateApple(position_ad, 3);
+	btVector3 position_ae(100, 2, -140);
+	CreateApple(position_ae, 2);
+	btVector3 position_af(100, 2, -135);
+	CreateApple(position_af, 1);
+	btVector3 position_ag(200, 100, 0);
+	CreateApple(position_ag, 3);
 ////タワー
 //	btVector3 position_d(-50, 0, -200);
 //	CreateTower(position_d, 2);
@@ -1031,6 +1053,9 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
+
+	printf("%d",world_->getNumCollisionObjects());
+
 
 }
 
@@ -2427,16 +2452,20 @@ void StageMap::CreateMush(const btVector3 &position, int level) {
 
 	//レベル分け
 	if (level == 5) {
-		size = 2;
-		mass = 0.01;
+		size = 11;
+		mass = 0.0;
 	} else if (level == 4) {
-
+		size = 7;
+		mass = 0;
 	} else if (level == 3) {
-
+		size = 4;
+		mass = 0;
 	} else if (level == 2) {
-
+		size = 2;
+		mass =0;
 	} else {
-
+		size = 1;
+		mass = 0;
 	}
 
 	//各オブジェクトの位置設定
@@ -2560,17 +2589,25 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 
 	//レベル分け
 	if (level == 5) {
-		size = 0.7;
-		size2 = 0.1;
+		size = 11;
+		size2 = 1;
 		mass = 0.01;
 	} else if (level == 4) {
-
+		size = 7;
+		size2 = 0.8;
+		mass = 0.01;
 	} else if (level == 3) {
-
+		size = 4;
+		size2 = 0.5;
+		mass = 0.01;
 	} else if (level == 2) {
-
+		size = 2;
+		size2 = 0.3;
+		mass = 0.01;
 	} else {
-
+		size = 1;
+		size2 = 0.1;
+		mass = 0.01;
 	}
 
 	//各オブジェクトの位置設定
