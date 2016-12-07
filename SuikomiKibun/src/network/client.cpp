@@ -234,7 +234,6 @@ void ClientUdp::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	}
 	//再度受信準備
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
-	receive_buff_.consume(receive_buff_.size());
 	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].radius);
 	//再度受信
 	StartReceive();

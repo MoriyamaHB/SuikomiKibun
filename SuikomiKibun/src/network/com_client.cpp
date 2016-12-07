@@ -205,9 +205,6 @@ void ComClientUdp::OnReceive(const boost::system::error_code& error, size_t byte
 	}
 	//再度受信準備
 	receive_timer_.cancel(); // タイムアウトのタイマーを切る
-	receive_buff_.consume(receive_buff_.size());
-	server_->changed_player_data_ = true;
-	//受信データテスト出力
 	printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.radius);
 	//再度受信
 	Receive();
