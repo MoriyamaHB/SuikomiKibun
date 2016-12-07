@@ -12,14 +12,14 @@
 #include "../util/uGL.h"
 #include "../gv.h"
 
-class Server;
+class ServerTcp;
 #include "com_client.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
 
-class Server {
-private:
+class ServerTcp {
+protected:
 	//状態を表す列挙型
 	enum State {
 		kAcceptWait, kRun, kCom
@@ -27,7 +27,7 @@ private:
 
 	//通信
 	std::vector<asio::io_service*> io_service_;
-	std::vector<ComClientUdp*> client_;
+	std::vector<ComClientTcp*> client_;
 	//スレッド
 	std::vector<boost::thread*> thread_;
 	//状態
@@ -39,9 +39,11 @@ private:
 
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun(asio::io_service *io);
+	//ServerUdp用の何もしないコンストラクタ
+	ServerTcp(int start_port, int client_num, int tukawanai);
 public:
-	Server(int start_port, int client_num);
-	~Server();
+	ServerTcp(int start_port, int client_num);
+	virtual ~ServerTcp();
 	void Update();
 	void Draw() const;
 
@@ -50,6 +52,15 @@ public:
 
 	//テスト
 	bool changed_player_data_;
+};
+
+class ServerUdp: public ServerTcp {
+private:
+	//通信
+	std::vector<ComClientUdp*> client_;
+public:
+	ServerUdp(int start_port, int client_num);
+	virtual ~ServerUdp();
 };
 
 #endif /* SUIKOMIKIBUN_NET_NET_H_ */

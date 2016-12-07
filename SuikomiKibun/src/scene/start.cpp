@@ -3,7 +3,7 @@
 //コンストラクタ
 StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		BaseScene(changer) {
-	server_ = new Server(31600, 3);
+	server_ = new ServerTcp(31600, 3);
 	client_ = new ClientTcp("127.0.0.1", 31600);
 	client1_ = new ClientTcp("127.0.0.1", 31601);
 	client2_ = new ClientTcp("127.0.0.1", 31602);

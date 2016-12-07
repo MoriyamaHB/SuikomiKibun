@@ -28,7 +28,7 @@ protected:
 	asio::streambuf receive_buff_;	//受信バッファ
 	ToServerContainer receive_data_; 	//受信データ
 	ToClientContainer send_data_;		//送信データ
-	Server *server_;		//サーバー
+	ServerTcp *server_;		//サーバー
 	//接続タイムアウト
 	asio::deadline_timer accept_timer_;
 	asio::deadline_timer send_timer_;
@@ -51,7 +51,7 @@ protected:
 	virtual void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
-	ComClientTcp(asio::io_service &io_service, int port, Server* se);
+	ComClientTcp(asio::io_service &io_service, int port, ServerTcp* se);
 	virtual void StartAccept();	//接続待機
 	virtual ~ComClientTcp();
 	void Start();	//送受信スタート
@@ -78,7 +78,7 @@ private:
 	void IniReceive();
 	void OnIniReceive(const boost::system::error_code& error, size_t bytes_transferred);
 public:
-	ComClientUdp(asio::io_service &io_service, int port, Server* se);
+	ComClientUdp(asio::io_service &io_service, int port, ServerTcp* se);
 	void StartAccept();	//接続
 	~ComClientUdp();
 };

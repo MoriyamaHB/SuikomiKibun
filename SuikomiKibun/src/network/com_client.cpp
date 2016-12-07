@@ -1,6 +1,6 @@
 #include "com_client.h"
 
-ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, Server* se) :
+ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, ServerTcp* se) :
 		io_service_(io_service), server_(se), accept_timer_(io_service_), send_timer_(io_service_), receive_timer_(
 				io_service_), kPort(port) {
 	//メンバー変数初期化
@@ -14,7 +14,7 @@ ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, Server* se) :
 	is_tcp_ = true;
 }
 
-ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se) :
+ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, ServerTcp* se) :
 		ComClientTcp(io_service, port, se) {
 	//StartAcceptで作成
 	send_socket_ = NULL;

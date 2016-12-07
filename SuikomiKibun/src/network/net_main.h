@@ -14,9 +14,9 @@
 #include <iostream>
 #include <string.h>
 
-#include "server.h"
 #include "../util/uGL.h"
 #include "client.h"
+#include "server.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
@@ -27,9 +27,11 @@ private:
 	int client_num_;
 	//クライアント
 	ClientUdp *client_udp_;
+	ClientTcp *client_tcp_;
 	ToServerContainer client_data_;
 	//サーバー
-	Server *server_;
+	ServerUdp *server_udp_;
+	ServerTcp *server_tcp_;
 	bool is_server_;
 	ToClientContainer server_data_;
 public:

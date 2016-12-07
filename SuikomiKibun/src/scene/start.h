@@ -9,7 +9,7 @@
 
 class StartScene: public BaseScene {
 private:
-	Server *server_;
+	ServerTcp *server_;
 	ClientTcp *client_;
 	ClientTcp *client1_;
 	ClientTcp *client2_;
