@@ -188,7 +188,7 @@ void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	//正常に届いた時
 	if (bytes_transferred == asio::error::message_size || is_tcp_) {
 		receive_data_ = *data;
-		printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.pos.x);
+		printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.radius);
 		server_->changed_player_data_ = true;
 	}
 	//再度受信

@@ -1,6 +1,7 @@
 #include "net_main.h"
 
 NetMain::NetMain() {
+	client_num_ = 0;
 	//ネットワーク初期化
 	char is_server;
 	std::string server_ip;
@@ -65,7 +66,15 @@ btVector3 NetMain::GetEnemyPos(int num) const {
 	return pos;
 }
 
+btScalar NetMain::GetEnemyRadius(int num) const {
+	return client_->get_receive_data().player_data[num].radius;
+}
+
 //setter
 void NetMain::SetMePos(btVector3 pos) {
 	client_data_.player_data.pos = pos;
+}
+
+void NetMain::SetMeRadius(btScalar radius) {
+	client_data_.player_data.radius = radius;
 }

@@ -112,6 +112,7 @@ BtDemoScene::~BtDemoScene() {
 void BtDemoScene::Update() {
 	//ネットワーク更新
 	net_main_->SetMePos(sphere_body_->getCenterOfMassPosition());
+	net_main_->SetMeRadius(static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius());
 	net_main_->Update();
 
 	//ほかプレイヤー情報を反映
@@ -120,10 +121,12 @@ void BtDemoScene::Update() {
 	btVector3 pos1 = net_main_->GetEnemyPos(0);
 	btDefaultMotionState* sphere_motion_state1 = new btDefaultMotionState(btTransform(qrot, pos1));
 	sphere_body1_->setMotionState(sphere_motion_state1);
+	sphere_body1_->setCollisionShape(new btSphereShape(net_main_->GetEnemyRadius(0)));
 //	//2
 	btVector3 pos2 = net_main_->GetEnemyPos(1);
 	btDefaultMotionState* sphere_motion_state2 = new btDefaultMotionState(btTransform(qrot, pos2));
 	sphere_body2_->setMotionState(sphere_motion_state2);
+	sphere_body2_->setCollisionShape(new btSphereShape(net_main_->GetEnemyRadius(1)));
 
 	//bulletをすすめる
 	dynamics_world_->stepSimulation(1.0 / kFps);
@@ -135,6 +138,10 @@ void BtDemoScene::Update() {
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
+	//だんだん大きくする
+	btScalar radius = static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius() + 0.001;
+	sphere_body_->setCollisionShape(new btSphereShape(radius));
 
 	//撃力を加える
 	btVector3 impulse;
@@ -227,7 +234,7 @@ void BtDemoScene::Draw() const {
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius(), 20, 20);
 	glPopMatrix();
 
 	//球1

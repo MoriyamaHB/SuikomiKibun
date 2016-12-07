@@ -216,7 +216,7 @@ void Client::OnReceive(const boost::system::error_code& error, size_t bytes_tran
 	//正常に届いた時
 	if (bytes_transferred == asio::error::message_size || is_tcp_) {
 		receive_data_ = *recive_data;
-		printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].pos.x);
+		printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].radius);
 	}
 	//再度受信
 	StartReceive();
