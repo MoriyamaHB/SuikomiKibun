@@ -11,7 +11,7 @@
 #include "../util/uGL.h"
 #include "../gv.h"
 
-class ComClient;
+class ComClientTcp;
 class ComClientUdp;
 #include "server.h"
 
@@ -19,7 +19,7 @@ namespace asio = boost::asio;
 using asio::ip::tcp;
 using asio::ip::udp;
 
-class ComClient {
+class ComClientTcp {
 protected:
 	//通信用
 	asio::io_service &io_service_;
@@ -51,9 +51,9 @@ protected:
 	virtual void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
-	ComClient(asio::io_service &io_service, int port, Server* se);
+	ComClientTcp(asio::io_service &io_service, int port, Server* se);
 	virtual void StartAccept();	//接続待機
-	virtual ~ComClient();
+	virtual ~ComClientTcp();
 	void Start();	//送受信スタート
 
 	void set_send_data(const ToClientContainer &send_data);
@@ -61,7 +61,7 @@ public:
 	bool get_has_accepted() const;
 };
 
-class ComClientUdp: public ComClient {
+class ComClientUdp: public ComClientTcp {
 private:
 	udp::socket *send_socket_;
 	udp::socket *receive_socket_;

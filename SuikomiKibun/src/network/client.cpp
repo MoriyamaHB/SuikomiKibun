@@ -1,10 +1,10 @@
-#include "../network/client.h"
+#include "client.h"
 
-Client::Client(std::string ip_adress, int start_port) :
+ClientTcp::ClientTcp(std::string ip_adress, int port) :
 		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(
 				ip_adress) {
 	//メンバー変数初期化
-	port_ = start_port;
+	port_ = port;
 	has_conected_ = false;
 	state_ = kConnectWait;
 	memset(&send_data_, 0, sizeof(send_data_));
@@ -15,14 +15,14 @@ Client::Client(std::string ip_adress, int start_port) :
 }
 
 ClientUdp::ClientUdp(std::string ip_adress, int start_port) :
-		Client(ip_adress, start_port) {
+		ClientTcp(ip_adress, start_port) {
 	send_socket_ = NULL;
 	receive_socket_ = NULL;
 	//状態
 	is_tcp_ = false;
 }
 
-Client::~Client() {
+ClientTcp::~ClientTcp() {
 	// タイムアウトのタイマーを切る
 	connect_timer_.cancel();
 	send_timer_.cancel();
@@ -50,7 +50,7 @@ ClientUdp::~ClientUdp() {
 	delete receive_socket_;
 }
 
-void Client::Update() {
+void ClientTcp::Update() {
 	switch (state_) {
 	case kConnectWait: //未接続
 		//接続済みなら送受信開始
@@ -62,7 +62,7 @@ void Client::Update() {
 		Send();
 		StartReceive();
 		//別スレッドで実行
-		boost::thread thd(&Client::ThRun, this);
+		boost::thread thd(&ClientTcp::ThRun, this);
 		run_thread_.swap(thd);
 		//送受信中状態に移行
 		state_ = kCom;
@@ -76,7 +76,7 @@ void Client::Update() {
 	}
 }
 
-void Client::Draw() {
+void ClientTcp::Draw() {
 	switch (state_) {
 	case kConnectWait: { //未接続
 		output_display0.Regist("client:サーバーと接続中です", uColor4fv_maroon);
@@ -95,23 +95,23 @@ void Client::Draw() {
 }
 
 //io_serviceを実行する(別スレッドで呼び出し用)
-void Client::ThRun() {
+void ClientTcp::ThRun() {
 	io_service_.run();
 	io_service_.reset();
 }
 
 //接続
-void Client::Connect() {
+void ClientTcp::Connect() {
 	//ソケット作成
 	socket_ = new tcp::socket(io_service_);
 	//接続登録
 	socket_->async_connect(tcp::endpoint(asio::ip::address::from_string(kIpAdress), port_),
-			boost::bind(&Client::OnConnect, this, asio::placeholders::error));
+			boost::bind(&ClientTcp::OnConnect, this, asio::placeholders::error));
 	//5秒でタイムアウト
 	connect_timer_.expires_from_now(boost::posix_time::seconds(5));
-	connect_timer_.async_wait(boost::bind(&Client::OnConnectTimeOut, this, _1));
+	connect_timer_.async_wait(boost::bind(&ClientTcp::OnConnectTimeOut, this, _1));
 	//接続を別スレッドで実行
-	boost::thread thd(&Client::ThRun, this);
+	boost::thread thd(&ClientTcp::ThRun, this);
 	conect_thread_.swap(thd);
 }
 
@@ -129,7 +129,7 @@ void ClientUdp::Connect() {
 }
 
 //接続完了
-void Client::OnConnect(const boost::system::error_code& error) {
+void ClientTcp::OnConnect(const boost::system::error_code& error) {
 	if (error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "接続受信失敗:" + error.message());
 		return;
@@ -140,7 +140,7 @@ void Client::OnConnect(const boost::system::error_code& error) {
 }
 
 //接続タイムアウト
-void Client::OnConnectTimeOut(const boost::system::error_code& error) {
+void ClientTcp::OnConnectTimeOut(const boost::system::error_code& error) {
 	if (!error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(port_) + "):接続にタイムアウト\n");
 		return;
@@ -148,13 +148,13 @@ void Client::OnConnectTimeOut(const boost::system::error_code& error) {
 }
 
 //クライアント情報送信
-void Client::Send() {
+void ClientTcp::Send() {
 	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToServerContainer)),
-			boost::bind(&Client::OnSend, this, asio::placeholders::error,
+			boost::bind(&ClientTcp::OnSend, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
-	send_timer_.async_wait(boost::bind(&Client::OnSendTimeOut, this, _1));
+	send_timer_.async_wait(boost::bind(&ClientTcp::OnSendTimeOut, this, _1));
 }
 
 void ClientUdp::Send() {
@@ -169,7 +169,7 @@ void ClientUdp::Send() {
 //送信完了
 //error: エラー情報
 // bytes_tranferred: 送信したバイト数
-void Client::OnSend(const boost::system::error_code &error, size_t bytes_transferred) {
+void ClientTcp::OnSend(const boost::system::error_code &error, size_t bytes_transferred) {
 	if (error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "送信失敗:" + error.message());
 		return;
@@ -179,7 +179,7 @@ void Client::OnSend(const boost::system::error_code &error, size_t bytes_transfe
 }
 
 //送信タイムアウト
-void Client::OnSendTimeOut(const boost::system::error_code& error) {
+void ClientTcp::OnSendTimeOut(const boost::system::error_code& error) {
 	if (!error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(port_) + "):送信タイムアウト\n");
 		return;
@@ -187,13 +187,13 @@ void Client::OnSendTimeOut(const boost::system::error_code& error) {
 }
 
 //サーバー情報受信
-void Client::StartReceive() {
+void ClientTcp::StartReceive() {
 	boost::asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
-			boost::bind(&Client::OnReceive, this, asio::placeholders::error,
+			boost::bind(&ClientTcp::OnReceive, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
-	receive_timer_.async_wait(boost::bind(&Client::OnReceiveTimeOut, this, _1));
+	receive_timer_.async_wait(boost::bind(&ClientTcp::OnReceiveTimeOut, this, _1));
 }
 
 void ClientUdp::StartReceive() {
@@ -209,7 +209,7 @@ void ClientUdp::StartReceive() {
 // 受信完了
 // error : エラー情報
 // bytes_transferred : 受信したバイト数
-void Client::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
+void ClientTcp::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
 	//エラー時
 	if (error && error != boost::asio::error::eof) {
 		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
@@ -240,18 +240,18 @@ void ClientUdp::OnReceive(const boost::system::error_code& error, size_t bytes_t
 }
 
 //受信タイムアウト
-void Client::OnReceiveTimeOut(const boost::system::error_code& error) {
+void ClientTcp::OnReceiveTimeOut(const boost::system::error_code& error) {
 	if (!error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(port_) + "):受信タイムアウト\n");
 		return;
 	}
 }
 
-void Client::set_send_data(const ToServerContainer& send_data) {
+void ClientTcp::set_send_data(const ToServerContainer& send_data) {
 	send_data_ = send_data;
 }
 
-ToClientContainer Client::get_receive_data() const {
+ToClientContainer ClientTcp::get_receive_data() const {
 	return receive_data_;
 }
 

@@ -22,7 +22,7 @@ namespace asio = boost::asio;
 using asio::ip::tcp;
 using asio::ip::udp;
 
-class Client {
+class ClientTcp {
 protected:
 	enum State {
 		kConnectWait, kRun, kCom
@@ -63,9 +63,9 @@ protected:
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun();
 public:
-	Client(std::string ip_adress, int start_port);
+	ClientTcp(std::string ip_adress, int start_port);
 	virtual void Connect();	//接続開始
-	virtual ~Client();
+	virtual ~ClientTcp();
 	void Update();
 	void Draw();
 
@@ -73,7 +73,7 @@ public:
 	ToClientContainer get_receive_data() const;
 };
 
-class ClientUdp: public Client {
+class ClientUdp: public ClientTcp {
 private:
 	//ソケット(override)
 	udp::socket *send_socket_;

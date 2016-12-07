@@ -1,6 +1,6 @@
-#include "../network/com_client.h"
+#include "com_client.h"
 
-ComClient::ComClient(asio::io_service &io_service, int port, Server* se) :
+ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, Server* se) :
 		io_service_(io_service), server_(se), accept_timer_(io_service_), send_timer_(io_service_), receive_timer_(
 				io_service_), kPort(port) {
 	//メンバー変数初期化
@@ -15,7 +15,7 @@ ComClient::ComClient(asio::io_service &io_service, int port, Server* se) :
 }
 
 ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se) :
-		ComClient(io_service, port, se) {
+		ComClientTcp(io_service, port, se) {
 	//StartAcceptで作成
 	send_socket_ = NULL;
 	receive_socket_ = NULL;
@@ -25,7 +25,7 @@ ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se) :
 	is_tcp_ = false;
 }
 
-ComClient::~ComClient() {
+ComClientTcp::~ComClientTcp() {
 	// タイムアウトのタイマーを切る
 	accept_timer_.cancel();
 	send_timer_.cancel();
@@ -51,15 +51,15 @@ ComClientUdp::~ComClientUdp() {
 }
 
 //接続
-void ComClient::StartAccept() {
+void ComClientTcp::StartAccept() {
 	//ソケット、アクセプタ作成
 	socket_ = new tcp::socket(io_service_);
 	acceptor_ = new tcp::acceptor(io_service_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), kPort));
 	//接続待機登録
-	acceptor_->async_accept(*socket_, bind(&ComClient::OnAccept, this, asio::placeholders::error));
+	acceptor_->async_accept(*socket_, bind(&ComClientTcp::OnAccept, this, asio::placeholders::error));
 	//180秒でタイムアウト
 	accept_timer_.expires_from_now(boost::posix_time::seconds(180));
-	accept_timer_.async_wait(boost::bind(&ComClient::OnAcceptTimeOut, this, _1));
+	accept_timer_.async_wait(boost::bind(&ComClientTcp::OnAcceptTimeOut, this, _1));
 }
 
 void ComClientUdp::StartAccept() {
@@ -101,7 +101,7 @@ void ComClientUdp::OnIniReceive(const boost::system::error_code& error, size_t b
 	send_socket_->open(udp::v4());
 }
 
-void ComClient::OnAccept(const boost::system::error_code& error) {
+void ComClientTcp::OnAccept(const boost::system::error_code& error) {
 	if (error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "接続受信失敗:" + error.message());
 		return;
@@ -109,7 +109,7 @@ void ComClient::OnAccept(const boost::system::error_code& error) {
 	has_accepted_ = true;
 	accept_timer_.cancel(); // タイムアウトのタイマーを切る
 }
-void ComClient::OnAcceptTimeOut(const boost::system::error_code& error) {
+void ComClientTcp::OnAcceptTimeOut(const boost::system::error_code& error) {
 	if (!error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(kPort) + "):接続にタイムアウト\n");
 		return;
@@ -117,7 +117,7 @@ void ComClient::OnAcceptTimeOut(const boost::system::error_code& error) {
 }
 
 //送受信スタート
-void ComClient::Start() {
+void ComClientTcp::Start() {
 	if (!has_accepted_) {
 		uErrorOut(__FILE__, __func__, __LINE__, "まだ接続されていません");
 		return;
@@ -127,12 +127,12 @@ void ComClient::Start() {
 }
 
 //送信
-void ComClient::Send() {
+void ComClientTcp::Send() {
 	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToClientContainer)),
-			bind(&ComClient::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			bind(&ComClientTcp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(5));
-	send_timer_.async_wait(boost::bind(&ComClient::OnSendTimeOut, this, _1));
+	send_timer_.async_wait(boost::bind(&ComClientTcp::OnSendTimeOut, this, _1));
 }
 
 void ComClientUdp::Send() {
@@ -144,7 +144,7 @@ void ComClientUdp::Send() {
 	send_timer_.async_wait(boost::bind(&ComClientUdp::OnSendTimeOut, this, _1));
 }
 
-void ComClient::OnSend(const boost::system::error_code& error, size_t bytes_transferred) {
+void ComClientTcp::OnSend(const boost::system::error_code& error, size_t bytes_transferred) {
 	if (error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "送信失敗:" + error.message());
 		return;
@@ -153,7 +153,7 @@ void ComClient::OnSend(const boost::system::error_code& error, size_t bytes_tran
 	Send();
 }
 
-void ComClient::OnSendTimeOut(const boost::system::error_code& error) {
+void ComClientTcp::OnSendTimeOut(const boost::system::error_code& error) {
 	if (!error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(kPort) + "):送信タイムアウト\n");
 		return;
@@ -161,13 +161,13 @@ void ComClient::OnSendTimeOut(const boost::system::error_code& error) {
 }
 
 //受信
-void ComClient::Receive() {
+void ComClientTcp::Receive() {
 	asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToServerContainer)),
-			bind(&ComClient::OnReceive, this, asio::placeholders::error,
+			bind(&ComClientTcp::OnReceive, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(5));
-	receive_timer_.async_wait(boost::bind(&ComClient::OnReceiveTimeOut, this, _1));
+	receive_timer_.async_wait(boost::bind(&ComClientTcp::OnReceiveTimeOut, this, _1));
 }
 
 void ComClientUdp::Receive() {
@@ -179,7 +179,7 @@ void ComClientUdp::Receive() {
 	receive_timer_.async_wait(boost::bind(&ComClientUdp::OnReceiveTimeOut, this, _1));
 }
 
-void ComClient::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
+void ComClientTcp::OnReceive(const boost::system::error_code& error, size_t bytes_transferred) {
 	//エラー時
 	if (error && error != asio::error::eof) {
 		uErrorOut(__FILE__, __func__, __LINE__, "受信失敗:" + error.message());
@@ -210,7 +210,7 @@ void ComClientUdp::OnReceive(const boost::system::error_code& error, size_t byte
 	Receive();
 }
 
-void ComClient::OnReceiveTimeOut(const boost::system::error_code& error) {
+void ComClientTcp::OnReceiveTimeOut(const boost::system::error_code& error) {
 	if (!error) {
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(kPort) + "):受信タイムアウト\n");
 		return;
@@ -218,15 +218,15 @@ void ComClient::OnReceiveTimeOut(const boost::system::error_code& error) {
 }
 
 //getter,setter
-void ComClient::set_send_data(const ToClientContainer& send_data) {
+void ComClientTcp::set_send_data(const ToClientContainer& send_data) {
 	send_data_ = send_data;
 }
 
-ToServerContainer ComClient::get_receive_data() const {
+ToServerContainer ComClientTcp::get_receive_data() const {
 	return receive_data_;
 }
 
-bool ComClient::get_has_accepted() const {
+bool ComClientTcp::get_has_accepted() const {
 	return has_accepted_;
 }
 
