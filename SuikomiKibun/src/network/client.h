@@ -58,7 +58,7 @@ protected:
 	void OnSendTimeOut(const boost::system::error_code& error);
 	//受信
 	virtual void StartReceive();
-	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
+	virtual void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun();
@@ -85,6 +85,7 @@ private:
 	void Send();
 	//受信
 	void StartReceive();
+	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 
 public:
 	ClientUdp(std::string ip_adress, int start_port);

@@ -72,6 +72,7 @@ private:
 	void Send();
 	//受信
 	void Receive();
+	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 
 	//初期時の処理
 	void IniReceive();

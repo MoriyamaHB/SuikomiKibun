@@ -140,7 +140,7 @@ void BtDemoScene::Update() {
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
 	//だんだん大きくする
-	btScalar radius = static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius() + 0.001;
+	btScalar radius = static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius() + 0.0001;
 	sphere_body_->setCollisionShape(new btSphereShape(radius));
 
 	//撃力を加える
