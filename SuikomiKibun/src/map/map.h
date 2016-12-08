@@ -48,7 +48,7 @@ public:
 	~StageMap();
 	void Update();
 	void Draw();
-	void DestroyObject(int num);
+	int DestroyObject(int num, int level);
 };
 
 

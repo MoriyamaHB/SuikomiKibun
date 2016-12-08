@@ -54,34 +54,34 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 wall_pos4 = btVector3(-250, 250, 0);
 	btVector3 kan_pos = btVector3(-48, 25, 248.5);
 	btVector3 kan_pos2 = btVector3(25, 0, 0);
-	btVector3 kan_pos3 = btVector3(0,0, -25);
+	btVector3 kan_pos3 = btVector3(0, 0, -25);
 	btVector3 kan_pos4 = btVector3(-48, 25, 198);
 	btVector3 kan_pos5 = btVector3(-25, 0, 0);
-	btVector3 kan_pos6 = btVector3(0,0, -25);
+	btVector3 kan_pos6 = btVector3(0, 0, -25);
 	btVector3 kan_pos7 = btVector3(-48, 25, 99);
 	btVector3 kan_pos8 = btVector3(25, 0, 0);
-	btVector3 kan_pos9 = btVector3(0,0, 25);
+	btVector3 kan_pos9 = btVector3(0, 0, 25);
 	btVector3 kan_pos10 = btVector3(-48, 25, 49);
 	btVector3 kan_pos11 = btVector3(-25, 0, 0);
-	btVector3 kan_pos12 = btVector3(0,0, -25);
+	btVector3 kan_pos12 = btVector3(0, 0, -25);
 	btVector3 kan_pos13 = btVector3(-99, 25, 49);
 	btVector3 kan_pos14 = btVector3(-25, 0, 0);
-	btVector3 kan_pos15 = btVector3(0,0, 25);
+	btVector3 kan_pos15 = btVector3(0, 0, 25);
 	btVector3 kan_pos16 = btVector3(-198, 25, 49);
 	btVector3 kan_pos17 = btVector3(25, 0, 0);
-	btVector3 kan_pos18 = btVector3(0,0, -25);
+	btVector3 kan_pos18 = btVector3(0, 0, -25);
 	btVector3 kan_pos19 = btVector3(-248.5, 25, 49);
 	btVector3 kan_pos20 = btVector3(25, 0, 0);
-	btVector3 kan_pos21 = btVector3(0,0, 25);
+	btVector3 kan_pos21 = btVector3(0, 0, 25);
 	btVector3 kan_pos22 = btVector3(-248.5, 25, 147.5);
 	btVector3 kan_pos23 = btVector3(25, 0, 0);
-	btVector3 kan_pos24 = btVector3(0,0, 25);
+	btVector3 kan_pos24 = btVector3(0, 0, 25);
 	btVector3 kan_pos25 = btVector3(-198, 25, 198);
 	btVector3 kan_pos26 = btVector3(25, 0, 0);
-	btVector3 kan_pos27 = btVector3(0,0, -25);
+	btVector3 kan_pos27 = btVector3(0, 0, -25);
 	btVector3 kan_pos28 = btVector3(-147.5, 25, 248.5);
 	btVector3 kan_pos29 = btVector3(25, 0, 0);
-	btVector3 kan_pos30 = btVector3(0,0, -25);
+	btVector3 kan_pos30 = btVector3(0, 0, -25);
 	btVector3 kan_pos31 = btVector3(-124, 25, 100);
 	btVector3 kan_pos32 = btVector3(-173, 25, 100);
 	btVector3 kan_pos33 = btVector3(-124, 25, 198);
@@ -116,7 +116,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *stairs = new btBoxShape(btVector3(4, 0.3, 2));
 	btCollisionShape *wall_shape = new btBoxShape(btVector3(250, 250, 0.1));
 //	btCollisionShape *kan_shape = new btBoxShape(btVector3(2, 10, 2));
-	btCollisionShape *kan_shape = new btCapsuleShape(btScalar(1),48);
+	btCollisionShape *kan_shape = new btCapsuleShape(btScalar(1), 48);
 	btCollisionShape *kan_shape2 = new btBoxShape(btVector3(24, 24, 0.5));
 	btCollisionShape *kan_shape3 = new btBoxShape(btVector3(0.5, 24, 24));
 	btCollisionShape *taki_shape = new btBoxShape(btVector3(1.01, 35, 1.01));
@@ -409,7 +409,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset2.setOrigin(kan_pos2);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos);
-	offset.setRotation(btQuaternion(0,0,0));
+	offset.setRotation(btQuaternion(0, 0, 0));
 	kan_body[0] = LocalCreateRigidBody(btScalar(1), offset, kan_shape);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
@@ -417,7 +417,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset.setIdentity();
 	offset.setOrigin(kan_pos);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0.1), offset*offset2, kan_shape2);
+	kan_body[1] = LocalCreateRigidBody(btScalar(0.1), offset * offset2,
+			kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(0, 1, 1);
@@ -425,7 +426,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset.setOrigin(kan_pos);
 	offset2.setOrigin(kan_pos3);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[2] = LocalCreateRigidBody(btScalar(0.1), offset*offset2, kan_shape3);
+	kan_body[2] = LocalCreateRigidBody(btScalar(0.1), offset * offset2,
+			kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 1, 0);
@@ -450,7 +452,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 	hingeC = new btHingeConstraint(*kan_body[0], btPivotA, btAxisA);
-	hingeC->setLimit(btScalar(0), btScalar(PI_/2));
+	hingeC->setLimit(btScalar(0), btScalar(PI_ / 2));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
@@ -544,7 +546,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 	hingeC = new btHingeConstraint(*kan_body[0], btPivotA, btAxisA);
-	hingeC->setLimit(btScalar(0), btScalar(PI_/2));
+	hingeC->setLimit(btScalar(0), btScalar(PI_ / 2));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
@@ -732,7 +734,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 	hingeC = new btHingeConstraint(*kan_body[0], btPivotA, btAxisA);
-	hingeC->setLimit(btScalar(0), btScalar(PI_/2));
+	hingeC->setLimit(btScalar(0), btScalar(PI_ / 2));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
@@ -779,7 +781,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 	hingeC = new btHingeConstraint(*kan_body[0], btPivotA, btAxisA);
-	hingeC->setLimit(btScalar(0), btScalar(PI_/2));
+	hingeC->setLimit(btScalar(0), btScalar(PI_ / 2));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
@@ -826,7 +828,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 	hingeC = new btHingeConstraint(*kan_body[0], btPivotA, btAxisA);
-	hingeC->setLimit(btScalar(0), btScalar(PI_/2));
+	hingeC->setLimit(btScalar(0), btScalar(PI_ / 2));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
@@ -873,7 +875,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 	hingeC = new btHingeConstraint(*kan_body[0], btPivotA, btAxisA);
-	hingeC->setLimit(btScalar(0), btScalar(PI_/2));
+	hingeC->setLimit(btScalar(0), btScalar(PI_ / 2));
 	joint = hingeC;
 	world_->addConstraint(joint, true);
 
@@ -919,7 +921,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(0.5, 0.5, 0.5);
-
 
 //反発係数
 	btScalar ground_rest = 0.6;
@@ -1054,8 +1055,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
-	printf("%d",world_->getNumCollisionObjects());
-
+	printf("%d", world_->getNumCollisionObjects());
 
 }
 
@@ -2462,7 +2462,7 @@ void StageMap::CreateMush(const btVector3 &position, int level) {
 		mass = 0;
 	} else if (level == 2) {
 		size = 2;
-		mass =0;
+		mass = 0;
 	} else {
 		size = 1;
 		mass = 0;
@@ -2674,39 +2674,68 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 }
 
 //オブジェクトの破壊
-void StageMap::DestroyObject(int num) {
+int StageMap::DestroyObject(int num, int level) {
 	int i;
+	int l;
+	static int pos = 400;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	obj = world_->getCollisionObjectArray()[num];
-	body = btRigidBody::upcast(obj);
-	if (body && body->getMotionState()) {
-		delete body->getMotionState();
-	}
-	world_->removeCollisionObject(obj);
+	btVector3 vec = btVector3(pos, pos, pos);
+	btTransform ten;
+	ten.setOrigin(vec);
+	btDefaultMotionState *motion = new btDefaultMotionState(ten);
 
-	for (i = 1; i < num_; i++) {
-		if (object_[num] == object_[num + i]) {
-			obj = world_->getCollisionObjectArray()[num + i];
-			body = btRigidBody::upcast(obj);
-			if (body && body->getMotionState()) {
-				delete body->getMotionState();
-			}
-			world_->removeCollisionObject(obj);
-		} else
-			break;
+	if (level_[num] == 5) {
+		l = 70;
+	} else if (level_[num] == 4) {
+		l = 30;
+	} else if (level_[num] == 3) {
+		l = 15;
+	} else {
+		l = 5;
 	}
 
-	for (i = 1; i < num_; i--) {
-		if (object_[num] == object_[num - i]) {
-			obj = world_->getCollisionObjectArray()[num - i];
-			body = btRigidBody::upcast(obj);
-			if (body && body->getMotionState()) {
-				delete body->getMotionState();
-			}
-			world_->removeCollisionObject(obj);
-		} else
-			break;
+	if (level > l) {
+		obj = world_->getCollisionObjectArray()[num];
+		body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState()) {
+			delete body->getMotionState();
+		}
+		body->setMotionState(motion);
+
+		for (i = 1; num + i <= num_; i++) {
+			if (object_[num] == object_[num + i]) {
+				obj = world_->getCollisionObjectArray()[num + i];
+				body = btRigidBody::upcast(obj);
+				btDefaultMotionState *motion = new btDefaultMotionState(ten);
+				if (body && body->getMotionState()) {
+					delete body->getMotionState();
+				}
+				body->setMotionState(motion);
+				object_[num + i] = -1;
+				//world_->removeCollisionObject( obj );
+			} else
+				break;
+		}
+
+		for (i = 1; num - i > 0; i++) {
+			if (object_[num] == object_[num - i]) {
+				obj = world_->getCollisionObjectArray()[num - i];
+				body = btRigidBody::upcast(obj);
+				btDefaultMotionState *motion = new btDefaultMotionState(ten);
+				if (body && body->getMotionState()) {
+					delete body->getMotionState();
+				}
+				body->setMotionState(motion);
+				//world_->removeCollisionObject( obj );
+				object_[num - i] = -1;
+			} else
+				break;
+		}
+		object_[num] = -1;
+	}else {
+		return 0;
 	}
+	return level_[num];
 }
 
