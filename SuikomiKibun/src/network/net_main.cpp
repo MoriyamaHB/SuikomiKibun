@@ -70,6 +70,10 @@ btScalar NetMain::GetEnemyRadius(int num) const {
 	return client_udp_->get_receive_data().player_data[num].radius;
 }
 
+int NetMain::GetColor(int num) const {
+	return client_udp_->get_receive_data().player_data[num].color;
+}
+
 //setter
 void NetMain::SetMePos(btVector3 pos) {
 	client_data_.player_data.pos = pos;
@@ -77,4 +81,8 @@ void NetMain::SetMePos(btVector3 pos) {
 
 void NetMain::SetMeRadius(btScalar radius) {
 	client_data_.player_data.radius = radius;
+}
+
+void NetMain::SetMeColor(int color) {
+	client_data_.player_data.color = color;
 }

@@ -12,6 +12,7 @@ extern OutputDisplay output_display0;
 typedef struct {
 	Vector3 pos;
 	double radius;
+	int color;
 } PlayerData;
 
 //送信するデータの種類を示す(toサーバー)
