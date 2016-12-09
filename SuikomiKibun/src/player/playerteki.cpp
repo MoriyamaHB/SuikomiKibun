@@ -101,7 +101,7 @@ void PlayerTeki::Draw() {
 void PlayerTeki::Update(btVector3 pos,int level,int color_change) {
 	PlayerTekiMove(pos);
 	PlayerTekiResize(level);
-	PlayerTeki::PlayerColorChange(color_change);
+	PlayerColorChange(color_change);
 }
 
 //プレイヤー敵サイズ変更

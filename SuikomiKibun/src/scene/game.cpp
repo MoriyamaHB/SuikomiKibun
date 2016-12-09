@@ -61,7 +61,8 @@ void GameScene::Update() {
 	//ネットワーク
 	net_main_->Update();
 	net_main_->SetMePos(player_->get_center_pos());
-	net_main_->SetMeLevel(player_->get_radius());
+	net_main_->SetMeLevel(player_->get_level());
+	net_main_->SetMeColor(player_->get_color());
 
 	//マップ更新
 	map_->Update();
