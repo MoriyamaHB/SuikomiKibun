@@ -24,7 +24,7 @@ private:
 	static btRigidBody* delete_body_;
 	static btRigidBody* delete_body2_;
 	int pcount;
-	double level_;
+	int level_;
 	GL_ShapeDrawer* m_shapeDrawer;
 	int color_judge_;
 	btVector3 color_[3];
@@ -43,6 +43,7 @@ public:
 	btVector3 get_center_pos()const;
 	double get_camera_distance()const;
 	btScalar get_radius()const;
+	int get_color()const;
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);

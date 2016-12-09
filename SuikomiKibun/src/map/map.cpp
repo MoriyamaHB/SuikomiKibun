@@ -1040,6 +1040,37 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateApple(position_af, 1);
 	btVector3 position_ag(200, 100, 0);
 	CreateApple(position_ag, 3);
+	btVector3 position_ah(10, 2, 10);
+	CreateApple(position_ah, 1);
+	btVector3 position_ai(20, 2, 15);
+	CreateApple(position_ai, 1);
+	btVector3 position_aj(30, 2, 50);
+	CreateApple(position_aj, 1);
+	btVector3 position_ak(-100, 100, 100);
+	CreateApple(position_ak, 1);
+	btVector3 position_al(-150, 2, 100);
+	CreateApple(position_al, 1);
+	btVector3 position_an(-200, 2, 150);
+	CreateApple(position_an, 1);
+	btVector3 position_am(-50, 100, 50);
+	CreateApple(position_am, 1);
+	btVector3 position_ao(200, 100, 0);
+	CreateApple(position_ao, 1);
+	btVector3 position_ap(-10, 2, -10);
+	CreateApple(position_ap, 1);
+	btVector3 position_aq(-20, 2, -15);
+	CreateApple(position_aq, 1);
+	btVector3 position_ar(-30, 2, -50);
+	CreateApple(position_ar, 1);
+	btVector3 position_as(-100, 100, -100);
+	CreateApple(position_as, 1);
+	btVector3 position_at(-150, 2, -100);
+	CreateApple(position_at, 1);
+	btVector3 position_au(-200, 2, -150);
+	CreateApple(position_au, 1);
+	btVector3 position_av(-50, 100, -50);
+	CreateApple(position_av, 1);
+
 ////タワー
 //	btVector3 position_d(-50, 0, -200);
 //	CreateTower(position_d, 2);
