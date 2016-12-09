@@ -108,7 +108,7 @@ void Player::Update(double angle, StageMap* map) {
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
-	double t = 0.1;
+	double t = 0.3;
 	static int upcount = 0;
 	static int pflug = 1;
 
