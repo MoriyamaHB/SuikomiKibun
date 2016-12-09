@@ -11,6 +11,8 @@
 
 #include "../util/uGL.h"
 #include "../gv.h"
+
+class Server;
 #include "com_client.h"
 
 namespace asio = boost::asio;
@@ -25,7 +27,7 @@ private:
 
 	//通信
 	std::vector<asio::io_service*> io_service_;
-	std::vector<ComClient*> client_;
+	std::vector<ComClientUdp*> client_;
 	//スレッド
 	std::vector<boost::thread*> thread_;
 	//状態
@@ -43,8 +45,11 @@ public:
 	void Update();
 	void Draw() const;
 
-	void SetSendData(const ServerData &send_data, int n);
-	ClientData GetReceiveData(int n) const;
+	void SetSendData(const ToClientContainer &send_data, int n);
+	ToServerContainer GetReceiveData(int n) const;
+
+	//テスト
+	bool changed_player_data_;
 };
 
 #endif /* SUIKOMIKIBUN_NET_NET_H_ */

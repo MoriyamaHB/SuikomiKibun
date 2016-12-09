@@ -7,24 +7,8 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	input::Init();
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
 
-	//ネットワーク初期化
-	char is_server;
-	std::string server_ip;
-	int port;
-	std::cout << "s/c?";
-	std::cin >> is_server;
-	if (is_server == 's') {
-		server_ = new Server(31600, 3);
-		is_server_ = true;
-	} else {
-		server_ = NULL;
-		is_server_ = false;
-	}
-	std::cout << "server_ip:";
-	std::cin >> server_ip;
-	std::cout << "port:";
-	std::cin >> port;
-	client_ = new Client(server_ip, port);
+	//net_main初期化
+	net_main_ = new NetMain();
 
 	//衝突検出方法の選択(デフォルトを選択)
 	btDefaultCollisionConfiguration *config = new btDefaultCollisionConfiguration();
@@ -75,10 +59,14 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 	cube_shape->calculateLocalInertia(cube_mass, cube_inertia);
 	//剛体オブジェクト生成
 	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
+	sphere_body1_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
+	sphere_body2_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
 	ground_body_ = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
 	cube_body_ = new btRigidBody(cube_mass, cube_motion_state, cube_shape, cube_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
+	sphere_body1_->setRestitution(sphere_rest);
+	sphere_body2_->setRestitution(sphere_rest);
 	ground_body_->setRestitution(ground_rest);
 	cube_body_->setRestitution(cube_rest);
 	//摩擦
@@ -87,26 +75,31 @@ BtDemoScene::BtDemoScene(ISceneChanger* changer, SceneParam param) :
 //	cube_body_->setFriction(100000);
 	//ワールドに剛体オブジェクトを追加
 	dynamics_world_->addRigidBody(sphere_body_);
+	dynamics_world_->addRigidBody(sphere_body1_);
+	dynamics_world_->addRigidBody(sphere_body2_);
 	dynamics_world_->addRigidBody(ground_body_);
 	dynamics_world_->addRigidBody(cube_body_);
 }
 
 //デストラクタ
 BtDemoScene::~BtDemoScene() {
-
-	//ネットワーク
-	if (is_server_)
-		delete server_;
-	delete client_;
+	//ネットワーク削除
+	delete net_main_;
 
 	//オブジェクト破壊
 	delete sphere_body_->getMotionState();
+	delete sphere_body1_->getMotionState();
+	delete sphere_body2_->getMotionState();
 	delete ground_body_->getMotionState();
 	delete cube_body_->getMotionState();
 	dynamics_world_->removeRigidBody(sphere_body_);
+	dynamics_world_->removeRigidBody(sphere_body1_);
+	dynamics_world_->removeRigidBody(sphere_body2_);
 	dynamics_world_->removeRigidBody(ground_body_);
 	dynamics_world_->removeRigidBody(cube_body_);
 	delete sphere_body_;
+	delete sphere_body1_;
+	delete sphere_body2_;
 	delete ground_body_;
 	delete cube_body_;
 
@@ -117,35 +110,42 @@ BtDemoScene::~BtDemoScene() {
 
 //更新
 void BtDemoScene::Update() {
-	//ネットワーク
-	if (is_server_) {
-		server_->Update();
-	}
-	ClientData client_data;
-	btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	client_data.pos.x = pos[0];
-	client_data.pos.y = pos[1];
-	client_data.pos.z = pos[2];
-	client_->set_send_data(client_data);
-	ServerData server_data = client_->get_receive_data();
-	pos1_ = server_data.pos[0];
-	pos2_ = server_data.pos[1];
-	client_->Update();
+	//ネットワーク更新
+	net_main_->SetMePos(sphere_body_->getCenterOfMassPosition());
+	net_main_->SetMeRadius(static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius());
+	net_main_->Update();
+
+	//ほかプレイヤー情報を反映
+	btQuaternion qrot(0, 0, 0, 1);
+	//1
+	btVector3 pos1 = net_main_->GetEnemyPos(0);
+	btDefaultMotionState* sphere_motion_state1 = new btDefaultMotionState(btTransform(qrot, pos1));
+	sphere_body1_->setMotionState(sphere_motion_state1);
+	sphere_body1_->setCollisionShape(new btSphereShape(net_main_->GetEnemyRadius(0)));
+//	//2
+	btVector3 pos2 = net_main_->GetEnemyPos(1);
+	btDefaultMotionState* sphere_motion_state2 = new btDefaultMotionState(btTransform(qrot, pos2));
+	sphere_body2_->setMotionState(sphere_motion_state2);
+	sphere_body2_->setCollisionShape(new btSphereShape(net_main_->GetEnemyRadius(1)));
 
 	//bulletをすすめる
 	dynamics_world_->stepSimulation(1.0 / kFps);
 
 	//カメラ更新
-	pos = sphere_body_->getCenterOfMassPosition();
-	camera.Update(pos[0], pos[1], pos[2]);
+	btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	camera_.Update(pos[0], pos[1], pos[2]);
 
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 15.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
+	//だんだん大きくする
+	btScalar radius = static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius() + 0.0001;
+	sphere_body_->setCollisionShape(new btSphereShape(radius));
+
 	//撃力を加える
 	btVector3 impulse;
-	const double ang = camera.get_angle_w() + M_PI;
+	const double ang = camera_.get_angle_w() + M_PI;
 	double t = 0.1;
 	if (input::get_special_keyboard_frame(GLUT_KEY_SHIFT_L) >= 1) {
 		if (input::get_keyboard_frame('w') >= 1) {
@@ -204,11 +204,8 @@ void BtDemoScene::Update() {
 
 //描画
 void BtDemoScene::Draw() const {
-	//ネットワーク
-	if (is_server_)
-		server_->Draw();
-	client_->Draw();
-
+	//ネットワーク描画
+	net_main_->Draw();
 	btVector3 pos;
 	//地面
 	glPushMatrix();
@@ -237,20 +234,22 @@ void BtDemoScene::Draw() const {
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius(), 20, 20);
 	glPopMatrix();
 
 	//球1
+	pos = sphere_body1_->getCenterOfMassPosition();
 	glPushMatrix();
-	glTranslatef(pos1_.x, pos1_.y, pos1_.z);
+	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(static_cast<btSphereShape*>(sphere_body1_->getCollisionShape())->getRadius(), 20, 20);
 	glPopMatrix();
 
 	//球2
+	pos = sphere_body2_->getCenterOfMassPosition();
 	glPushMatrix();
-	glTranslatef(pos2_.x, pos2_.y, pos2_.z);
+	glTranslatef(pos[0], pos[1], pos[2]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(static_cast<btSphereShape*>(sphere_body2_->getCollisionShape())->getRadius(), 20, 20);
 	glPopMatrix();
 }

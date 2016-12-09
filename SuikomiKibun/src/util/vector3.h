@@ -14,6 +14,8 @@
 #define __VECTOR3_H_INCLUDED__
 
 #include <math.h>
+#include <bullet/btBulletCollisionCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -26,53 +28,76 @@ public:
 
 // Public representation:  Not many options here.
 
-	float x,y,z;
+	float x, y, z;
 
 // Constructors
 
-	// Default constructor leaves vector in
-	// an indeterminate state
+// Default constructor leaves vector in
+// an indeterminate state
 
-	Vector3() {}
+	Vector3() {
+	}
 
 	// Copy constructor
 
-	Vector3(const Vector3 &a) : x(a.x), y(a.y), z(a.z) {}
+	Vector3(const Vector3 &a) :
+			x(a.x), y(a.y), z(a.z) {
+	}
 
 	// Construct given three values
 
-	Vector3(float nx, float ny, float nz) : x(nx), y(ny), z(nz) {}
+	Vector3(float nx, float ny, float nz) :
+			x(nx), y(ny), z(nz) {
+	}
+
+	//btVector3が与えられた時
+	Vector3(const btVector3 &a) :
+			x(a[0]), y(a[1]), z(a[2]) {
+	}
 
 // Standard object maintenance
 
-	// Assignment.  We adhere to C convention and
-	// return reference to the lvalue
+// Assignment.  We adhere to C convention and
+// return reference to the lvalue
 
 	Vector3 &operator =(const Vector3 &a) {
-		x = a.x; y = a.y; z = a.z;
+		x = a.x;
+		y = a.y;
+		z = a.z;
+		return *this;
+	}
+
+	//btVectorが代入された時
+	Vector3 &operator =(const btVector3 &a) {
+		x = a[0];
+		y = a[1];
+		z = a[2];
 		return *this;
 	}
 
 	// Check for equality
 
 	bool operator ==(const Vector3 &a) const {
-		return x==a.x && y==a.y && z==a.z;
+		return x == a.x && y == a.y && z == a.z;
 	}
 
 	bool operator !=(const Vector3 &a) const {
-		return x!=a.x || y!=a.y || z!=a.z;
+		return x != a.x || y != a.y || z != a.z;
 	}
-
 
 // Vector operations
 
-	// Set the vector to zero
+// Set the vector to zero
 
-	void zero() { x = y = z = 0.0f; }
+	void zero() {
+		x = y = z = 0.0f;
+	}
 
 	// Unary minus returns the negative of the vector
 
-	Vector3 operator -() const { return Vector3(-x,-y,-z); }
+	Vector3 operator -() const {
+		return Vector3(-x, -y, -z);
+	}
 
 	// Binary + and - add and subtract vectors
 
@@ -87,42 +112,50 @@ public:
 	// Multiplication and division by scalar
 
 	Vector3 operator *(float a) const {
-		return Vector3(x*a, y*a, z*a);
+		return Vector3(x * a, y * a, z * a);
 	}
 
 	Vector3 operator /(float a) const {
-		float	oneOverA = 1.0f / a; // NOTE: no check for divide by zero here
-		return Vector3(x*oneOverA, y*oneOverA, z*oneOverA);
+		float oneOverA = 1.0f / a; // NOTE: no check for divide by zero here
+		return Vector3(x * oneOverA, y * oneOverA, z * oneOverA);
 	}
 
 	// Combined assignment operators to conform to
 	// C notation convention
 
 	Vector3 &operator +=(const Vector3 &a) {
-		x += a.x; y += a.y; z += a.z;
+		x += a.x;
+		y += a.y;
+		z += a.z;
 		return *this;
 	}
 
 	Vector3 &operator -=(const Vector3 &a) {
-		x -= a.x; y -= a.y; z -= a.z;
+		x -= a.x;
+		y -= a.y;
+		z -= a.z;
 		return *this;
 	}
 
 	Vector3 &operator *=(float a) {
-		x *= a; y *= a; z *= a;
+		x *= a;
+		y *= a;
+		z *= a;
 		return *this;
 	}
 
 	Vector3 &operator /=(float a) {
-		float	oneOverA = 1.0f / a;
-		x *= oneOverA; y *= oneOverA; z *= oneOverA;
+		float oneOverA = 1.0f / a;
+		x *= oneOverA;
+		y *= oneOverA;
+		z *= oneOverA;
 		return *this;
 	}
 
 	// Normalize the vector
 
-	void	normalize() {
-		float magSq = x*x + y*y + z*z;
+	void normalize() {
+		float magSq = x * x + y * y + z * z;
 		if (magSq > 0.0f) { // check for divide-by-zero
 			float oneOverMag = 1.0f / sqrt(magSq);
 			x *= oneOverMag;
@@ -135,7 +168,7 @@ public:
 	// multiplication symbol to do this
 
 	float operator *(const Vector3 &a) const {
-		return x*a.x + y*a.y + z*a.z;
+		return x * a.x + y * a.y + z * a.z;
 	}
 };
 
@@ -148,23 +181,19 @@ public:
 // Compute the magnitude of a vector
 
 inline float vectorMag(const Vector3 &a) {
-	return sqrt(a.x*a.x + a.y*a.y + a.z*a.z);
+	return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 }
 
 // Compute the cross product of two vectors
 
 inline Vector3 crossProduct(const Vector3 &a, const Vector3 &b) {
-	return Vector3(
-		a.y*b.z - a.z*b.y,
-		a.z*b.x - a.x*b.z,
-		a.x*b.y - a.y*b.x
-	);
+	return Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
 // Scalar on the left multiplication, for symmetry
 
 inline Vector3 operator *(float k, const Vector3 &v) {
-	return Vector3(k*v.x, k*v.y, k*v.z);
+	return Vector3(k * v.x, k * v.y, k * v.z);
 }
 
 // Compute the distance between two points
@@ -173,7 +202,7 @@ inline float distance(const Vector3 &a, const Vector3 &b) {
 	float dx = a.x - b.x;
 	float dy = a.y - b.y;
 	float dz = a.z - b.z;
-	return sqrt(dx*dx + dy*dy + dz*dz);
+	return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 // Compute the distance between two points, squared.  Often useful
@@ -183,7 +212,7 @@ inline float distanceSquared(const Vector3 &a, const Vector3 &b) {
 	float dx = a.x - b.x;
 	float dy = a.y - b.y;
 	float dz = a.z - b.z;
-	return dx*dx + dy*dy + dz*dz;
+	return dx * dx + dy * dy + dz * dz;
 }
 
 /////////////////////////////////////////////////////////////////////////////

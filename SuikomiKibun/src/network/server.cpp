@@ -5,11 +5,13 @@ Server::Server(int start_port, int client_num) :
 	//状態初期化
 	com_accept_num_ = 0;
 	state_ = kAcceptWait;
+	changed_player_data_ = true;
 	for (int i = 0; i < kClientNum; i++) {
 		//io_service作成
 		io_service_.push_back(new asio::io_service());
 		//クライアント作成
-		client_.push_back(new ComClient(*io_service_[i], start_port + i));
+		client_.push_back(new ComClientUdp(*io_service_[i], start_port + i, this));
+		client_[i]->StartAccept();
 		//スレッド作成,実行
 		thread_.push_back(new boost::thread());
 		boost::thread thd(&Server::ThRun, this, io_service_[i]);
@@ -66,10 +68,10 @@ void Server::Update() {
 	}
 	case kCom: {	//送受信中
 		for (int i = 0; i < kClientNum; i++) {
-			ServerData server_data;
+			ToClientContainer server_data;
 			for (int j = 0, cnt = 0; j < kClientNum; j++) {
 				if (i != j) {
-					server_data.pos[cnt] = client_[j]->get_receive_data().pos;
+					server_data.player_data[cnt] = client_[j]->get_receive_data().player_data;
 					cnt++;
 				}
 			}
@@ -86,7 +88,7 @@ void Server::Update() {
 void Server::Draw() const {
 	switch (state_) {
 	case kAcceptWait: { //接続待機中
-		output_display0.Regist("sever:接続待機を待機中(現在" + uToStr(com_accept_num_) + "/" + uToStr(kClientNum) + "台接続されました)",
+		output_display0.Regist("sever:接続を待機中(現在" + uToStr(com_accept_num_) + "/" + uToStr(kClientNum) + "台接続されました)",
 				uColor4fv_green);
 		break;
 	}
@@ -102,13 +104,13 @@ void Server::Draw() const {
 	}
 }
 
-void Server::SetSendData(const ServerData &send_data, int n) {
+void Server::SetSendData(const ToClientContainer &send_data, int n) {
 	if (n < 0 || n >= kClientNum)
 		uErrorOut(__FILE__, __func__, __LINE__, "範囲外");
 	client_[n]->set_send_data(send_data);
 }
 
-ClientData Server::GetReceiveData(int n) const {
+ToServerContainer Server::GetReceiveData(int n) const {
 	if (n < 0 || n >= kClientNum)
 		uErrorOut(__FILE__, __func__, __LINE__, "範囲外");
 	return client_[n]->get_receive_data();
