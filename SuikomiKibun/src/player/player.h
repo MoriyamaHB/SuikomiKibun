@@ -40,8 +40,9 @@ public:
 	~Player();
 	void Update(double angle, StageMap* map);
 	void Draw();
-	btVector3 get_center_pos();
-	double get_camera_distance();
+	btVector3 get_center_pos()const;
+	double get_camera_distance()const;
+	btScalar get_radius()const;
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);

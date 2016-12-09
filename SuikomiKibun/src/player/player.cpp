@@ -366,14 +366,18 @@ void Player::PlayerMove(btVector3 pos) {
 	t_pos[1] = i_pos[1] = 0;
 	t_pos[2] = pos[2] - i_pos[2];
 	sphere_body_->translate(pos);
-
 }
 
-btVector3 Player::get_center_pos() {
+
+btVector3 Player::get_center_pos() const {
 	return sphere_body_->getCenterOfMassPosition();
 }
 
-double Player::get_camera_distance() {
+btScalar Player::get_radius() const{
+	return player_radius_;
+}
+
+double Player::get_camera_distance()const {
 	return player_radius_ * 3;
 }
 

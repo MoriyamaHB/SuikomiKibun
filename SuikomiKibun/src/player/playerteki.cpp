@@ -99,8 +99,9 @@ void PlayerTeki::Draw() {
 
 
 //プレイヤー敵データ更新
-void PlayerTeki::Update(btVector3 pos) {
+void PlayerTeki::Update(btVector3 pos,btScalar size) {
 	PlayerTekiMove(pos);
+	PlayerTekiResize(size);
 }
 
 //プレイヤー敵サイズ変更
