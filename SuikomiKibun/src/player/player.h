@@ -42,7 +42,7 @@ public:
 	void Draw();
 	btVector3 get_center_pos()const;
 	double get_camera_distance()const;
-	btScalar get_radius()const;
+	int get_level()const;
 	int get_color()const;
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);

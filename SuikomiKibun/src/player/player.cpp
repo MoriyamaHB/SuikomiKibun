@@ -388,8 +388,8 @@ btVector3 Player::get_center_pos() const {
 	return sphere_body_->getCenterOfMassPosition();
 }
 
-btScalar Player::get_radius() const{
-	return player_radius_;
+btScalar Player::get_level() const{
+	return level_;
 }
 
 double Player::get_camera_distance()const {

@@ -87,8 +87,7 @@ void PlayerTeki::RenderScene() {
 		aabbMin -= btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
 		aabbMax += btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
 
-		m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),
-				wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
+		m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
 
 }
 
@@ -99,17 +98,18 @@ void PlayerTeki::Draw() {
 
 
 //プレイヤー敵データ更新
-void PlayerTeki::Update(btVector3 pos,btScalar size) {
+void PlayerTeki::Update(btVector3 pos,int level_,int color_change) {
 	PlayerTekiMove(pos);
-	PlayerTekiResize(size);
+	PlayerTekiResize(level);
+	PlayerTeki::PlayerColorChange(color_change);
 }
 
 //プレイヤー敵サイズ変更
-void PlayerTeki::PlayerTekiResize(int size){
-	btCollisionShape *new_sphere_shape = new btSphereShape(size);
+void PlayerTeki::PlayerTekiResize(int level){
+	btCollisionShape *new_sphere_shape = new btSphereShape(level);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
-	player_radius_ = size;
+	player_radius_ = level;
 }
 
 void PlayerTeki::PlayerTekiMove(btVector3 pos) {
