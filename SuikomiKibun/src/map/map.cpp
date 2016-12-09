@@ -228,9 +228,10 @@ StageMap::StageMap(btDynamicsWorld* world)
 	btVector3 position_d(-20, 10*sqrt(24)+2.0, -20);
 	CreateTower(position_d);
 
-//	object_[num_] = ++object_num_;
-	object_[num_] = 500;
-	color_[num_++] = btVector3(1.0, 0, 0);
+	//プレイヤー登録
+	object_[num_] = ++object_num_;
+	object_[num_++] = ++object_num_;
+	object_[num_++] = ++object_num_;
 
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer ();
@@ -270,43 +271,43 @@ void StageMap::Draw(){
 //	RenderScene(0);
 //
 	glDisable(GL_LIGHTING);
-	glDepthMask(GL_FALSE);
-	glDepthFunc(GL_LEQUAL);
+//	glDepthMask(GL_FALSE);
+//	glDepthFunc(GL_LEQUAL);
 	//glEnable(GL_STENCIL_TEST);
-	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
-	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
-	glFrontFace(GL_CCW);
-	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
-	RenderScene(1);
-	glFrontFace(GL_CW);
-	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
-	RenderScene(1);
-	glFrontFace(GL_CCW);
+//	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
+//	glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
+//	glFrontFace(GL_CCW);
+//	glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
+//	RenderScene(1);
+//	glFrontFace(GL_CW);
+//	glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
+//	RenderScene(1);
+//	glFrontFace(GL_CCW);
 
 
-	glPolygonMode(GL_FRONT,GL_FILL);
-	glPolygonMode(GL_BACK,GL_FILL);
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_LIGHTING);
-	glDepthMask(GL_TRUE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
-	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-
-	glDepthFunc(GL_LEQUAL);
-	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
-	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
-	glDisable(GL_LIGHTING);
+//	glPolygonMode(GL_FRONT,GL_FILL);
+//	glPolygonMode(GL_BACK,GL_FILL);
+//	glShadeModel(GL_SMOOTH);
+//	glEnable(GL_DEPTH_TEST);
+//	glDepthFunc(GL_LESS);
+//	glEnable(GL_LIGHTING);
+//	glDepthMask(GL_TRUE);
+//	glCullFace(GL_BACK);
+//	glFrontFace(GL_CCW);
+//	glEnable(GL_CULL_FACE);
+//	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+//
+//	glDepthFunc(GL_LEQUAL);
+//	glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
+//	glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
+//	glDisable(GL_LIGHTING);
 
 	RenderScene(2);
 
-	glEnable(GL_LIGHTING);
-	glDepthFunc(GL_LESS);
-	glDisable(GL_STENCIL_TEST);
-	glDisable(GL_CULL_FACE);
+//	glEnable(GL_LIGHTING);
+//	glDepthFunc(GL_LESS);
+//	glDisable(GL_STENCIL_TEST);
+//	glDisable(GL_CULL_FACE);
 
 	glFlush();
 
@@ -318,7 +319,7 @@ void	StageMap::RenderScene(int pass)
 	btMatrix3x3	rot;rot.setIdentity();
 	const int	numObjects=world_->getNumCollisionObjects();
 	btVector3 wireColor(1,0,0);
-	for(int i=0;i<numObjects;i++)
+	for(int i=0;i<numObjects - 3;i++)
 	{
 		btCollisionObject*	colObj=world_->getCollisionObjectArray()[i];
 		btRigidBody*		body=btRigidBody::upcast(colObj);
