@@ -2674,7 +2674,7 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 //オブジェクトの破壊
 int StageMap::DestroyObject(int num, int level) {
 	int i;
-	int l = 1;
+	int l = 0;
 	static int pos = 400;
 	btCollisionObject* obj;
 	btRigidBody* body;
