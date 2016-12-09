@@ -17,7 +17,7 @@ Player::Player(btDynamicsWorld* world) :
 	//質量
 	btScalar sphere_mass = 0.03;
 	//反発係数
-	btScalar sphere_rest = 0.2;
+	btScalar sphere_rest = 1.0;
 	//慣性モーメント
 	btVector3 sphere_inertia(0, 0, 0);
 	//形状を設定
@@ -191,7 +191,7 @@ void Player::Update(double angle, StageMap* map) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
-					map->DestroyObject(i, level_);
+				level_+= map->DestroyObject(i, level_);
 				}
 			}
 
