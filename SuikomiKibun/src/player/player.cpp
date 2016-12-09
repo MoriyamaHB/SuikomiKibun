@@ -52,6 +52,15 @@ Player::Player(btDynamicsWorld* world) :
 
 	player_num_ = world_->getNumCollisionObjects() - 1;
 
+	btCollisionObject* colObj1 = world_->getCollisionObjectArray()[player_num_
+			- 1];
+	sphere_tekibody1_ = btRigidBody::upcast(colObj1);
+	btCollisionObject* colObj2 = world_->getCollisionObjectArray()[player_num_
+			- 2];
+	sphere_tekibody2_ = btRigidBody::upcast(colObj2);
+
+	printf("%d", player_num_ - 1);
+
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
@@ -71,37 +80,35 @@ void Player::RenderScene() {
 	btMatrix3x3 rot;
 	rot.setIdentity();
 	btVector3 wireColor(1, 0, 0);
-		btCollisionObject* colObj = world_->getCollisionObjectArray()[player_num_];
-		btRigidBody* body = btRigidBody::upcast(colObj);
-		if (body && body->getMotionState()) {
-			btDefaultMotionState* myMotionState =
-					(btDefaultMotionState*) body->getMotionState();
-			myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(m);
-			rot = myMotionState->m_graphicsWorldTrans.getBasis();
-		} else {
-			colObj->getWorldTransform().getOpenGLMatrix(m);
-			rot = colObj->getWorldTransform().getBasis();
-		}
+	btCollisionObject* colObj = world_->getCollisionObjectArray()[player_num_];
+	btRigidBody* body = btRigidBody::upcast(colObj);
+	if (body && body->getMotionState()) {
+		btDefaultMotionState* myMotionState =
+				(btDefaultMotionState*) body->getMotionState();
+		myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(m);
+		rot = myMotionState->m_graphicsWorldTrans.getBasis();
+	} else {
+		colObj->getWorldTransform().getOpenGLMatrix(m);
+		rot = colObj->getWorldTransform().getBasis();
+	}
 
-		if (color_judge_ == 1)
-			wireColor = color_[0];
-		else if (color_judge_ == 2)
-			wireColor = color_[1];
-		else
-			wireColor = color_[2];
+	if (color_judge_ == 1)
+		wireColor = color_[0];
+	else if (color_judge_ == 2)
+		wireColor = color_[1];
+	else
+		wireColor = color_[2];
 
-		btVector3 aabbMin, aabbMax;
-		world_->getBroadphase()->getBroadphaseAabb(aabbMin, aabbMax);
+	btVector3 aabbMin, aabbMax;
+	world_->getBroadphase()->getBroadphaseAabb(aabbMin, aabbMax);
 
-		aabbMin -= btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
-		aabbMax += btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
+	aabbMin -= btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
+	aabbMax += btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
 
-		m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),
-				wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
+	m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),
+			wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
 
 }
-
-
 
 //更新
 void Player::Update(double angle, StageMap* map) {
@@ -160,28 +167,36 @@ void Player::Update(double angle, StageMap* map) {
 	int i;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
+
+	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
+	} else if (sphere_body_ == delete_body2_
+			&& sphere_tekibody1_ == delete_body_) {
+	}
+
+	else if (sphere_body_ == delete_body_
+			&& sphere_tekibody2_ == delete_body2_) {
+	} else if (sphere_body_ == delete_body2_
+			&& sphere_tekibody2_ == delete_body_) {
+	}
+
+	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
 		if (sphere_body_ == delete_body_)
 			delete_body_ = delete_body2_;
-
-
-
 		if (delete_body_ != NULL) {
 			for (i = world_->getNumCollisionObjects() - 1; i > 59; i--) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
 					map->DestroyObject(i);
-					level_+= 1;
+					level_ += 1;
 				}
-				//		DeleteBody(&delete_body_);	// 削除テスト
 			}
 
 		}
 	}
 
-	if(player_radius_ <= level_)
-		PlayerSize(player_radius_+= 0.05);
+	if (player_radius_ <= level_)
+		PlayerSize(player_radius_ += 0.05);
 
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
