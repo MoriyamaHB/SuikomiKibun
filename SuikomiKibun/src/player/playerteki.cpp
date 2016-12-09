@@ -98,7 +98,7 @@ void PlayerTeki::Draw() {
 
 
 //プレイヤー敵データ更新
-void PlayerTeki::Update(btVector3 pos,int level_,int color_change) {
+void PlayerTeki::Update(btVector3 pos,int level,int color_change) {
 	PlayerTekiMove(pos);
 	PlayerTekiResize(level);
 	PlayerTeki::PlayerColorChange(color_change);
