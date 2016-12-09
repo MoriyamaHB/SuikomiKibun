@@ -998,6 +998,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	 world_->addRigidBody(cube_body4_);
 	 world_->addRigidBody(cube_body5_);
 	 */
+
+	printf("%d", world_->getNumCollisionObjects());
 ////クモ
 //	btVector3 posision_j(-50, 10, -30);
 //	CreateSpider(posision_j, 2);
