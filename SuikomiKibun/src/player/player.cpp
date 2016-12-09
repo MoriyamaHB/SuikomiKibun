@@ -186,7 +186,7 @@ void Player::Update(double angle, StageMap* map) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
-					map->DestroyObject(i);
+					map->DestroyObject(i, level_);
 					level_ += 1;
 				}
 			}

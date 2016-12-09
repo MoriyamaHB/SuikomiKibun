@@ -22,35 +22,33 @@
 #define PI_ 3.1415926
 
 class StageMap{
-protected:
-	GL_ShapeDrawer*	m_shapeDrawer;
-	bool	 m_enableshadows;
-	btVector3	m_sundirection;
-	btScalar	m_defaultContactProcessingThreshold;
-	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
-
 private:
+	GL_ShapeDrawer*	m_shapeDrawer;
 	btDynamicsWorld* world_;
 
 	int num_;
-	btVector3 color_[200];
-	int object_[200];
+	btVector3 color_[2000];
+	int object_[2000];
+	int level_[2000];
 	int object_num_;
 
-	void RenderScene(int pass);
+	void RenderScene(void);
 	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
-	void CreateSpider(const btVector3& position);
-	void CreateSnowman(const btVector3& position, double size);
-	void CreatePyramid(const btVector3& position);
-	void CreateTriangle(const btVector3& position);
-	void CreateTower(const btVector3& position);
-
+	void CreateSpider(const btVector3& position, int level);
+	void CreateSnowman(const btVector3& position, int level);
+	void CreatePyramid(const btVector3& position, int level);
+	void CreateTriangle(const btVector3& position, int level);
+	void CreateTower(const btVector3& position, int level);
+	void CreatePonde(const btVector3& position, int level);
+	void CreateMush(const btVector3& position, int level);
+	void CreateApple(const btVector3& position, int level);
+	void CreateDango(const btVector3& position, int level);
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();
 	void Update();
 	void Draw();
-	void DestroyObject(int num);
+	int DestroyObject(int num, int level);
 };
 
 
