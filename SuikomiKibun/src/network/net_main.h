@@ -42,10 +42,12 @@ public:
 	int get_enemy_num() const;
 	btVector3 GetEnemyPos(int num) const;
 	btScalar GetEnemyRadius(int num) const;
+	int GetColor(int num) const;
 
 	//setter
 	void SetMePos(btVector3 pos);
 	void SetMeRadius(btScalar radius);
+	void SetMeColor(int color);
 };
 
 #endif /* SUIKOMIKIBUN_NET_NETMAIN_H_ */
