@@ -29,11 +29,12 @@ private:
 public:
 	PlayerTeki(btDynamicsWorld* world,btVector3 pos);
 	~PlayerTeki();
-	void Update(btVector3 pos,btScalar size);
+	void Update(btVector3 pos,btScalar size,int color_change);
 	void Draw();
 	void RenderScene();
 	void PlayerTekiMove(btVector3 pos);
 	void PlayerTekiResize(int size);
+	void PlayerColorChange(int color_change);
 };
 
 

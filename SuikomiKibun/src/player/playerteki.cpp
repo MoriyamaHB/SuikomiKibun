@@ -119,5 +119,9 @@ void PlayerTeki::PlayerTekiMove(btVector3 pos) {
 	sphere_body_->setMotionState(sphere_motion_state);
 }
 
+void PlayerTeki::PlayerColorChange(int color_change){
+	color_judge_ = color_change;
+}
+
 
 

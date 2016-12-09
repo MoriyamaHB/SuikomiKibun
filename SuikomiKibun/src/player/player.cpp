@@ -396,6 +396,10 @@ double Player::get_camera_distance()const {
 	return player_radius_ * 3;
 }
 
+int Player::get_color()const{
+	return color_judge_;
+}
+
 void Player::DeleteBody(btRigidBody** ppBody) {
 	btRigidBody* pBody = *ppBody;
 	world_->removeRigidBody(pBody);
