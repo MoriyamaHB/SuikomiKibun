@@ -154,6 +154,10 @@ void Camera3D3P::Update(float gx, float gy, float gz) {
 	SetGluLookAt();
 }
 
+void Camera3D3P::Update(btVector3 gpos) {
+	Update(gpos[0], gpos[1], gpos[2]);
+}
+
 //-------------------------------------------------------------------------------------------
 //カメラ座標をマウスの移動から計算する(1人称視点)
 //3人称視点の動きと同期できていないため使用しないほうが良い

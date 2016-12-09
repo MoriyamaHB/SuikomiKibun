@@ -15,8 +15,7 @@
 #include "../map/map.h"
 #include "../player/player.h"
 #include "../player/playerteki.h"
-#include "../network/server.h"
-#include "../network/client.h"
+#include "../network/net_main.h"
 
 class GameScene: public BaseScene {
 private:
@@ -26,6 +25,7 @@ private:
 	Player *player_;
 	PlayerTeki *playerteki1_;
 	PlayerTeki *playerteki2_;
+	NetMain *net_main_;
 
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
