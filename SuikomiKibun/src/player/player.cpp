@@ -108,7 +108,7 @@ void Player::Update(double angle, StageMap* map) {
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
-	double t = 0.3;
+	double t = 0.2;
 	static int upcount = 0;
 	static int pflug = 1;
 
@@ -160,11 +160,27 @@ void Player::Update(double angle, StageMap* map) {
 	btRigidBody* body;
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
+		if(color_judge_< 2)
+		color_judge_++;
+		else
+		color_judge_ = 0;
 	} else if (sphere_body_ == delete_body2_ && sphere_tekibody1_ == delete_body_) {
+		if(color_judge_< 2)
+				color_judge_++;
+				else
+				color_judge_ = 0;
 	}
 
 	else if (sphere_body_ == delete_body_ && sphere_tekibody2_ == delete_body2_) {
+		if(color_judge_< 2)
+				color_judge_++;
+				else
+				color_judge_ = 0;
 	} else if (sphere_body_ == delete_body2_ && sphere_tekibody2_ == delete_body_) {
+		if(color_judge_< 2)
+				color_judge_++;
+				else
+				color_judge_ = 0;
 	}
 
 	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
