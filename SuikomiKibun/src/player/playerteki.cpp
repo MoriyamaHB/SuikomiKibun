@@ -39,7 +39,7 @@ PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 	color_[0] = btVector3(1, 0, 0);
 	color_[1] = btVector3(0, 1, 0);
 	color_[2] = btVector3(0, 0, 1);
-	color_judge_ = 0;
+	color_judge_ = 2;
 
 	playerteki_num_ = world_->getNumCollisionObjects() - 1;
 
