@@ -1047,9 +1047,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	btVector3 position_f(-50, 20, -20);
 //	CreatePonde(position_f, 5);
 //プレイヤー
-	object_[num_] = ++object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1.0, 0, 0);
 
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
@@ -1134,7 +1131,7 @@ void StageMap::RenderScene() {
 	rot.setIdentity();
 	const int numObjects = world_->getNumCollisionObjects();
 	btVector3 wireColor(1, 0, 0);
-	for (int i = 0; i < numObjects; i++) {
+	for (int i = 0; i < numObjects-3; i++) {
 		btCollisionObject* colObj = world_->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(colObj);
 		if (body && body->getMotionState()) {
@@ -2737,4 +2734,3 @@ int StageMap::DestroyObject(int num, int level) {
 	}
 	return level_[num];
 }
-
