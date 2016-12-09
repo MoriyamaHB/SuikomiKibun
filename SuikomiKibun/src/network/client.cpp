@@ -215,7 +215,7 @@ void ClientTcp::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	receive_buff_.consume(receive_buff_.size());
 	//データ処理
 	receive_data_ = *recive_data;
-	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].radius);
+	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].level);
 	//再度受信
 	StartReceive();
 }

@@ -41,12 +41,12 @@ public:
 	//getter
 	int get_enemy_num() const;
 	btVector3 GetEnemyPos(int num) const;
-	btScalar GetEnemyRadius(int num) const;
+	int GetEnemyLevel(int num) const;
 	int GetColor(int num) const;
 
 	//setter
 	void SetMePos(btVector3 pos);
-	void SetMeRadius(btScalar radius);
+	void SetMeLevel(int level);
 	void SetMeColor(int color);
 };
 
