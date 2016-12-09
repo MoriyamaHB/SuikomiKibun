@@ -61,7 +61,7 @@ void GameScene::Update() {
 	//ネットワーク
 	net_main_->Update();
 	net_main_->SetMePos(player_->get_center_pos());
-	net_main_->SetMeRadius(player_->get_radius());
+	net_main_->SetMeLevel(player_->get_radius());
 
 	//マップ更新
 	map_->Update();
@@ -70,8 +70,8 @@ void GameScene::Update() {
 	player_->Update(camera_.get_angle_w() + M_PI, map_);
 
 	//敵プレイヤー更新
-	playerteki1_->Update(net_main_->GetEnemyPos(0),net_main_->GetEnemyRadius(0));
-	playerteki2_->Update(net_main_->GetEnemyPos(1),net_main_->GetEnemyRadius(1));
+	playerteki1_->Update(net_main_->GetEnemyPos(0),net_main_->GetEnemyLevel(0));
+	playerteki2_->Update(net_main_->GetEnemyPos(1),net_main_->GetEnemyLevel(1));
 
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置

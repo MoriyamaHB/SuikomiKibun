@@ -11,7 +11,7 @@ extern OutputDisplay output_display0;
 //プレイヤーデータ
 typedef struct {
 	Vector3 pos;
-	double radius;
+	int level;
 	int color;
 } PlayerData;
 
