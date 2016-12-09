@@ -100,16 +100,18 @@ void PlayerTeki::Draw() {
 //プレイヤー敵データ更新
 void PlayerTeki::Update(btVector3 pos,int level,int color_change) {
 	PlayerTekiMove(pos);
-	PlayerTekiResize(level);
+	if(player_radius_ < 1.0 + (double)level / 3.0)
+		PlayerTekiResize(player_radius_+= 0.05);
+
 	PlayerColorChange(color_change);
 }
 
 //プレイヤー敵サイズ変更
-void PlayerTeki::PlayerTekiResize(int level){
-	btCollisionShape *new_sphere_shape = new btSphereShape(level);
+void PlayerTeki::PlayerTekiResize(int size){
+	btCollisionShape *new_sphere_shape = new btSphereShape(size);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
-	player_radius_ = level;
+	player_radius_ = size;
 }
 
 void PlayerTeki::PlayerTekiMove(btVector3 pos) {

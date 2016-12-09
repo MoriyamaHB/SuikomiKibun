@@ -198,7 +198,7 @@ void Player::Update(double angle, StageMap* map) {
 		}
 	}
 
-	if (player_radius_ <= level_)
+	if (player_radius_ <= (double)level_ / 3.0)
 		PlayerSize(player_radius_ += 0.05);
 
 	delete_body_ = NULL;
