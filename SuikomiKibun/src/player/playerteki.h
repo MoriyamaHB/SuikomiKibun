@@ -33,6 +33,7 @@ public:
 	void Draw();
 	void RenderScene();
 	void PlayerTekiMove(btVector3 pos);
+	void PlayerTekiResize(int size);
 };
 
 

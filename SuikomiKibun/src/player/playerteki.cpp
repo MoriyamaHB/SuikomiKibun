@@ -103,6 +103,14 @@ void PlayerTeki::Update(btVector3 pos) {
 	PlayerTekiMove(pos);
 }
 
+//プレイヤー敵サイズ変更
+void PlayerTeki::PlayerTekiResize(int size){
+	btCollisionShape *new_sphere_shape = new btSphereShape(size);
+	delete sphere_body_->getCollisionShape();
+	sphere_body_->setCollisionShape(new_sphere_shape);
+	player_radius_ = size;
+}
+
 void PlayerTeki::PlayerTekiMove(btVector3 pos) {
 	btQuaternion qrot(0, 0, 0, 1);
 	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
