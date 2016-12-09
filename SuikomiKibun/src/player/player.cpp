@@ -64,9 +64,10 @@ Player::Player(btDynamicsWorld* world) :
 //デストラクタ
 Player::~Player() {
 	//オブジェクト破壊
-//	delete sphere_body_->getMotionState();
-//	world_->removeRigidBody(sphere_body_);
-//	delete sphere_body_;
+	delete sphere_body_->getMotionState();
+	world_->removeRigidBody(sphere_body_);
+	delete sphere_body_;
+
 }
 
 void Player::RenderScene() {

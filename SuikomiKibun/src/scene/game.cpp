@@ -36,12 +36,14 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 
 //デストラクタ
 GameScene::~GameScene() {
-	//マップ破壊
-	delete map_;
 	//ネットワーク
 	delete net_main_;
 	//プレイヤー破壊
 	delete player_;
+	delete playerteki1_;
+	delete playerteki2_;
+	//マップ破壊
+	delete map_;
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
 	delete dynamics_world_;
