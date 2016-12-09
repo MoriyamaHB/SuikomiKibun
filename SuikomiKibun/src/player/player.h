@@ -34,14 +34,13 @@ private:
 	btCollisionObject* colObj2;
 	btRigidBody* sphere_tekibody2_;
 
-
 	void RenderScene();
 public:
 	Player(btDynamicsWorld* world);
 	~Player();
 	void Update(double angle, StageMap* map);
 	void Draw();
-	Vector3 get_center_pos();
+	btVector3 get_center_pos();
 	double get_camera_distance();
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);

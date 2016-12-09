@@ -30,6 +30,7 @@ public:
 	void Update(); 					//マウスによる視点移動
 	void Update(int dx, int dy); 	//パラメータによるカメラ座標移動
 	void Update(float gx, float gy, float gz); 	//パラメータによる視点座標の移動
+	void Update(btVector3 gpos); 	//パラメータによる視点座標の移動(btVecotr)
 
 protected:
 	float x_;
