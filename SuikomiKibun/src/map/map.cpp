@@ -2691,7 +2691,7 @@ int StageMap::DestroyObject(int num, int level) {
 		l = 5;
 	}
 
-	if (level > l) {
+	if (level > l && level_[num] != 0) {
 		obj = world_->getCollisionObjectArray()[num];
 		body = btRigidBody::upcast(obj);
 		if (body && body->getMotionState()) {
