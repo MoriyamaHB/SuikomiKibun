@@ -59,7 +59,6 @@ Player::Player(btDynamicsWorld* world) :
 			- 2];
 	sphere_tekibody2_ = btRigidBody::upcast(colObj2);
 
-	printf("%d", player_num_ - 1);
 
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
