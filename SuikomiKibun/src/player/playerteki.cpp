@@ -51,6 +51,9 @@ PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 
 
 PlayerTeki::~PlayerTeki() {
+	delete sphere_body_->getMotionState();
+	world_->removeRigidBody(sphere_body_);
+	delete sphere_body_;
 
 }
 

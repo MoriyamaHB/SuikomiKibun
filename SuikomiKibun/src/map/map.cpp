@@ -1058,7 +1058,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //デストラクタ
 StageMap::~StageMap() {
 	//オブジェクトの破棄
-	for (int i = world_->getNumCollisionObjects()-1; i > 0; i--) {
+	for (int i = world_->getNumCollisionObjects()-1; i >= 0; i--) {
 		btCollisionObject* obj = world_->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(obj);
 		if (body && body->getMotionState()) {

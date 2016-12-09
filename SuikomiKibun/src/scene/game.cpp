@@ -26,8 +26,8 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	map_ = new StageMap(dynamics_world_);
 
 	//敵プレイヤー作成
-		playerteki1_ = new PlayerTeki(dynamics_world_,btVector3(1,1,0));
-		playerteki2_ = new PlayerTeki(dynamics_world_,btVector3(10,10,2));
+	playerteki1_ = new PlayerTeki(dynamics_world_, btVector3(1, 1, 0));
+	playerteki2_ = new PlayerTeki(dynamics_world_, btVector3(10, 10, 2));
 
 	//プレイヤー作成
 	player_ = new Player(dynamics_world_);
@@ -37,6 +37,8 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 GameScene::~GameScene() {
 	//プレイヤー破壊
 	delete player_;
+	delete playerteki1_;
+	delete playerteki2_;
 	//マップ破壊
 	delete map_;
 	//ワールド破壊
