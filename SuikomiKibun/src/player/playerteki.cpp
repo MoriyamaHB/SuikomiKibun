@@ -100,7 +100,7 @@ void PlayerTeki::Draw() {
 //プレイヤー敵データ更新
 void PlayerTeki::Update(btVector3 pos,int level,int color_change) {
 	PlayerTekiMove(pos);
-	if(player_radius_ <= 1.0 + (double)level / 5.0)
+	if(player_radius_ <= (double)level / 5.0)
 		PlayerTekiResize(player_radius_+= 0.05);
 
 	PlayerColorChange(color_change);
