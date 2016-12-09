@@ -1055,7 +1055,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
-	printf("%d", world_->getNumCollisionObjects());
 
 }
 
