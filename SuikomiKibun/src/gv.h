@@ -9,11 +9,20 @@
 extern OutputDisplay output_display0;
 
 //プレイヤーデータ
-typedef struct {
+struct PlayerData {
 	Vector3 pos;
 	int level;
 	int color;
-} PlayerData;
+};
+
+enum GameState {
+	kConnect, kPlay
+};
+
+//ゲームの状態
+struct GameData {
+	GameState state;
+};
 
 //送信するデータの種類を示す(toサーバー)
 enum CommandToServer {
@@ -26,18 +35,37 @@ enum CommandToClient {
 };
 
 //クライアントからサーバーに送信するデータ
-typedef struct {
+struct ToServerContainer {
 	CommandToServer command; //データの種類
 	PlayerData player_data; //プレイヤーデータ
-} ToServerContainer;
+};
 
 //サーバーからクライアントに送信するデータ
-typedef struct {
-private:
-
+struct ToClientContainer {
 public:
 	CommandToClient command; //データの種類
 	PlayerData player_data[2];
-} ToClientContainer;
+	GameData game_data;
+	//コンストラクタ
+	ToClientContainer() {
+		command = kPlayerDataToClient;
+		game_data.state = kConnect;
+	}
+	//コピーコンストラクタ
+	ToClientContainer(const ToClientContainer& o) {
+		command = o.command;
+		player_data[0] = o.player_data[0];
+		player_data[1] = o.player_data[1];
+		game_data = o.game_data;
+	}
+	//代入演算子オーバーロード
+	ToClientContainer &operator=(const ToClientContainer o) {
+		command = o.command;
+		player_data[0] = o.player_data[0];
+		player_data[1] = o.player_data[1];
+		game_data = o.game_data;
+		return (*this);
+	}
+};
 
 #endif /* SUIKOMIKIBUN_GV_H_ */

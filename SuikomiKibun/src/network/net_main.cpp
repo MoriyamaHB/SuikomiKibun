@@ -74,6 +74,10 @@ int NetMain::GetColor(int num) const {
 	return client_udp_->get_receive_data().player_data[num].color;
 }
 
+GameState NetMain::GetGameState() const {
+	return client_udp_->get_receive_data().game_data.state;
+}
+
 //setter
 void NetMain::SetMePos(btVector3 pos) {
 	client_data_.player_data.pos = pos;
