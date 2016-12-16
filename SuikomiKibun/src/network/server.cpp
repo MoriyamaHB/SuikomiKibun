@@ -51,7 +51,7 @@ void Server::Update() {
 			if (client_[i]->get_has_accepted())
 				com_accept_num_++;
 		//すべて接続されたら次に進む
-		if (com_accept_num_ == kClientNum)
+		if (com_accept_num_ == 2)
 			state_ = kRun;
 		break;
 	case kRun: {	//送受信開始
