@@ -168,10 +168,11 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	btRigidBody* body;
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
+		Player::Pwinlosejudge(color_judge_,color_judge1);
 
 	} else if (sphere_body_ == delete_body2_
 			&& sphere_tekibody1_ == delete_body_) {
-		ResMove1(color_judge_,color_judge1);
+		Player::Pwinlosejudge(color_judge_,color_judge1);
 	}
 	else if (sphere_body_ == delete_body_
 			&& sphere_tekibody2_ == delete_body2_) {
@@ -451,8 +452,19 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	return true;
 }
 
-//void ResMove1(int color1, int color2){
-//	if(color1 == 1 && color2 == 2)
-//	{}
-//}
+void Player::Pwinlosejudge(int color1, int color2){
+	if(color1 == 1 && color2 == 2)
+		ResMove(sphere_body_);
+	else if(color1 == 2 && color2 == 3)
+	ResMove(sphere_body_);
+	else if(color1 == 3 && color2 == 1)
+		ResMove(sphere_body_);
+	else
+		ResMove(sphere_tekibody1_);
+}
+
+void Player::ResMove(btRigidBody* sphere_res_body_){
+	btVector3 pos = btVector3(100,0,0);
+	sphere_res_body_->translate(pos);
+}
 
