@@ -17,6 +17,7 @@
 #include "server.h"
 #include "../util/uGL.h"
 #include "client.h"
+#include "../gv.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
@@ -43,6 +44,7 @@ public:
 	btVector3 GetEnemyPos(int num) const;
 	int GetEnemyLevel(int num) const;
 	int GetColor(int num) const;
+	GameState GetGameState() const;
 
 	//setter
 	void SetMePos(btVector3 pos);

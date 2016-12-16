@@ -50,6 +50,9 @@ void NetMain::Draw() const {
 	if (is_server_)
 		server_->Draw();
 	client_udp_->Draw();
+	//制限時間描画
+	output_display0.Regist("残り時間:" + uToStr(client_udp_->get_receive_data().game_data.limited_time), uColor4fv_orange,
+			1);
 }
 
 //getter
@@ -72,6 +75,10 @@ int NetMain::GetEnemyLevel(int num) const {
 
 int NetMain::GetColor(int num) const {
 	return client_udp_->get_receive_data().player_data[num].color;
+}
+
+GameState NetMain::GetGameState() const {
+	return client_udp_->get_receive_data().game_data.state;
 }
 
 //setter
