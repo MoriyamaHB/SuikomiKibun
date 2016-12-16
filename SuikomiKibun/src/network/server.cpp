@@ -72,7 +72,7 @@ void Server::Update() {
 			for (int j = 0, cnt = 0; j < kClientNum; j++) {
 				if (i != j) {
 					server_data.player_data[cnt] = client_[j]->get_receive_data().player_data;
-					//server_data.game_data.state = kPlay;
+					server_data.game_data.state = kPlay;
 					cnt++;
 				}
 			}
