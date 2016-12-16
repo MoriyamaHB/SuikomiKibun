@@ -11,6 +11,7 @@
 
 #include "../util/uGL.h"
 #include "../gv.h"
+#include "../time/time.h"
 
 class Server;
 #include "com_client.h"
@@ -33,6 +34,7 @@ private:
 	//状態
 	State state_;
 	int com_accept_num_; //接続数
+	LimitedTime time; //制限時間
 	//定数
 	const int kStartPort;	//待機開始ポート
 	const int kClientNum;	//クライアント接続数

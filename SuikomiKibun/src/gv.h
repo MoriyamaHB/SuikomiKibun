@@ -3,6 +3,7 @@
 #ifndef SUIKOMIKIBUN_GV_H_
 #define SUIKOMIKIBUN_GV_H_
 
+#include <time.h>
 #include "util/output_display.h"
 #include "util/vector3.h"
 
@@ -22,6 +23,7 @@ enum GameState {
 //ゲームの状態
 struct GameData {
 	GameState state;
+	time_t limited_time;
 };
 
 //送信するデータの種類を示す(toサーバー)
