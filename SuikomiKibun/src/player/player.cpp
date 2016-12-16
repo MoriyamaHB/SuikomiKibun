@@ -24,13 +24,15 @@ Player::Player(btDynamicsWorld* world) :
 	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
 	//球体の初期位置、姿勢
 	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, sphere_pos));
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
+			btTransform(qrot, sphere_pos));
 
 	//慣性モーメントの計算
 	sphere_shape->calculateLocalInertia(sphere_mass, sphere_inertia);
 
 	//剛体オブジェクト生成
-	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
+	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,
+			sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
 
@@ -43,16 +45,18 @@ Player::Player(btDynamicsWorld* world) :
 	//撃力を加える回数最大数をセット
 	pcount = 5;
 
-	color_[0] = btVector3(1, 0, 0);
-	color_[1] = btVector3(0, 1, 0);
-	color_[2] = btVector3(0, 0, 1);
+	color_[0] = btVector3(1, 0, 0);//赤
+	color_[1] = btVector3(0, 1, 0);//緑
+	color_[2] = btVector3(0, 0, 1);//青
 	color_judge_ = 2;
 
 	player_num_ = world_->getNumCollisionObjects() - 1;
 
-	btCollisionObject* colObj1 = world_->getCollisionObjectArray()[player_num_ - 1];
+	btCollisionObject* colObj1 = world_->getCollisionObjectArray()[player_num_
+			- 1];
 	sphere_tekibody1_ = btRigidBody::upcast(colObj1);
-	btCollisionObject* colObj2 = world_->getCollisionObjectArray()[player_num_ - 2];
+	btCollisionObject* colObj2 = world_->getCollisionObjectArray()[player_num_
+			- 2];
 	sphere_tekibody2_ = btRigidBody::upcast(colObj2);
 
 	//描画
@@ -78,7 +82,8 @@ void Player::RenderScene() {
 	btCollisionObject* colObj = world_->getCollisionObjectArray()[player_num_];
 	btRigidBody* body = btRigidBody::upcast(colObj);
 	if (body && body->getMotionState()) {
-		btDefaultMotionState* myMotionState = (btDefaultMotionState*) body->getMotionState();
+		btDefaultMotionState* myMotionState =
+				(btDefaultMotionState*) body->getMotionState();
 		myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(m);
 		rot = myMotionState->m_graphicsWorldTrans.getBasis();
 	} else {
@@ -99,12 +104,13 @@ void Player::RenderScene() {
 	aabbMin -= btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
 	aabbMax += btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
 
-	m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(), wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
+	m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),
+			wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
 
 }
 
 //更新
-void Player::Update(double angle, StageMap* map) {
+void Player::Update(double angle, StageMap* map, int color_judge1, int color_judge2){
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
@@ -128,12 +134,14 @@ void Player::Update(double angle, StageMap* map) {
 	}
 	if (input::get_keyboard_frame('a') == 1) {
 		sphere_body_->activate(true);
-		impulse.setValue(t * cos(angle - M_PI / 2.0), 0, t * sin(angle - M_PI / 2.0));
+		impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
+				t * sin(angle - M_PI / 2.0));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 	if (input::get_keyboard_frame('d') == 1) {
 		sphere_body_->activate(true);
-		impulse.setValue(t * cos(angle + M_PI / 2.0), 0, t * sin(angle + M_PI / 2.0));
+		impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
+				t * sin(angle + M_PI / 2.0));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 	if (input::get_keyboard_frame(' ') == 1) {
@@ -160,30 +168,24 @@ void Player::Update(double angle, StageMap* map) {
 	btRigidBody* body;
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
-		if(color_judge_< 2)
-		color_judge_++;
+
+	} else if (sphere_body_ == delete_body2_
+			&& sphere_tekibody1_ == delete_body_) {
+		ResMove1(color_judge_,color_judge1);
+	}
+	else if (sphere_body_ == delete_body_
+			&& sphere_tekibody2_ == delete_body2_) {
+		if (color_judge_ < 2)
+			color_judge_++;
 		else
-		color_judge_ = 0;
-	} else if (sphere_body_ == delete_body2_ && sphere_tekibody1_ == delete_body_) {
-		if(color_judge_< 2)
-				color_judge_++;
-				else
-				color_judge_ = 0;
-	}
-
-	else if (sphere_body_ == delete_body_ && sphere_tekibody2_ == delete_body2_) {
-		if(color_judge_< 2)
-				color_judge_++;
-				else
-				color_judge_ = 0;
-	} else if (sphere_body_ == delete_body2_ && sphere_tekibody2_ == delete_body_) {
-		if(color_judge_< 2)
-				color_judge_++;
-				else
-				color_judge_ = 0;
-	}
-
-	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
+			color_judge_ = 0;
+	} else if (sphere_body_ == delete_body2_
+			&& sphere_tekibody2_ == delete_body_) {
+		if (color_judge_ < 2)
+			color_judge_++;
+		else
+			color_judge_ = 0;
+	} else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
 		if (sphere_body_ == delete_body_)
 			delete_body_ = delete_body2_;
 		if (delete_body_ != NULL) {
@@ -191,14 +193,40 @@ void Player::Update(double angle, StageMap* map) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
-				level_+= map->DestroyObject(i, level_);
+					level_ += map->DestroyObject(i, level_);
 				}
 			}
+		}
 
+	} else if (sphere_tekibody1_ == delete_body_
+			|| sphere_tekibody1_ == delete_body2_) {
+		if (sphere_tekibody1_ == delete_body_)
+			delete_body_ = delete_body2_;
+		if (delete_body_ != NULL) {
+			for (i = world_->getNumCollisionObjects() - 1; i > 449; i--) {
+				obj = world_->getCollisionObjectArray()[i];
+				body = btRigidBody::upcast(obj);
+				if (delete_body_ == body) {
+					map->DestroyObject(i, level_);
+				}
+			}
+		}
+	} else if (sphere_tekibody2_ == delete_body_
+			|| sphere_tekibody2_ == delete_body2_) {
+		if (sphere_tekibody2_ == delete_body_)
+			delete_body_ = delete_body2_;
+		if (delete_body_ != NULL) {
+			for (i = world_->getNumCollisionObjects() - 1; i > 449; i--) {
+				obj = world_->getCollisionObjectArray()[i];
+				body = btRigidBody::upcast(obj);
+				if (delete_body_ == body) {
+					map->DestroyObject(i, level_);
+				}
+			}
 		}
 	}
 
-	if (player_radius_ <= (double)level_ / 5.0)
+	if (player_radius_ <= (double) level_ / 5.0)
 		PlayerSize(player_radius_ += 0.05);
 
 	delete_body_ = NULL;
@@ -213,7 +241,7 @@ void Player::Draw() {
 
 	//中心円作成
 	u3Dto2D();
-	glBegin (GL_POLYGON); // ポリゴンの描画
+	glBegin(GL_POLYGON); // ポリゴンの描画
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	// 円を描画
 	for (i = 0; i < n; i++) {
@@ -268,7 +296,8 @@ void Player::Draw() {
 			for (i = 0; i < n; i++) {
 				// 座標を計算
 				rate = (double) i / n;
-				if (2.0 * M_PI * rate >= M_PI * 2 / 9 && 2.0 * M_PI * rate <= M_PI * 2)
+				if (2.0 * M_PI * rate >= M_PI * 2 / 9
+						&& 2.0 * M_PI * rate <= M_PI * 2)
 					r2 = 0;
 				else
 					r2 = 110;
@@ -285,8 +314,10 @@ void Player::Draw() {
 			for (i = 0; i < n; i++) {
 				// 座標を計算
 				rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2 * 7 / 36 && 2.0 * M_PI * rate <= M_PI * 2)
-						|| (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 2 / 9))
+				if ((2.0 * M_PI * rate >= M_PI * 2 * 7 / 36
+						&& 2.0 * M_PI * rate <= M_PI * 2)
+						|| (2.0 * M_PI * rate >= 0
+								&& 2.0 * M_PI * rate <= M_PI * 2 / 9))
 					r2 = 0;
 				else
 					r2 = 110;
@@ -303,8 +334,10 @@ void Player::Draw() {
 			for (i = 0; i < n; i++) {
 				// 座標を計算
 				rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2 * 47 / 180 && 2.0 * M_PI * rate <= M_PI * 2)
-						|| (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 2 * 7 / 36))
+				if ((2.0 * M_PI * rate >= M_PI * 2 * 47 / 180
+						&& 2.0 * M_PI * rate <= M_PI * 2)
+						|| (2.0 * M_PI * rate >= 0
+								&& 2.0 * M_PI * rate <= M_PI * 2 * 7 / 36))
 					r2 = 0;
 				else
 					r2 = 110;
@@ -315,14 +348,17 @@ void Player::Draw() {
 			}
 			glEnd(); // ポリゴンの描画終了
 		}
-		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2 || pcount == 1) {
+		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2
+				|| pcount == 1) {
 			glBegin(GL_POLYGON); // ポリゴンの描画
 			glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 			for (i = 0; i < n; i++) {
 				// 座標を計算
 				rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2 * 57 / 180 && 2.0 * M_PI * rate <= M_PI * 2)
-						|| (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 2 * 47 / 180))
+				if ((2.0 * M_PI * rate >= M_PI * 2 * 57 / 180
+						&& 2.0 * M_PI * rate <= M_PI * 2)
+						|| (2.0 * M_PI * rate >= 0
+								&& 2.0 * M_PI * rate <= M_PI * 2 * 47 / 180))
 					r2 = 0;
 				else
 					r2 = 110;
@@ -362,7 +398,7 @@ void Player::Draw() {
 	 glPopMatrix();
 	 */
 
-	glDisable (GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	RenderScene();
 }
 
@@ -383,20 +419,19 @@ void Player::PlayerMove(btVector3 pos) {
 	sphere_body_->translate(pos);
 }
 
-
 btVector3 Player::get_center_pos() const {
 	return sphere_body_->getCenterOfMassPosition();
 }
 
-int Player::get_level() const{
+int Player::get_level() const {
 	return level_;
 }
 
-double Player::get_camera_distance()const {
+double Player::get_camera_distance() const {
 	return player_radius_ * 3;
 }
 
-int Player::get_color()const{
+int Player::get_color() const {
 	return color_judge_;
 }
 
@@ -415,4 +450,9 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	delete_body2_ = static_cast<btRigidBody*>(b);
 	return true;
 }
+
+//void ResMove1(int color1, int color2){
+//	if(color1 == 1 && color2 == 2)
+//	{}
+//}
 

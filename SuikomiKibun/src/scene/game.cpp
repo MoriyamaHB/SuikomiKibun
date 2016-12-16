@@ -68,11 +68,11 @@ void GameScene::Update() {
 	map_->Update();
 
 	//プレイヤー更新
-	player_->Update(camera_.get_angle_w() + M_PI, map_);
+	player_->Update(camera_.get_angle_w() + M_PI, map_,net_main_->GetColor(0),net_main_->GetColor(1));
 
 	//敵プレイヤー更新
-	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0));
-	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1));
+	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0),map_);
+	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1),map_);
 
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置

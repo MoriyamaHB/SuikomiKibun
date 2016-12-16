@@ -16,6 +16,8 @@
 #include "../map/GL_ShapeDrawer.h"
 
 
+//衝突コールバック
+extern ContactProcessedCallback gContactProcessedCallback;
 
 class PlayerTeki{
 private:
@@ -25,16 +27,20 @@ private:
 	GL_ShapeDrawer* m_shapeDrawer;
 	int playerteki_num_;
 	int color_judge_;
+	int level_;
+	static btRigidBody* delete_body_;
+	static btRigidBody* delete_body2_;
 	btVector3 color_[3];
 public:
 	PlayerTeki(btDynamicsWorld* world,btVector3 pos);
 	~PlayerTeki();
-	void Update(btVector3 pos,int level,int color_change);
+	void Update(btVector3 pos,int level,int color_change, StageMap* map);
 	void Draw();
 	void RenderScene();
 	void PlayerTekiMove(btVector3 pos);
 	void PlayerTekiResize(double size);
 	void PlayerColorChange(int color_change);
+	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
 };
 
 

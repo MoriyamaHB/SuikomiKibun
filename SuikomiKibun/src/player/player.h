@@ -38,7 +38,7 @@ private:
 public:
 	Player(btDynamicsWorld* world);
 	~Player();
-	void Update(double angle, StageMap* map);
+	void Update(double angle, StageMap* map,int color_judge1,int color_judge2);
 	void Draw();
 	btVector3 get_center_pos()const;
 	double get_camera_distance()const;
@@ -46,6 +46,7 @@ public:
 	int get_color()const;
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);
+	void ResMove1(int color1,int color2);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
 	void DeleteBody(btRigidBody** ppBody);
 };
