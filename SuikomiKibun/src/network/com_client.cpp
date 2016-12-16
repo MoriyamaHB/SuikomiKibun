@@ -42,6 +42,10 @@ ComClientTcp::~ComClientTcp() {
 }
 
 ComClientUdp::~ComClientUdp() {
+	// タイムアウトのタイマーを切る
+	accept_timer_.cancel();
+	send_timer_.cancel();
+	receive_timer_.cancel();
 	//接続を切る
 	send_socket_->close();
 	receive_socket_->close();
@@ -187,7 +191,7 @@ void ComClientTcp::OnReceive(const boost::system::error_code& error, size_t byte
 	receive_buff_.consume(receive_buff_.size());
 	//データ処理
 	receive_data_ = *data;
-	printf("server_receive(%d):%f\n", kPort, receive_data_.player_data.level);
+	printf("server_receive(%d):%d\n", kPort, receive_data_.player_data.level);
 	server_->changed_player_data_ = true;
 	//再度受信
 	Receive();

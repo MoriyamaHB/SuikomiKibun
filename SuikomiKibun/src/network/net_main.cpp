@@ -13,7 +13,7 @@ NetMain::NetMain() {
 //		std::cin >> client_num_;
 		server_ = new Server(31600, 3);
 		is_server_ = true;
-		server_ip = "127.0.0.1";
+		server_ip = "localhost";
 		port = 31600;
 	} else {
 		server_ = NULL;

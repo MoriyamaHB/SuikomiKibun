@@ -41,9 +41,20 @@ ClientTcp::~ClientTcp() {
 }
 
 ClientUdp::~ClientUdp() {
+	// タイムアウトのタイマーを切る
+	connect_timer_.cancel();
+	send_timer_.cancel();
+	receive_timer_.cancel();
 	//接続を切る
 	send_socket_->close();
 	receive_socket_->close();
+	//io_serviceを止める
+	io_service_.stop();
+	//スレッド終了まで待機
+	if (conect_thread_.joinable())
+		conect_thread_.join();
+	if (run_thread_.joinable())
+		run_thread_.join();
 	//開放
 	delete send_socket_;
 	delete receive_socket_;
@@ -120,7 +131,6 @@ void ClientUdp::Connect() {
 	udp::resolver resolver(io_service_);
 	udp::resolver::query query(udp::v4(), kIpAdress, uToStr (port_));
 	send_endpoint_ = *resolver.resolve(query);
-	//send_endpoint_ = udp::endpoint(asio::ip::address::from_string(kIpAdress), port_);
 	//ソケット作成
 	receive_socket_ = new udp::socket(io_service_, endpoint);
 	send_socket_ = new udp::socket(io_service_);
