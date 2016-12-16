@@ -1376,8 +1376,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	CreateApple(position_aaz, 2);
 
 //タワー
-	btVector3 position_wa(-150, 0, 150);
-	CreateTower(position_wa, 5);
+//	btVector3 position_wa(-150, 0, 150);
+//	CreateTower(position_wa, 5);
 //	btVector3 position_wb(-125, 70, -125);
 //	CreateTower(position_wb, 2);
 //	btVector3 position_wc(-35, 0, -35);
