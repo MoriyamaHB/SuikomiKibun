@@ -1641,7 +1641,7 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 	} else {
 		sphere_size = 0.5;
 		side_size = 4;
-		mass = 0;
+		mass = 0.1;
 	}
 
 	btTransform trans;
@@ -2427,7 +2427,7 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 		mass = 0;
 	} else {
 		size = 1;
-		mass = 0;
+		mass = 0.1;
 	}
 
 	//各オブジェクトの位置設定
@@ -2687,9 +2687,9 @@ int StageMap::DestroyObject(int num, int level) {
 	if (level > l && level_[num] != 0) {
 		obj = world_->getCollisionObjectArray()[num];
 		body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState()) {
-			delete body->getMotionState();
-		}
+//		if (body && body->getMotionState()) {
+//			delete body->getMotionState();
+//		}
 		body->setMotionState(motion);
 
 		for (i = 1; num + i <= num_; i++) {
@@ -2697,9 +2697,9 @@ int StageMap::DestroyObject(int num, int level) {
 				obj = world_->getCollisionObjectArray()[num + i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-				if (body && body->getMotionState()) {
-					delete body->getMotionState();
-				}
+//				if (body && body->getMotionState()) {
+//					delete body->getMotionState();
+//				}
 				body->setMotionState(motion);
 				object_[num + i] = -1;
 				//world_->removeCollisionObject( obj );
@@ -2712,9 +2712,9 @@ int StageMap::DestroyObject(int num, int level) {
 				obj = world_->getCollisionObjectArray()[num - i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-				if (body && body->getMotionState()) {
-					delete body->getMotionState();
-				}
+//				if (body && body->getMotionState()) {
+//					delete body->getMotionState();
+//				}
 				body->setMotionState(motion);
 				//world_->removeCollisionObject( obj );
 				object_[num - i] = -1;
