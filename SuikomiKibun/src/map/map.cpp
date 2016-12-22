@@ -729,11 +729,17 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	 */
 	printf("%d ", world_->getNumCollisionObjects());
 //クモ
-//	btVector3 posision_j(190, 20, -190);
-//	CreateSpider(posision_j, 5);
+	btVector3 posision_j(120, 20, -200);
+	CreateSpider(posision_j, 5);
 //雪だるま
-//	btVector3 position_a(208, 82, 55);
-//	CreateSnowman(position_a, 2);
+	btVector3 position_sa(100, 0, 20);
+	CreateSnowman(position_sa, 2);
+	btVector3 position_sb(80, 0, 20);
+	CreateSnowman(position_sb, 2);
+	btVector3 position_sc(70, 0, 20);
+	CreateSnowman(position_sc, 2);
+	btVector3 position_sd(60, 0, 20);
+	CreateSnowman(position_sd, 2);
 //ピラミッド
 //	btVector3 position_pa(-125-28.2, 7*4, -125-28.2);
 //	CreatePyramid(position_pa, 0);
@@ -894,12 +900,12 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	CreateApple(position_aaz, 2);
 
 //タワー
-//	btVector3 position_wa(-150, 0, 150);
-//	CreateTower(position_wa, 5);
-//	btVector3 position_wb(-125, 70, -125);
-//	CreateTower(position_wb, 2);
-//	btVector3 position_wc(-35, 0, -35);
-//	CreateTower(position_wc, 4);
+	btVector3 position_wa(-125, 0, 125);
+	CreateTower(position_wa, 5);
+	btVector3 position_wb(150, 0, -20);
+	CreateTower(position_wb, 3);
+	btVector3 position_wc(150, 0, 30);
+	CreateTower(position_wc, 3);
 //	btVector3 position_wd(-125, 70, -125);
 //	CreateTower(position_wd, 4);
 //	btVector3 position_we(-125, 70, -125);
@@ -1241,7 +1247,7 @@ void StageMap::CreateSnowman(const btVector3& position, int level) {
 	} else if (level == 3) {
 
 	} else if (level == 2) {
-		size = 2;
+		size = 1.0;
 		mass = 0.01;
 	} else {
 		size = 1;
@@ -1948,7 +1954,7 @@ void StageMap::CreateTower(const btVector3& position, int level) {
 		wide2 = 0.6;
 	} else if (level == 3) {
 		sphere_size = 1;
-		side_size = 5;
+		side_size = 3;
 		wide = 0.6;
 		wide2 = 0.3;
 	} else if (level == 2) {
@@ -2594,7 +2600,7 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 	} else {
 		size = 1;
 		size2 = 0.1;
-		mass = 0;
+		mass = 1;
 	}
 
 	//各オブジェクトの位置設定
@@ -2664,10 +2670,10 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 int StageMap::DestroyObject(int num, int level) {
 	int i;
 	int l;
-	static int pos = 600;
+	static int pos = 100;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	btVector3 vec = btVector3(-125, 50, 125);
+	btVector3 vec = btVector3(100, 50, pos);
 	btTransform ten;
 	ten.setOrigin(vec);
 	btDefaultMotionState *motion = new btDefaultMotionState(ten);
@@ -2685,21 +2691,16 @@ int StageMap::DestroyObject(int num, int level) {
 	}
 
 	if (level > l && level_[num] != 0) {
-		obj = world_->getCollisionObjectArray()[num];
-		body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState()) {
-			delete body->getMotionState();
-		}
-		body->setMotionState(motion);
+
 
 		for (i = 1; num + i <= num_; i++) {
 			if (object_[num] == object_[num + i]) {
 				obj = world_->getCollisionObjectArray()[num + i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-				if (body && body->getMotionState()) {
-					delete body->getMotionState();
-				}
+//				if (body && body->getMotionState()) {
+//					delete body->getMotionState();
+//				}
 				body->setMotionState(motion);
 //				object_[num + i] = -1;
 				//world_->removeCollisionObject( obj );
@@ -2712,20 +2713,26 @@ int StageMap::DestroyObject(int num, int level) {
 				obj = world_->getCollisionObjectArray()[num - i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-				if (body && body->getMotionState()) {
-					delete body->getMotionState();
-				}
+//				if (body && body->getMotionState()) {
+//					delete body->getMotionState();
+//				}
 				body->setMotionState(motion);
 				//world_->removeCollisionObject( obj );
 //				object_[num - i] = -1;
 			} else
 				break;
 		}
+		obj = world_->getCollisionObjectArray()[num];
+		body = btRigidBody::upcast(obj);
+//		if (body && body->getMotionState()) {
+//			delete body->getMotionState();
+//		}
+		body->setMotionState(motion);
 //		object_[num] = -1;
 	}else {
 		return 0;
 	}
-	pos += 50;
+	pos += 10;
 	return level_[num];
 }
 
