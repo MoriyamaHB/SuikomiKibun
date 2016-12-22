@@ -2725,6 +2725,7 @@ int StageMap::DestroyObject(int num, int level) {
 	}else {
 		return 0;
 	}
+	pos += 50;
 	return level_[num];
 }
 
