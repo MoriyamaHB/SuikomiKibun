@@ -727,7 +727,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	 world_->addRigidBody(cube_body4_);
 	 world_->addRigidBody(cube_body5_);
 	 */
-
 	printf("%d ", world_->getNumCollisionObjects());
 //クモ
 //	btVector3 posision_j(190, 20, -190);
@@ -950,12 +949,12 @@ StageMap::~StageMap() {
 //更新
 void StageMap::Update() {
 	//流動体
-	static float offset =0;
-	offset+=0.01;
-	SetVertexPositions(7, offset);
-	btVector3 worldMin(-1000, -1000, -1000);
-	btVector3 worldMax(1000, 1000, 1000);
-	trimeshShape_->refitTree(worldMin, worldMax);
+//	static float offset =0;
+//	offset+=0.01;
+//	SetVertexPositions(7, offset);
+//	btVector3 worldMin(-1000, -1000, -1000);
+//	btVector3 worldMax(1000, 1000, 1000);
+//	trimeshShape_->refitTree(worldMin, worldMax);
 }
 
 //描画
@@ -2665,7 +2664,7 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 int StageMap::DestroyObject(int num, int level) {
 	int i;
 	int l;
-	static int pos = 400;
+	static int pos = 600;
 	btCollisionObject* obj;
 	btRigidBody* body;
 	btVector3 vec = btVector3(pos, pos, pos);
