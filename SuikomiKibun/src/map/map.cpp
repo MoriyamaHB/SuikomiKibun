@@ -1641,7 +1641,7 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 	} else {
 		sphere_size = 0.5;
 		side_size = 4;
-		mass = 2;
+		mass = 0;
 	}
 
 	btTransform trans;
@@ -2590,11 +2590,11 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 	} else if (level == 2) {
 		size = 2;
 		size2 = 0.3;
-		mass = 0.01;
+		mass = 0.0;
 	} else {
 		size = 1;
 		size2 = 0.1;
-		mass = 10;
+		mass = 0;
 	}
 
 	//各オブジェクトの位置設定
