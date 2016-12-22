@@ -39,7 +39,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//中心座標
 	btVector3 ground_pos = btVector3(125, -16, 0);
 	btVector3 ground_pos2 = btVector3(-125, -16, 125);
-	btVector3 ground_pos3 = btVector3(-100, -5, -110);
+	btVector3 ground_pos3 = btVector3(-90, -5, -90);
 	btVector3 ten_pos = btVector3(0, 500, 0);
 	btVector3 stairs_pos = btVector3(-7, 148, 3);
 	btVector3 stairs_pos2 = btVector3(0, -0.7, 5);
@@ -614,7 +614,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	color_[num_++] = btVector3(1, 1, 1);
 
 //流動体
-	int total = 2*(10-1)*(10-1);
+	int total = 2*(5-1)*(5-1);
 	int verstride = sizeof(btVector3);
 	int indexstride = 3*sizeof(int);
 	vertices_ = new btVector3[total];
@@ -623,18 +623,18 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btTriangleIndexVertexArray* arrays;
 
 	int index=0;
-	for(int i = 0; i< 10-1; i++){
-		for(int j = 0; j < 10-1; j++){
-			indices_[index++] = j*10+i;
-			indices_[index++] = j*10+i+1;
-			indices_[index++] = (j+1)*10+i+1;
-			indices_[index++] = j*10+i;
-			indices_[index++] = (j+1)*10+i+1;
-			indices_[index++] = (j+1)*10+i;
+	for(int i = 0; i< 5-1; i++){
+		for(int j = 0; j < 5-1; j++){
+			indices_[index++] = j*5+i;
+			indices_[index++] = j*5+i+1;
+			indices_[index++] = (j+1)*5+i+1;
+			indices_[index++] = j*5+i;
+			indices_[index++] = (j+1)*5+i+1;
+			indices_[index++] = (j+1)*5+i;
 		}
 	}
 
-	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride, 2*(10-1)*(10-1), (btScalar*)&vertices_[0].x(), verstride);
+	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride, 2*(5-1)*(5-1), (btScalar*)&vertices_[0].x(), verstride);
 	trimeshShape_ = new btBvhTriangleMeshShape(arrays, true);
 	btCollisionShape* groundShape4 = trimeshShape_;
 	offset.setIdentity();
@@ -949,12 +949,12 @@ StageMap::~StageMap() {
 //更新
 void StageMap::Update() {
 	//流動体
-//	static float offset =0;
-//	offset+=0.01;
-//	SetVertexPositions(7, offset);
-//	btVector3 worldMin(-1000, -1000, -1000);
-//	btVector3 worldMax(1000, 1000, 1000);
-//	trimeshShape_->refitTree(worldMin, worldMax);
+	static float offset =0;
+	offset+=0.01;
+	SetVertexPositions(7, offset);
+	btVector3 worldMin(-1000, -1000, -1000);
+	btVector3 worldMax(1000, 1000, 1000);
+	trimeshShape_->refitTree(worldMin, worldMax);
 }
 
 //描画
@@ -2730,10 +2730,10 @@ int StageMap::DestroyObject(int num, int level) {
 
 void StageMap::SetVertexPositions(float waveheight, float offset){
 	int i, j;
-	int verts = 10;
+	int verts = 5;
 	for(i = 0; i < verts; i++){
 		for(j = 0; j < verts; j++){
-			vertices_[i+j*verts].setValue((i-verts*0.5f)*33, waveheight*sinf((float)i + offset)*cosf((float)j+offset),(j-verts*0.5f)*33);
+			vertices_[i+j*verts].setValue((i-verts*0.5f)*65, waveheight*sinf((float)i + offset)*cosf((float)j+offset),(j-verts*0.5f)*65);
 
 		}
 	}
