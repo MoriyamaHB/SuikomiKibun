@@ -85,7 +85,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 kan_pos32 = btVector3(-229, 20, 126);
 	btVector3 kan_pos33 = btVector3(-125, 20, 249.5);
 	btVector3 kan_pos34 = btVector3(-249.5, 20, 125);
-	btVector3 dai_pos = btVector3(80, 6, -70);
+	btVector3 dai_pos = btVector3(80, 10, -110);
 	btVector3 dai_pos2 = btVector3(90, 3, -70);
 
 	btVector3 taki_pos = btVector3(190, 35.2, 50);
@@ -126,7 +126,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *hill_shape = new btBoxShape(btVector3(104.9, 0.4, 104.9));
 	btCollisionShape *hill_shape2 = new btBoxShape(btVector3(0.01, 2.1, 104.9));
 	btCollisionShape *hill_shape3 = new btBoxShape(btVector3(104.9, 0.4, 99.9));
-	btCollisionShape *dai_shape = new btBoxShape(btVector3(5, 0.1, 10));
+	btCollisionShape *dai_shape = new btBoxShape(btVector3(5, 0.1, 20));
 
 	//bulletに登録（地面&天井）
 	offset.setOrigin(ground_pos);
@@ -198,18 +198,18 @@ StageMap::StageMap(btDynamicsWorld* world) :
 		offset = offset * offset2;
 	}
 
-//	//	赤階段
-//	offset.setOrigin(stairs_pos3);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-//		offset = offset * offset2;
-//	}
-//
+	//	赤階段
+	offset.setOrigin(stairs_pos3);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(1.0, 0.0, 0.0);
+		offset = offset * offset2;
+	}
+
 //	黄階段
 	offset.setOrigin(stairs_pos4);
 	offset2.setOrigin(stairs_pos2);
@@ -607,11 +607,11 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//台
 	offset.setIdentity();
 	offset.setOrigin(dai_pos);
-	offset.setRotation(btQuaternion(-PI_/7, PI_/6, 0));
+	offset.setRotation(btQuaternion(-PI_/4, PI_/5, 0));
 	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, dai_shape);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
-	color_[num_++] = btVector3(0.5, 0.5, 0.5);
+	color_[num_++] = btVector3(1, 1, 1);
 
 //流動体
 	int total = 2*(10-1)*(10-1);
@@ -768,10 +768,10 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 position_ti(-50, 20, -230);
 	CreateTriangle(position_ti, 1, 3);
 //きのこ
-//	btVector3 position_ma(235, 102, 65);
-//	CreateMush(position_ma, 4,2);
-//	btVector3 position_mb(208, 82, 65);
-//	CreateMush(position_mb, 2,1);
+	btVector3 position_ma(170, 54, -120);
+	CreateMush(position_ma, 3,2);
+	btVector3 position_mb(128, 10, -162);
+	CreateMush(position_mb, 4,1);
 //	btVector3 position_mc(235, 82, 95);
 //	CreateMush(position_mc, 3,1);
 //	btVector3 position_md(190, 62, 109);
@@ -789,23 +789,23 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	btVector3 position_mj(160, 22, 110);
 //	CreateMush(position_mj, 2, 2);
 //りんご
-//	btVector3 position_aa(230, 102, -55);
-//	CreateApple(position_aa, 4);
-//	btVector3 position_ab(208, 82, -45);
-//	CreateApple(position_ab, 3);
-//	btVector3 position_ac(208, 82, -65);
-//	CreateApple(position_ac, 2);
-//	btVector3 position_ad(190, 62, -65);
-//	CreateApple(position_ad, 3);
-//	btVector3 position_ae(190, 62, -80);
-//	CreateApple(position_ae, 2);
-//	btVector3 position_af(190, 62, -45);
-//	CreateApple(position_af, 1);
-//	btVector3 position_ag(190, 62, -55);
-//	CreateApple(position_ag, 2);
-//	btVector3 position_ah(175, 42, -45);
-//	CreateApple(position_ah, 2);
-//	btVector3 position_ai(175, 42, -55);
+	btVector3 position_aa(10, 0, 0);
+	CreateApple(position_aa, 1);
+	btVector3 position_ab(15, 0, 0);
+	CreateApple(position_ab, 1);
+	btVector3 position_ac(20, 0, 0);
+	CreateApple(position_ac, 1);
+	btVector3 position_ad(25, 0, 0);
+	CreateApple(position_ad, 1);
+	btVector3 position_ae(30, 0, 0);
+	CreateApple(position_ae, 1);
+	btVector3 position_af(35, 0, 0);
+	CreateApple(position_af, 2);
+	btVector3 position_ag(40, 0, 0);
+	CreateApple(position_ag, 2);
+	btVector3 position_ah(45, 0, 0);
+	CreateApple(position_ah, 2);
+	btVector3 position_ai(50, 0, 0);
 //	CreateApple(position_ai, 2);
 //	btVector3 position_aj(175, 42, -65);
 //	CreateApple(position_aj, 2);
