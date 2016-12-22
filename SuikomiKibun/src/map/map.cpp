@@ -2668,7 +2668,7 @@ int StageMap::DestroyObject(int num, int level) {
 	static int pos = 400;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	btVector3 vec = btVector3(0, pos, 0);
+	btVector3 vec = btVector3(pos, pos, pos);
 	btTransform ten;
 	ten.setOrigin(vec);
 	btDefaultMotionState *motion = new btDefaultMotionState(ten);
