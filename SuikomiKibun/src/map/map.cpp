@@ -614,7 +614,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	color_[num_++] = btVector3(1, 1, 1);
 
 //流動体
-	int total = 2*(5-1)*(5-1);
+	int total = 2*(10-1)*(10-1);
 	int verstride = sizeof(btVector3);
 	int indexstride = 3*sizeof(int);
 	vertices_ = new btVector3[total];
@@ -623,18 +623,18 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btTriangleIndexVertexArray* arrays;
 
 	int index=0;
-	for(int i = 0; i< 5-1; i++){
-		for(int j = 0; j < 5-1; j++){
-			indices_[index++] = j*5+i;
-			indices_[index++] = j*5+i+1;
-			indices_[index++] = (j+1)*5+i+1;
-			indices_[index++] = j*5+i;
-			indices_[index++] = (j+1)*5+i+1;
-			indices_[index++] = (j+1)*5+i;
+	for(int i = 0; i< 10-1; i++){
+		for(int j = 0; j < 10-1; j++){
+			indices_[index++] = j*10+i;
+			indices_[index++] = j*10+i+1;
+			indices_[index++] = (j+1)*10+i+1;
+			indices_[index++] = j*10+i;
+			indices_[index++] = (j+1)*10+i+1;
+			indices_[index++] = (j+1)*10+i;
 		}
 	}
 
-	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride, 2*(5-1)*(5-1), (btScalar*)&vertices_[0].x(), verstride);
+	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride, 2*(10-1)*(10-1), (btScalar*)&vertices_[0].x(), verstride);
 	trimeshShape_ = new btBvhTriangleMeshShape(arrays, true);
 	btCollisionShape* groundShape4 = trimeshShape_;
 	offset.setIdentity();
@@ -2667,7 +2667,7 @@ int StageMap::DestroyObject(int num, int level) {
 	static int pos = 600;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	btVector3 vec = btVector3(pos, pos, pos);
+	btVector3 vec = btVector3(-125, 50, 125);
 	btTransform ten;
 	ten.setOrigin(vec);
 	btDefaultMotionState *motion = new btDefaultMotionState(ten);
@@ -2687,9 +2687,9 @@ int StageMap::DestroyObject(int num, int level) {
 	if (level > l && level_[num] != 0) {
 		obj = world_->getCollisionObjectArray()[num];
 		body = btRigidBody::upcast(obj);
-//		if (body && body->getMotionState()) {
-//			delete body->getMotionState();
-//		}
+		if (body && body->getMotionState()) {
+			delete body->getMotionState();
+		}
 		body->setMotionState(motion);
 
 		for (i = 1; num + i <= num_; i++) {
@@ -2697,11 +2697,11 @@ int StageMap::DestroyObject(int num, int level) {
 				obj = world_->getCollisionObjectArray()[num + i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-//				if (body && body->getMotionState()) {
-//					delete body->getMotionState();
-//				}
+				if (body && body->getMotionState()) {
+					delete body->getMotionState();
+				}
 				body->setMotionState(motion);
-				object_[num + i] = -1;
+//				object_[num + i] = -1;
 				//world_->removeCollisionObject( obj );
 			} else
 				break;
@@ -2712,16 +2712,16 @@ int StageMap::DestroyObject(int num, int level) {
 				obj = world_->getCollisionObjectArray()[num - i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-//				if (body && body->getMotionState()) {
-//					delete body->getMotionState();
-//				}
+				if (body && body->getMotionState()) {
+					delete body->getMotionState();
+				}
 				body->setMotionState(motion);
 				//world_->removeCollisionObject( obj );
-				object_[num - i] = -1;
+//				object_[num - i] = -1;
 			} else
 				break;
 		}
-		object_[num] = -1;
+//		object_[num] = -1;
 	}else {
 		return 0;
 	}
@@ -2731,10 +2731,10 @@ int StageMap::DestroyObject(int num, int level) {
 
 void StageMap::SetVertexPositions(float waveheight, float offset){
 	int i, j;
-	int verts = 5;
+	int verts = 10;
 	for(i = 0; i < verts; i++){
 		for(j = 0; j < verts; j++){
-			vertices_[i+j*verts].setValue((i-verts*0.5f)*65, waveheight*sinf((float)i + offset)*cosf((float)j+offset),(j-verts*0.5f)*65);
+			vertices_[i+j*verts].setValue((i-verts*0.5f)*33, waveheight*sinf((float)i + offset)*cosf((float)j+offset),(j-verts*0.5f)*33);
 
 		}
 	}
