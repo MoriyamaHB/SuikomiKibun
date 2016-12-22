@@ -768,7 +768,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 position_ti(-50, 20, -230);
 	CreateTriangle(position_ti, 1, 3);
 //きのこ
-	btVector3 position_ma(170, 54, -120);
+	btVector3 position_ma(160, 41, -130);
 	CreateMush(position_ma, 3,2);
 	btVector3 position_mb(128, 10, -162);
 	CreateMush(position_mb, 4,1);
@@ -2668,7 +2668,7 @@ int StageMap::DestroyObject(int num, int level) {
 	static int pos = 400;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	btVector3 vec = btVector3(pos, pos, pos);
+	btVector3 vec = btVector3(0, pos, 0);
 	btTransform ten;
 	ten.setOrigin(vec);
 	btDefaultMotionState *motion = new btDefaultMotionState(ten);
