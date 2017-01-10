@@ -2670,10 +2670,9 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 int StageMap::DestroyObject(int num, int level) {
 	int i;
 	int l;
-	static int pos = 100;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	btVector3 vec = btVector3(100, 50, pos);
+	btVector3 vec = btVector3(100, 50, 100);
 	btTransform ten;
 	ten.setOrigin(vec);
 	btDefaultMotionState *motion = new btDefaultMotionState(ten);
@@ -2732,10 +2731,11 @@ int StageMap::DestroyObject(int num, int level) {
 	}else {
 		return 0;
 	}
-	pos += 10;
+
 	return level_[num];
 }
 
+//流動体の計算
 void StageMap::SetVertexPositions(float waveheight, float offset){
 	int i, j;
 	int verts = 10;
