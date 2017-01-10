@@ -2672,6 +2672,7 @@ int StageMap::DestroyObject(int num, int level) {
 	int i;
 	int l;
 	int num2 = num;
+	int objectnum = object_[num];
 	btCollisionObject* obj;
 	btRigidBody* body;
 	btVector3 vec = btVector3(50, 50, 50);
@@ -2691,17 +2692,17 @@ int StageMap::DestroyObject(int num, int level) {
 
 	//プレイヤーがオブジェクトよりレベルが高いならオブジェクトを破壊
 	if (level > l && level_[num] != 0) {
-
+		for (i = 1; num - i >= 0; i++) {
+			if (object_[num] == object_[num - i]) {
+				num2 = num - i;
+			} else
+				break;
+		}
 		//レベル１，２のオブジェクトは再配置
 		if (l == 0 || l == 5) {
-			for (i = 1; num - i >= 0; i++) {
-				if (object_[num] == object_[num - i]) {
-					num2 = num - i;
-				} else
-					break;
-			}
+
 			for (i = 0; num2 + i <= num_; i++) {
-				if (object_[num] == object_[num2 + i]) {
+				if (objectnum == object_[num2 + i]) {
 
 					obj = world_->getCollisionObjectArray()[num2 + i];
 					body = btRigidBody::upcast(obj);
@@ -2716,10 +2717,10 @@ int StageMap::DestroyObject(int num, int level) {
 			}
 		} else {
 
-			for (i = 0; num - i >= 0; i++) {
-				if (object_[num] == object_[num - i]) {
+			for (i = 0; num2 + i <= num_; i++) {
+				if (objectnum == object_[num2 + i]) {
 
-					obj = world_->getCollisionObjectArray()[num - i];
+					obj = world_->getCollisionObjectArray()[num2 + i];
 					body = btRigidBody::upcast(obj);
 
 					btQuaternion qrot(0, 0, 0, 1);
@@ -2727,23 +2728,9 @@ int StageMap::DestroyObject(int num, int level) {
 							new btDefaultMotionState(btTransform(qrot, vec2));
 					body->setMotionState(sphere_motion_state);
 					body->activate(true);
-					object_[num - i] = -1;
+					object_[num2 + i] = -1;
 				} else
-					break;
-			}
-			for (i = 1; num + i <= num_; i++) {
-				if (object_[num] == object_[num + i]) {
 
-					obj = world_->getCollisionObjectArray()[num + i];
-					body = btRigidBody::upcast(obj);
-
-					btQuaternion qrot(0, 0, 0, 1);
-					btDefaultMotionState* sphere_motion_state =
-							new btDefaultMotionState(btTransform(qrot, vec2));
-					body->setMotionState(sphere_motion_state);
-					body->activate(true);
-					object_[num + i] = -1;
-				} else
 					break;
 			}
 		}
