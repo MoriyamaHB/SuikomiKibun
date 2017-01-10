@@ -145,7 +145,7 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	type_ = static_cast<StartBodys::BodyType>(cc_util::GetRandom(0, kBodyTypeNum - 1));
 
 	//他ステータスを設定
-	btVector3 pos = btVector3(0, 5, 0);	//中心座標
+	btVector3 pos = btVector3(0, 10, 0);	//中心座標
 	btScalar mass = 0.03;	//質量
 	btScalar rest = 0.2;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
@@ -174,7 +174,7 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 		break;
 	case kCone:
 		memcpy(material_, uMaterial4fv_white, sizeof(material_));
-		shape = new btConeShapeZ(radius, extents[1]);
+		shape = new btConeShapeZ(radius * 2.0, extents[1] * 2.0);
 		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.球を作成します.");
