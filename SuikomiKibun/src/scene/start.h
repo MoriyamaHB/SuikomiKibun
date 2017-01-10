@@ -49,7 +49,7 @@ public:
 class StartBodys {
 public:
 	enum BodyType {
-		kSphere = 0
+		kSphere = 0, kCube, kBodyTypeNum
 	};
 private:
 	btRigidBody* body_;
@@ -57,7 +57,7 @@ private:
 	BodyType type_;
 	float material_[4];
 public:
-	StartBodys(BodyType type, btDynamicsWorld *world);
+	StartBodys(btDynamicsWorld *world);
 	~StartBodys();
 	void Draw();
 };

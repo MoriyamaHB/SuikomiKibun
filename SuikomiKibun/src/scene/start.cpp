@@ -88,7 +88,7 @@ void StartScene::Update() {
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
 	//オブジェクト追加
-	bodys_.push_back(new StartBodys(StartBodys::kSphere, dynamics_world_));
+	bodys_.push_back(new StartBodys(dynamics_world_));
 
 	//↓Renderがconstでは使えないためここに記述
 	//タイトル描画
@@ -132,16 +132,19 @@ void StartScene::Draw() const {
 
 ////////////////////////////   start_body   //////////////////////////////////////////////////////
 
-StartBodys::StartBodys(BodyType type, btDynamicsWorld *world) :
-		world_(world), type_(type) {
-	//乱数で材質,大きさ設定
+StartBodys::StartBodys(btDynamicsWorld *world) :
+		world_(world) {
+	//乱数で材質,大きさ,タイプ設定
 	material_[0] = cc_util::GetRandom(0, 1000) / 1000.0;
 	material_[1] = cc_util::GetRandom(0, 1000) / 1000.0;
 	material_[2] = cc_util::GetRandom(0, 1000) / 1000.0;
 	material_[3] = cc_util::GetRandom(0, 1000) / 1000.0;
 	btScalar radius = cc_util::GetRandom(0, 1000) / 1000.0;
+	btVector3 extents = btVector3(cc_util::GetRandom(0, 1000) / 1000.0, cc_util::GetRandom(0, 1000) / 1000.0,
+			cc_util::GetRandom(0, 1000) / 1000.0);
+	type_ = static_cast<StartBodys::BodyType>(cc_util::GetRandom(0, kBodyTypeNum - 1));
 
-	//bulletで生成
+	//他ステータスを設定
 	btVector3 pos = btVector3(0, 5, 0);	//中心座標
 	btScalar mass = 0.03;	//質量
 	btScalar rest = 0.8;	//反発係数
@@ -155,6 +158,9 @@ StartBodys::StartBodys(BodyType type, btDynamicsWorld *world) :
 	switch (type_) {
 	case kSphere:
 		shape = new btSphereShape(radius);
+		break;
+	case kCube:
+		shape = new btBoxShape(extents);
 		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.球を作成します.");
@@ -178,14 +184,27 @@ StartBodys::~StartBodys() {
 
 //描画
 void StartBodys::Draw() {
-	btVector3 pos = body_->getCenterOfMassPosition();
 	glPushMatrix();
-	glTranslatef(pos[0], pos[1], pos[2]);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 	switch (type_) {
-	case kSphere:
+	case kSphere: {
+		btVector3 pos = body_->getCenterOfMassPosition();
+		glTranslatef(pos[0], pos[1], pos[2]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 		glutSolidSphere(static_cast<btSphereShape*>(body_->getCollisionShape())->getRadius(), 20, 20);
 		break;
+	}
+	case kCube: {
+		GLfloat cube_m[16];
+		btDefaultMotionState *cube_motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
+		cube_motion->m_graphicsWorldTrans.getOpenGLMatrix(cube_m);
+		glMultMatrixf(cube_m);
+		const btBoxShape* cube_shape = static_cast<const btBoxShape*>(body_->getCollisionShape());
+		btVector3 cube_half_extent = cube_shape->getHalfExtentsWithMargin();
+		glScaled(2 * cube_half_extent[0], 2 * cube_half_extent[1], 2 * cube_half_extent[2]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
+		glutSolidCube(1.0);
+		break;
+	}
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.");
 		break;
