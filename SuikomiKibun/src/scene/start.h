@@ -50,7 +50,7 @@ public:
 class StartBodys {
 public:
 	enum BodyType {
-		kSphere = 0, kCube, kCylinder, kBodyTypeNum
+		kSphere = 0, kCube, kCylinder, kCapsule, kBodyTypeNum
 	};
 private:
 	btRigidBody* body_;

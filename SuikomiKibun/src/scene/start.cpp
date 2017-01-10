@@ -168,9 +168,14 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 		memcpy(material_, uMaterial4fv_red, sizeof(material_));
 		shape = new btCylinderShapeZ(extents);
 		break;
+	case kCapsule:
+		memcpy(material_, uMaterial4fv_green, sizeof(material_));
+		shape = new btCapsuleShapeZ(radius, extents[1]);
+		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.球を作成します.");
 		shape = new btSphereShape(radius);
+		memcpy(material_, uMaterial4fv_black, sizeof(material_));
 		type_ = kSphere;
 		break;
 	}
@@ -191,19 +196,20 @@ StartBodys::~StartBodys() {
 //描画
 void StartBodys::Draw() {
 	glPushMatrix();
+
+	//モーションステータス
+	GLfloat m[16];
+	btDefaultMotionState *motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
+	motion->m_graphicsWorldTrans.getOpenGLMatrix(m);
+	glMultMatrixf(m);
+
 	switch (type_) {
 	case kSphere: {
-		btVector3 pos = body_->getCenterOfMassPosition();
-		glTranslatef(pos[0], pos[1], pos[2]);
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 		glutSolidSphere(static_cast<btSphereShape*>(body_->getCollisionShape())->getRadius(), 20, 20);
 		break;
 	}
 	case kCube: {
-		GLfloat m[16];
-		btDefaultMotionState *motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
-		motion->m_graphicsWorldTrans.getOpenGLMatrix(m);
-		glMultMatrixf(m);
 		const btBoxShape* shape = static_cast<const btBoxShape*>(body_->getCollisionShape());
 		btVector3 half_extent = shape->getHalfExtentsWithMargin();
 		glScaled(2 * half_extent[0], 2 * half_extent[1], 2 * half_extent[2]);
@@ -212,15 +218,19 @@ void StartBodys::Draw() {
 		break;
 	}
 	case kCylinder: {
-		GLfloat m[16];
-		btDefaultMotionState *motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
-		motion->m_graphicsWorldTrans.getOpenGLMatrix(m);
-		glMultMatrixf(m);
 		const btCylinderShape* shape = static_cast<const btCylinderShape*>(body_->getCollisionShape());
 		btScalar rad = shape->getRadius();
 		btScalar len = shape->getHalfExtentsWithMargin()[shape->getUpAxis()] * 2;
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 		glutSolidCylinder(rad, len, 20, 20);
+		break;
+	}
+	case kCapsule: {
+		const btCapsuleShape* shape = static_cast<const btCapsuleShape*>(body_->getCollisionShape());
+		btScalar rad = shape->getRadius();
+		btScalar len = shape->getHalfHeight() * 2;
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
+		DrawCapsule(rad, len, 20, 20);
 		break;
 	}
 	default:

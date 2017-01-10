@@ -91,6 +91,9 @@ extern void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[]
 extern void uDrawQuadrangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vector3 v3, float color3[],
 		Vector3 v4, float color4[]);
 
+//カプセルを描画
+void DrawCapsule(double rad, double len, int axis, int slices);
+
 //黒白の地面を描画
 extern void uDrawGround(int size);
 
