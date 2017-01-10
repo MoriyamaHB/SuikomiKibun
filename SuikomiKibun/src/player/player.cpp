@@ -1,4 +1,5 @@
 #include "player.h"
+#include "playerteki.h"
 
 btRigidBody* Player::delete_body_ = NULL;
 btRigidBody* Player::delete_body2_ = NULL;
@@ -48,7 +49,7 @@ Player::Player(btDynamicsWorld* world) :
 	color_[0] = btVector3(1, 0, 0);//赤
 	color_[1] = btVector3(0, 1, 0);//緑
 	color_[2] = btVector3(0, 0, 1);//青
-	color_judge_ = 2;
+	color_judge_ = 1;
 
 	player_num_ = world_->getNumCollisionObjects() - 1;
 
@@ -110,7 +111,7 @@ void Player::RenderScene() {
 }
 
 //更新
-void Player::Update(double angle, StageMap* map, int color_judge1, int color_judge2){
+void Player::Update(double angle, StageMap* map, int color_judge1, int color_judge2,int teki1_level,int teki2_level){
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
@@ -168,25 +169,17 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	btRigidBody* body;
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
-		Player::Pwinlosejudge(color_judge_,color_judge1);
-
-	} else if (sphere_body_ == delete_body2_
-			&& sphere_tekibody1_ == delete_body_) {
-		Player::Pwinlosejudge(color_judge_,color_judge1);
+		Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
+	}else if (sphere_body_ == delete_body2_&& sphere_tekibody1_ == delete_body_) {
+		Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
 	}
-	else if (sphere_body_ == delete_body_
-			&& sphere_tekibody2_ == delete_body2_) {
-		if (color_judge_ < 2)
-			color_judge_++;
-		else
-			color_judge_ = 0;
-	} else if (sphere_body_ == delete_body2_
-			&& sphere_tekibody2_ == delete_body_) {
-		if (color_judge_ < 2)
-			color_judge_++;
-		else
-			color_judge_ = 0;
-	} else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
+	else if (sphere_body_ == delete_body_&& sphere_tekibody2_ == delete_body2_) {
+		Player::Pwinlosejudge2(color_judge_,color_judge2,teki2_level);
+	}
+	else if (sphere_body_ == delete_body2_&& sphere_tekibody2_ == delete_body_) {
+		Player::Pwinlosejudge2(color_judge_,color_judge2,teki2_level);
+	}
+	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
 		if (sphere_body_ == delete_body_)
 			delete_body_ = delete_body2_;
 		if (delete_body_ != NULL) {
@@ -199,7 +192,8 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 			}
 		}
 
-	} else if (sphere_tekibody1_ == delete_body_
+	}
+	else if (sphere_tekibody1_ == delete_body_
 			|| sphere_tekibody1_ == delete_body2_) {
 		if (sphere_tekibody1_ == delete_body_)
 			delete_body_ = delete_body2_;
@@ -212,7 +206,8 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 				}
 			}
 		}
-	} else if (sphere_tekibody2_ == delete_body_
+	}
+	else if (sphere_tekibody2_ == delete_body_
 			|| sphere_tekibody2_ == delete_body2_) {
 		if (sphere_tekibody2_ == delete_body_)
 			delete_body_ = delete_body2_;
@@ -372,33 +367,6 @@ void Player::Draw() {
 		}
 	}
 	u2Dto3D();
-
-//		u3Dto2D();
-//		glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
-//		glTranslatef(0, 0, 1);
-//		glBegin(GL_QUADS);
-//		glNormal3d(0.0, 1.0, 0.0);
-//		glVertex3f(50 * i, 30, 0);
-//		glVertex3f(50 * i, 50, 0);
-//		glVertex3f(20 + 50 * i, 50, 0);
-//		glVertex3f(20 + 50 * i, 30, 0);
-//		glEnd();
-//		u2Dto3D();
-//}
-
-//球
-	/*
-	 btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	 glPushMatrix();
-	 glTranslatef(pos[0], pos[1], pos[2]);
-	 btScalar player_radius;
-	 player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
-	 glScalef(player_radius, player_radius, player_radius);
-	 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	 glutSolidSphere(1.0, 20, 20);
-	 glPopMatrix();
-	 */
-
 	glDisable(GL_LIGHTING);
 	RenderScene();
 }
@@ -452,19 +420,54 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	return true;
 }
 
-void Player::Pwinlosejudge(int color1, int color2){
-	if(color1 == 1 && color2 == 2)
+int Player::Pwinlosejudge(int color1, int color2, int tekilevel){
+	if(color1 == color2){
+		if(tekilevel > level_){
 		ResMove(sphere_body_);
-	else if(color1 == 2 && color2 == 3)
-	ResMove(sphere_body_);
-	else if(color1 == 3 && color2 == 1)
+		return 0;
+		}
+		else if(tekilevel <= level_)
+			return 0;
+	}
+	else if(color1 == 1 && color2 == 2){
 		ResMove(sphere_body_);
-	else
-		ResMove(sphere_tekibody1_);
+	}
+	else if(color1 == 2 && color2 == 3){
+		ResMove(sphere_body_);
+	}
+	else if(color1 == 3 && color2 == 1){
+		ResMove(sphere_body_);
+	}
+
+	return 0;
+}
+
+int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
+	if(color1 == color2){
+		if(tekilevel > level_){
+		ResMove(sphere_body_);
+		}
+		else if(tekilevel <= level_)
+			return 0;
+	}
+	else if(color1 == 1 && color2 == 2){
+		ResMove(sphere_body_);
+	}
+	else if(color1 == 2 && color2 == 3){
+		ResMove(sphere_body_);
+	}
+	else if(color1 == 3 && color2 == 1){
+		ResMove(sphere_body_);
+	}
+
+	return 0;
 }
 
 void Player::ResMove(btRigidBody* sphere_res_body_){
-	btVector3 pos = btVector3(100,0,0);
-	sphere_res_body_->translate(pos);
+		level_ = 1;
+		btVector3 pos = btVector3(0,150,0);
+		btQuaternion qrot(0, 0, 0, 1);
+		btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, pos));
+		sphere_res_body_->setMotionState(sphere_motion_state);
 }
 

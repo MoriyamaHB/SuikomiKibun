@@ -41,7 +41,7 @@ PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 	color_[0] = btVector3(1, 0, 0);
 	color_[1] = btVector3(0, 1, 0);
 	color_[2] = btVector3(0, 0, 1);
-	color_judge_ = 2;
+	color_judge_ = 1;
 
 	playerteki_num_ = world_->getNumCollisionObjects() - 1;
 
@@ -161,4 +161,5 @@ bool PlayerTeki::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	delete_body2_ = static_cast<btRigidBody*>(b);
 	return true;
 }
+
 

@@ -40,6 +40,7 @@ public:
 	void PlayerTekiMove(btVector3 pos);
 	void PlayerTekiResize(double size);
 	void PlayerColorChange(int color_change);
+	int get_color()const;
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
 };
 
