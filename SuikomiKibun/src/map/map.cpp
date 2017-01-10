@@ -110,8 +110,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 
 	//形状を設定
 	btCollisionShape *ground_shape = new btBoxShape(btVector3(125, 16, 250));
-	btCollisionShape *ground_shape2 = new btBoxShape(
-			btVector3(125, 16, 125));
+	btCollisionShape *ground_shape2 = new btBoxShape(btVector3(125, 16, 125));
 	btCollisionShape *ten_shape = new btBoxShape(btVector3(250, 0.01, 250));
 	btCollisionShape *stairs = new btBoxShape(btVector3(4, 0.3, 2));
 	btCollisionShape *wall_shape = new btBoxShape(btVector3(250, 300, 0.1));
@@ -598,7 +597,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos34);
-	offset.setRotation(btQuaternion(PI_/2, 0, 0));
+	offset.setRotation(btQuaternion(PI_ / 2, 0, 0));
 	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
@@ -607,34 +606,35 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//台
 	offset.setIdentity();
 	offset.setOrigin(dai_pos);
-	offset.setRotation(btQuaternion(-PI_/4, PI_/5, 0));
+	offset.setRotation(btQuaternion(-PI_ / 4, PI_ / 5, 0));
 	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, dai_shape);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 1, 1);
 
 //流動体
-	int total = 2*(10-1)*(10-1);
+	int total = 2 * (10 - 1) * (10 - 1);
 	int verstride = sizeof(btVector3);
-	int indexstride = 3*sizeof(int);
+	int indexstride = 3 * sizeof(int);
 	vertices_ = new btVector3[total];
-	indices_ = new int[3*total];
+	indices_ = new int[3 * total];
 	SetVertexPositions(8, 0.f);
 	btTriangleIndexVertexArray* arrays;
 
-	int index=0;
-	for(int i = 0; i< 10-1; i++){
-		for(int j = 0; j < 10-1; j++){
-			indices_[index++] = j*10+i;
-			indices_[index++] = j*10+i+1;
-			indices_[index++] = (j+1)*10+i+1;
-			indices_[index++] = j*10+i;
-			indices_[index++] = (j+1)*10+i+1;
-			indices_[index++] = (j+1)*10+i;
+	int index = 0;
+	for (int i = 0; i < 10 - 1; i++) {
+		for (int j = 0; j < 10 - 1; j++) {
+			indices_[index++] = j * 10 + i;
+			indices_[index++] = j * 10 + i + 1;
+			indices_[index++] = (j + 1) * 10 + i + 1;
+			indices_[index++] = j * 10 + i;
+			indices_[index++] = (j + 1) * 10 + i + 1;
+			indices_[index++] = (j + 1) * 10 + i;
 		}
 	}
 
-	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride, 2*(10-1)*(10-1), (btScalar*)&vertices_[0].x(), verstride);
+	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride,
+			2 * (10 - 1) * (10 - 1), (btScalar*) &vertices_[0].x(), verstride);
 	trimeshShape_ = new btBvhTriangleMeshShape(arrays, true);
 	btCollisionShape* groundShape4 = trimeshShape_;
 	offset.setIdentity();
@@ -651,7 +651,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btScalar kan_rest = 0;
 
 	//反発係数設定
-	for(int i = 0; i < 4; i++){
+	for (int i = 0; i < 4; i++) {
 		ground_body[i]->setRestitution(ground_rest);
 	}
 
@@ -754,29 +754,29 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	btVector3 position_pf(-200, 0, -200);
 //	CreatePyramid(position_pf, 5);
 //トライアングル
-	btVector3 position_ta(180, 0,-5);
-	CreateTriangle(position_ta, 1, 1);
-	btVector3 position_tb(210, 100, -30);
-	CreateTriangle(position_tb, 1, 2);
-	btVector3 position_tc(210, 100, 40);
-	CreateTriangle(position_tc, 1, 3);
-	btVector3 position_td(-155, 0,95);
-	CreateTriangle(position_td, 1, 1);
-	btVector3 position_te(-95, 0, 95);
-	CreateTriangle(position_te, 1, 2);
-	btVector3 position_tf(-95, 0, 155);
-	CreateTriangle(position_tf, 1, 3);
-	btVector3 position_tg(-80, 20,-80);
-	CreateTriangle(position_tg, 1, 1);
-	btVector3 position_th(-230, 20, -50);
-	CreateTriangle(position_th, 1, 2);
-	btVector3 position_ti(-50, 20, -230);
-	CreateTriangle(position_ti, 1, 3);
+//	btVector3 position_ta(180, 0, -5);
+//	CreateTriangle(position_ta, 1, 1);
+//	btVector3 position_tb(210, 100, -30);
+//	CreateTriangle(position_tb, 1, 2);
+//	btVector3 position_tc(210, 100, 40);
+//	CreateTriangle(position_tc, 1, 3);
+//	btVector3 position_td(-155, 0, 95);
+//	CreateTriangle(position_td, 1, 1);
+//	btVector3 position_te(-95, 0, 95);
+//	CreateTriangle(position_te, 1, 2);
+//	btVector3 position_tf(-95, 0, 155);
+//	CreateTriangle(position_tf, 1, 3);
+//	btVector3 position_tg(-80, 20, -80);
+//	CreateTriangle(position_tg, 1, 1);
+//	btVector3 position_th(-230, 20, -50);
+//	CreateTriangle(position_th, 1, 2);
+//	btVector3 position_ti(-50, 20, -230);
+//	CreateTriangle(position_ti, 1, 3);
 //きのこ
 	btVector3 position_ma(160, 41, -130);
-	CreateMush(position_ma, 3,2);
+	CreateMush(position_ma, 3, 2);
 	btVector3 position_mb(128, 10, -162);
-	CreateMush(position_mb, 4,1);
+	CreateMush(position_mb, 4, 1);
 //	btVector3 position_mc(235, 82, 95);
 //	CreateMush(position_mc, 3,1);
 //	btVector3 position_md(190, 62, 109);
@@ -811,7 +811,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 position_ah(45, 0, 0);
 	CreateApple(position_ah, 2);
 	btVector3 position_ai(50, 0, 0);
-//	CreateApple(position_ai, 2);
+	CreateApple(position_ai, 2);
 //	btVector3 position_aj(175, 42, -65);
 //	CreateApple(position_aj, 2);
 //	btVector3 position_ak(175, 42, -75);
@@ -925,8 +925,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	CreatePonde(position_pe, 5);
 //プレイヤー
 
-
-	//描画
+//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
@@ -937,7 +936,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //デストラクタ
 StageMap::~StageMap() {
 	//オブジェクトの破棄
-	for (int i = world_->getNumCollisionObjects()-1; i >= 0; i--) {
+	for (int i = world_->getNumCollisionObjects() - 1; i >= 0; i--) {
 		btCollisionObject* obj = world_->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(obj);
 		if (body && body->getMotionState()) {
@@ -957,8 +956,8 @@ StageMap::~StageMap() {
 //更新
 void StageMap::Update() {
 	//流動体
-	static float offset =0;
-	offset+=0.01;
+	static float offset = 0;
+	offset += 0.01;
 	SetVertexPositions(7, offset);
 	btVector3 worldMin(-1000, -1000, -1000);
 	btVector3 worldMax(1000, 1000, 1000);
@@ -971,7 +970,6 @@ void StageMap::Draw() {
 //	glClear(GL_STENCIL_BUFFER_BIT);
 //	glEnable(GL_CULL_FACE);
 //	RenderScene(0);
-
 
 //
 	glDisable(GL_LIGHTING);
@@ -1024,7 +1022,7 @@ void StageMap::RenderScene() {
 	rot.setIdentity();
 	const int numObjects = world_->getNumCollisionObjects();
 	btVector3 wireColor(1, 0, 0);
-	for (int i = 0; i < numObjects-3; i++) {
+	for (int i = 0; i < numObjects - 3; i++) {
 		btCollisionObject* colObj = world_->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(colObj);
 		if (body && body->getMotionState()) {
@@ -1331,7 +1329,7 @@ void StageMap::CreatePyramid(const btVector3& position, int level) {
 
 	} else if (level == 2) {
 
-	} else if(level == 1){
+	} else if (level == 1) {
 
 	} else {
 		cube_size = 7;
@@ -1365,7 +1363,8 @@ void StageMap::CreatePyramid(const btVector3& position, int level) {
 	offset.setOrigin(position);
 
 	//cubeをbulletに登録
-	box_body[0] = LocalCreateRigidBody(btScalar(cube_mass), offset*offset2, shape);
+	box_body[0] = LocalCreateRigidBody(btScalar(cube_mass), offset * offset2,
+			shape);
 	object_[num_] = ++object_num_;
 	level_[num_] = level;
 	color_[num_++] = btVector3(0.71, 0, 0.48);
@@ -1671,11 +1670,11 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 			side_size / 4);
 	btVector3 position9(side_size / (4 * sqrt(3)), -side_size * sqrt(3) / 2,
 			-side_size / 4);
-	btVector3 position10(0, -side_size * sqrt(3)/3,0);
+	btVector3 position10(0, -side_size * sqrt(3) / 3, 0);
 
 	//形状設定
 	btCollisionShape *sphere_shape = new btSphereShape(sphere_size);
-	btCollisionShape *sphere_shape2 = new btSphereShape(sphere_size*1.7);
+	btCollisionShape *sphere_shape2 = new btSphereShape(sphere_size * 1.7);
 	btCollisionShape *side_shape = new btCapsuleShape(btScalar(0.1),
 			btScalar(side_size));
 
@@ -1691,22 +1690,22 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 			sphere_shape);
 	object_[num_] = ++object_num_;
 	level_[num_] = level;
-	if(co == 3){
+	if (co == 3) {
 		color_[num_++] = btVector3(1, 0, 0);
-	}else if(co == 2){
+	} else if (co == 2) {
 		color_[num_++] = btVector3(0, 1, 0);
-	}else {
+	} else {
 		color_[num_++] = btVector3(0, 0, 1);
 	}
 	triangle_sphere[1] = LocalCreateRigidBody(btScalar(mass), offset * offset2,
 			sphere_shape);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 3){
+	if (co == 3) {
 		color_[num_++] = btVector3(1, 0, 0);
-	}else if(co == 2){
+	} else if (co == 2) {
 		color_[num_++] = btVector3(0, 1, 0);
-	}else {
+	} else {
 		color_[num_++] = btVector3(0, 0, 1);
 	}
 	offset2.setIdentity();
@@ -1715,11 +1714,11 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 			sphere_shape);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 3){
+	if (co == 3) {
 		color_[num_++] = btVector3(1, 0, 0);
-	}else if(co == 2){
+	} else if (co == 2) {
 		color_[num_++] = btVector3(0, 1, 0);
-	}else {
+	} else {
 		color_[num_++] = btVector3(0, 0, 1);
 	}
 	offset2.setIdentity();
@@ -1728,11 +1727,11 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 			sphere_shape);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 3){
+	if (co == 3) {
 		color_[num_++] = btVector3(1, 0, 0);
-	}else if(co == 2){
+	} else if (co == 2) {
 		color_[num_++] = btVector3(0, 1, 0);
-	}else {
+	} else {
 		color_[num_++] = btVector3(0, 0, 1);
 	}
 	offset2.setIdentity();
@@ -1741,11 +1740,11 @@ void StageMap::CreateTriangle(const btVector3& position, int level, int co) {
 			sphere_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 3){
+	if (co == 3) {
 		color_[num_++] = btVector3(1, 0, 0);
-	}else if(co == 2){
+	} else if (co == 2) {
 		color_[num_++] = btVector3(0, 1, 0);
-	}else {
+	} else {
 		color_[num_++] = btVector3(0, 0, 1);
 	}
 
@@ -2469,11 +2468,11 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 			cube_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 1)
+	if (co == 1)
 		color_[num_++] = btVector3(1, 0, 0);
-	else if(co == 2)
+	else if (co == 2)
 		color_[num_++] = btVector3(1, 0, 1);
-	else if(co == 3)
+	else if (co == 3)
 		color_[num_++] = btVector3(1, 1, 0);
 	offset2.setIdentity();
 	offset2.setOrigin(position4);
@@ -2481,11 +2480,11 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 			cube_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 1)
+	if (co == 1)
 		color_[num_++] = btVector3(1, 0, 0);
-	else if(co == 2)
+	else if (co == 2)
 		color_[num_++] = btVector3(1, 0, 1);
-	else if(co == 3)
+	else if (co == 3)
 		color_[num_++] = btVector3(1, 1, 0);
 	offset.setRotation(btQuaternion(PI_ / 2, 0, 0));
 	offset2.setOrigin(position3);
@@ -2493,22 +2492,22 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 			cube_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 1)
+	if (co == 1)
 		color_[num_++] = btVector3(1, 0, 0);
-	else if(co == 2)
+	else if (co == 2)
 		color_[num_++] = btVector3(1, 0, 1);
-	else if(co == 3)
+	else if (co == 3)
 		color_[num_++] = btVector3(1, 1, 0);
 	offset2.setOrigin(position4);
 	cube_body[4] = LocalCreateRigidBody(btScalar(mass), offset * offset2,
 			cube_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 1)
+	if (co == 1)
 		color_[num_++] = btVector3(1, 0, 0);
-	else if(co == 2)
+	else if (co == 2)
 		color_[num_++] = btVector3(1, 0, 1);
-	else if(co == 3)
+	else if (co == 3)
 		color_[num_++] = btVector3(1, 1, 0);
 	offset.setIdentity();
 	offset.setOrigin(position);
@@ -2518,11 +2517,11 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 			cube_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = level;
-	if(co == 1)
+	if (co == 1)
 		color_[num_++] = btVector3(1, 0, 0);
-	else if(co == 2)
+	else if (co == 2)
 		color_[num_++] = btVector3(1, 0, 1);
-	else if(co == 3)
+	else if (co == 3)
 		color_[num_++] = btVector3(1, 1, 0);
 
 	//オブジェクトを繋げる
@@ -2596,9 +2595,9 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 		size2 = 0.5;
 		mass = 0.01;
 	} else if (level == 2) {
-		size = 2;
-		size2 = 0.3;
-		mass = 0.0;
+		size = 1.5;
+		size2 = 0.2;
+		mass = 1.0;
 	} else {
 		size = 1;
 		size2 = 0.1;
@@ -2614,9 +2613,9 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 //	btCollisionShape *cube_shape = new btBoxShape(btVector3(0.7, 0.7,  0.7));
 	btCollisionShape *cube_shape = new btSphereShape(size);
 	btCollisionShape *cube_shape2 = new btBoxShape(
-			btVector3(size2, size2*2, size2));
+			btVector3(size2, size2, size2));
 	btCollisionShape *cube_shape3 = new btBoxShape(
-			btVector3(size2, size2*2, size2 * 3));
+			btVector3(size2, size2, size2 * 3));
 
 	//bulletに登録
 	btTransform offset;
@@ -2672,68 +2671,83 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 int StageMap::DestroyObject(int num, int level) {
 	int i;
 	int l;
-	int test = num;
+	int num2 = num;
 	btCollisionObject* obj;
 	btRigidBody* body;
 	btVector3 vec = btVector3(50, 50, 50);
-	btTransform ten;
-	ten.setOrigin(vec);
-
+	btVector3 vec2 = btVector3(500, 500, 500);
+	//オブジェクトのレベルを取得
 	if (level_[num] == 5) {
 		l = 70;
 	} else if (level_[num] == 4) {
 		l = 30;
 	} else if (level_[num] == 3) {
 		l = 15;
-	} else if(level_[num] == 2){
+	} else if (level_[num] == 2) {
 		l = 5;
 	} else {
 		l = 0;
 	}
 
+	//プレイヤーがオブジェクトよりレベルが高いならオブジェクトを破壊
 	if (level > l && level_[num] != 0) {
 
+		//レベル１，２のオブジェクトは再配置
+		if (l == 0 || l == 5) {
+			for (i = 1; num - i >= 0; i++) {
+				if (object_[num] == object_[num - i]) {
+					num2 = num - i;
+				} else
+					break;
+			}
+			for (i = 0; num2 + i <= num_; i++) {
+				if (object_[num] == object_[num2 + i]) {
 
-		for (i = 1; num + i <= num_; i++) {
-			if (object_[num] == object_[num + i]) {
-				test = num + i;
-//				obj = world_->getCollisionObjectArray()[num + i];
-//				body = btRigidBody::upcast(obj);
-//				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-////				if (body && body->getMotionState()) {
-////					delete body->getMotionState();
-////				}
-//				body->setMotionState(motion);
-////				object_[num + i] = -1;
-//				//world_->removeCollisionObject( obj );
-			} else
-				break;
+					obj = world_->getCollisionObjectArray()[num2 + i];
+					body = btRigidBody::upcast(obj);
+
+					btQuaternion qrot(0, 0, 0, 1);
+					btDefaultMotionState* sphere_motion_state =
+							new btDefaultMotionState(btTransform(qrot, vec));
+					body->setMotionState(sphere_motion_state);
+					body->activate(true);
+				} else
+					break;
+			}
+		} else {
+
+			for (i = 0; num - i >= 0; i++) {
+				if (object_[num] == object_[num - i]) {
+
+					obj = world_->getCollisionObjectArray()[num - i];
+					body = btRigidBody::upcast(obj);
+
+					btQuaternion qrot(0, 0, 0, 1);
+					btDefaultMotionState* sphere_motion_state =
+							new btDefaultMotionState(btTransform(qrot, vec2));
+					body->setMotionState(sphere_motion_state);
+					body->activate(true);
+					object_[num - i] = -1;
+				} else
+					break;
+			}
+			for (i = 1; num + i <= num_; i++) {
+				if (object_[num] == object_[num + i]) {
+
+					obj = world_->getCollisionObjectArray()[num + i];
+					body = btRigidBody::upcast(obj);
+
+					btQuaternion qrot(0, 0, 0, 1);
+					btDefaultMotionState* sphere_motion_state =
+							new btDefaultMotionState(btTransform(qrot, vec2));
+					body->setMotionState(sphere_motion_state);
+					body->activate(true);
+					object_[num + i] = -1;
+				} else
+					break;
+			}
 		}
-
-		for (i = 0;test - i >= 0;i++) {
-			if (object_[num] == object_[test - i]) {
-
-				obj = world_->getCollisionObjectArray()[test - i];
-				body = btRigidBody::upcast(obj);
-				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-				if (body && body->getMotionState()) {
-					delete body->getMotionState();
-				}
-				body->setMotionState(motion);
-				//world_->removeCollisionObject( obj );
-//				object_[num - i] = -1;
-//				delete motion;
-			} else
-				break;
-		}
-//		obj = world_->getCollisionObjectArray()[num];
-//		body = btRigidBody::upcast(obj);
-////		if (body && body->getMotionState()) {
-////			delete body->getMotionState();
-////		}
-//		body->setMotionState(motion);
-//		object_[num] = -1;
-	}else {
+	} else {
 		return 0;
 	}
 
@@ -2741,12 +2755,15 @@ int StageMap::DestroyObject(int num, int level) {
 }
 
 //流動体の計算
-void StageMap::SetVertexPositions(float waveheight, float offset){
+void StageMap::SetVertexPositions(float waveheight, float offset) {
 	int i, j;
 	int verts = 10;
-	for(i = 0; i < verts; i++){
-		for(j = 0; j < verts; j++){
-			vertices_[i+j*verts].setValue((i-verts*0.5f)*33, waveheight*sinf((float)i + offset)*cosf((float)j+offset),(j-verts*0.5f)*33);
+	for (i = 0; i < verts; i++) {
+		for (j = 0; j < verts; j++) {
+			vertices_[i + j * verts].setValue((i - verts * 0.5f) * 33,
+					waveheight * sinf((float) i + offset)
+							* cosf((float) j + offset),
+					(j - verts * 0.5f) * 33);
 
 		}
 	}
