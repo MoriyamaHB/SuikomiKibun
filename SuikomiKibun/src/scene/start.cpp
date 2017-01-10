@@ -26,8 +26,6 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		dynamics_world_->setGravity(btVector3(0, -9.8, 0));
 	}
 
-	//オブジェクト作成
-
 	//地面
 	{
 		btVector3 ground_pos = btVector3(0, 0, 0);
@@ -43,8 +41,6 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		ground_body_->setRestitution(ground_rest);
 		dynamics_world_->addRigidBody(ground_body_);
 	}
-
-	body1 = new StartBodys(StartBodys::kSphere, dynamics_world_);
 
 	//描画図形乱数
 //	start_rand_solid = cc_util::GetRandom(0, 5);
@@ -69,7 +65,11 @@ StartScene::~StartScene() {
 	dynamics_world_->removeRigidBody(ground_body_);
 	delete ground_body_;
 
-	delete body1;
+	//オブジェクト
+	for (auto itr = bodys_.begin(); itr != bodys_.end();) {
+		delete (*itr);
+		itr = bodys_.erase(itr);
+	}
 
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
@@ -86,6 +86,9 @@ void StartScene::Update() {
 
 	//ライト
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
+	//オブジェクト追加
+	bodys_.push_back(new StartBodys(StartBodys::kSphere, dynamics_world_));
 
 	//↓Renderがconstでは使えないためここに記述
 	//タイトル描画
@@ -119,7 +122,9 @@ void StartScene::Draw() const {
 	glPopMatrix();
 
 	//オブジェクト
-	body1->Draw();
+	for (auto itr = bodys_.begin(); itr != bodys_.end(); ++itr) {
+		(*itr)->Draw();
+	}
 
 	//文字描画
 	uDrawString2("Aキーを押すとゲーム開始です", 940, 760, uColor4fv_red);

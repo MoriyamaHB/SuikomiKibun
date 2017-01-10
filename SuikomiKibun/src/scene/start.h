@@ -6,6 +6,7 @@
 #include <bullet/btBulletDynamicsCommon.h>
 #include <GL/freeglut.h>
 #include <math.h>
+#include <vector>
 
 #include "scene_mgr.h"
 #include "../input/input.h"
@@ -23,11 +24,9 @@ private:
 	//カメラ
 	Camera3D3P camera_;
 
-	//図形
-	int start_rand_solid;
-	float start_rand_mate[4];
+	//オブジェクト、地面
 	btRigidBody* ground_body_;
-	StartBodys *body1;
+	std::vector<StartBodys*> bodys_;
 
 	//bullet
 	btDynamicsWorld* dynamics_world_;
