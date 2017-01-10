@@ -925,11 +925,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	CreatePonde(position_pe, 5);
 //プレイヤー
 
+
 	//描画
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
 	printf("%d", world_->getNumCollisionObjects());
+
 }
 
 //デストラクタ
@@ -2612,9 +2614,9 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 //	btCollisionShape *cube_shape = new btBoxShape(btVector3(0.7, 0.7,  0.7));
 	btCollisionShape *cube_shape = new btSphereShape(size);
 	btCollisionShape *cube_shape2 = new btBoxShape(
-			btVector3(size2, size2, size2));
+			btVector3(size2, size2*2, size2));
 	btCollisionShape *cube_shape3 = new btBoxShape(
-			btVector3(size2, size2, size2 * 3));
+			btVector3(size2, size2*2, size2 * 3));
 
 	//bulletに登録
 	btTransform offset;
@@ -2670,12 +2672,12 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 int StageMap::DestroyObject(int num, int level) {
 	int i;
 	int l;
+	int test = num;
 	btCollisionObject* obj;
 	btRigidBody* body;
-	btVector3 vec = btVector3(100, 50, 100);
+	btVector3 vec = btVector3(50, 50, 50);
 	btTransform ten;
 	ten.setOrigin(vec);
-	btDefaultMotionState *motion = new btDefaultMotionState(ten);
 
 	if (level_[num] == 5) {
 		l = 70;
@@ -2694,39 +2696,42 @@ int StageMap::DestroyObject(int num, int level) {
 
 		for (i = 1; num + i <= num_; i++) {
 			if (object_[num] == object_[num + i]) {
-				obj = world_->getCollisionObjectArray()[num + i];
-				body = btRigidBody::upcast(obj);
-				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-//				if (body && body->getMotionState()) {
-//					delete body->getMotionState();
-//				}
-				body->setMotionState(motion);
-//				object_[num + i] = -1;
-				//world_->removeCollisionObject( obj );
+				test = num + i;
+//				obj = world_->getCollisionObjectArray()[num + i];
+//				body = btRigidBody::upcast(obj);
+//				btDefaultMotionState *motion = new btDefaultMotionState(ten);
+////				if (body && body->getMotionState()) {
+////					delete body->getMotionState();
+////				}
+//				body->setMotionState(motion);
+////				object_[num + i] = -1;
+//				//world_->removeCollisionObject( obj );
 			} else
 				break;
 		}
 
-		for (i = 1; num - i > 0; i++) {
-			if (object_[num] == object_[num - i]) {
-				obj = world_->getCollisionObjectArray()[num - i];
+		for (i = 0;test - i >= 0;i++) {
+			if (object_[num] == object_[test - i]) {
+
+				obj = world_->getCollisionObjectArray()[test - i];
 				body = btRigidBody::upcast(obj);
 				btDefaultMotionState *motion = new btDefaultMotionState(ten);
-//				if (body && body->getMotionState()) {
-//					delete body->getMotionState();
-//				}
+				if (body && body->getMotionState()) {
+					delete body->getMotionState();
+				}
 				body->setMotionState(motion);
 				//world_->removeCollisionObject( obj );
 //				object_[num - i] = -1;
+//				delete motion;
 			} else
 				break;
 		}
-		obj = world_->getCollisionObjectArray()[num];
-		body = btRigidBody::upcast(obj);
-//		if (body && body->getMotionState()) {
-//			delete body->getMotionState();
-//		}
-		body->setMotionState(motion);
+//		obj = world_->getCollisionObjectArray()[num];
+//		body = btRigidBody::upcast(obj);
+////		if (body && body->getMotionState()) {
+////			delete body->getMotionState();
+////		}
+//		body->setMotionState(motion);
 //		object_[num] = -1;
 	}else {
 		return 0;
