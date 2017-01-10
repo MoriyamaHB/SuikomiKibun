@@ -134,8 +134,15 @@ void StartScene::Draw() const {
 
 StartBodys::StartBodys(BodyType type, btDynamicsWorld *world) :
 		world_(world), type_(type) {
+	//乱数で材質,大きさ設定
+	material_[0] = cc_util::GetRandom(0, 1000) / 1000.0;
+	material_[1] = cc_util::GetRandom(0, 1000) / 1000.0;
+	material_[2] = cc_util::GetRandom(0, 1000) / 1000.0;
+	material_[3] = cc_util::GetRandom(0, 1000) / 1000.0;
+	btScalar radius = cc_util::GetRandom(0, 1000) / 1000.0;
+
+	//bulletで生成
 	btVector3 pos = btVector3(0, 5, 0);	//中心座標
-	btScalar radius = 0.2;	//大きさ
 	btScalar mass = 0.03;	//質量
 	btScalar rest = 0.8;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
@@ -174,7 +181,7 @@ void StartBodys::Draw() {
 	btVector3 pos = body_->getCenterOfMassPosition();
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 	switch (type_) {
 	case kSphere:
 		glutSolidSphere(static_cast<btSphereShape*>(body_->getCollisionShape())->getRadius(), 20, 20);

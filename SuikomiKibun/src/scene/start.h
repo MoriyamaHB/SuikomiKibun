@@ -55,6 +55,7 @@ private:
 	btRigidBody* body_;
 	btDynamicsWorld* world_;
 	BodyType type_;
+	float material_[4];
 public:
 	StartBodys(BodyType type, btDynamicsWorld *world);
 	~StartBodys();
