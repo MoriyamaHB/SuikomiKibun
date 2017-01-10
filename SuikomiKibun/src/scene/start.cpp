@@ -2,14 +2,15 @@
 
 //コンストラクタ
 StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
-		BaseScene(changer), title_font("font/crayon.ttf"), description_font("font/jkgm.ttf"), kTitleFontSize(150), kDescriptionFontSize(
-				40) {
+		BaseScene(changer), title_font("font/crayon.ttf"), description_font("font/jkgm.ttf"), kTitleFontSize(
+				150), kDescriptionFontSize(40) {
 	kLight0Pos[0] = 0.0, kLight0Pos[1] = 15.0, kLight0Pos[2] = 0.0, kLight0Pos[3] = 1.0;
 
 	//input初期化
 	input::Init();
 
 	//カメラ位置
+	camera_.set_distance(5.0);
 	camera_.Update(0, 200);
 
 	//ワールド作成
@@ -88,19 +89,22 @@ void StartScene::Update() {
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
 	//オブジェクト追加
-	bodys_.push_back(new StartBodys(dynamics_world_));
+	static int cnt = 0;
+	cnt++;
+	if (cnt % 60 == 0)
+		bodys_.push_back(new StartBodys(dynamics_world_));
 
 	//↓Renderがconstでは使えないためここに記述
 	//タイトル描画
 	u3Dto2D();
 	if (!title_font.Error()) {
-		glColor4fv (uColor4fv_purple);
+		glColor4fv(uColor4fv_purple);
 		glRasterPos2f(220, 180);
 		title_font.Render("吸い込み気分");
 	}
 	//ゲーム説明描画
 	if (!description_font.Error()) {
-		glColor4fv (uColor4fv_gray);
+		glColor4fv(uColor4fv_gray);
 		glRasterPos2f(200, 260);
 		description_font.Render("このゲームは物体を吸い込んで大きくしていくゲームです。");
 	}
@@ -134,11 +138,7 @@ void StartScene::Draw() const {
 
 StartBodys::StartBodys(btDynamicsWorld *world) :
 		world_(world) {
-	//乱数で材質,大きさ,タイプ設定
-	material_[0] = cc_util::GetRandom(0, 1000) / 1000.0;
-	material_[1] = cc_util::GetRandom(0, 1000) / 1000.0;
-	material_[2] = cc_util::GetRandom(0, 1000) / 1000.0;
-	material_[3] = cc_util::GetRandom(0, 1000) / 1000.0;
+	//乱数で大きさ,タイプ設定
 	btScalar radius = cc_util::GetRandom(0, 1000) / 1000.0;
 	btVector3 extents = btVector3(cc_util::GetRandom(0, 1000) / 1000.0, cc_util::GetRandom(0, 1000) / 1000.0,
 			cc_util::GetRandom(0, 1000) / 1000.0);
@@ -147,20 +147,26 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	//他ステータスを設定
 	btVector3 pos = btVector3(0, 5, 0);	//中心座標
 	btScalar mass = 0.03;	//質量
-	btScalar rest = 0.8;	//反発係数
+	btScalar rest = 0.1;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
 	btQuaternion qrot(0, 0, 0, 1);	//姿勢
 
 	btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(qrot, pos));	//姿勢,位置設定
 
-	//オブジェクト生成
+	//オブジェクト生成,材質設定
 	btCollisionShape *shape;
 	switch (type_) {
 	case kSphere:
+		memcpy(material_, uMaterial4fv_brown, sizeof(material_));
 		shape = new btSphereShape(radius);
 		break;
 	case kCube:
+		memcpy(material_, uMaterial4fv_blue, sizeof(material_));
 		shape = new btBoxShape(extents);
+		break;
+	case kCylinder:
+		memcpy(material_, uMaterial4fv_red, sizeof(material_));
+		shape = new btCylinderShapeZ(extents);
 		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.球を作成します.");
@@ -194,15 +200,27 @@ void StartBodys::Draw() {
 		break;
 	}
 	case kCube: {
-		GLfloat cube_m[16];
-		btDefaultMotionState *cube_motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
-		cube_motion->m_graphicsWorldTrans.getOpenGLMatrix(cube_m);
-		glMultMatrixf(cube_m);
-		const btBoxShape* cube_shape = static_cast<const btBoxShape*>(body_->getCollisionShape());
-		btVector3 cube_half_extent = cube_shape->getHalfExtentsWithMargin();
-		glScaled(2 * cube_half_extent[0], 2 * cube_half_extent[1], 2 * cube_half_extent[2]);
+		GLfloat m[16];
+		btDefaultMotionState *motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
+		motion->m_graphicsWorldTrans.getOpenGLMatrix(m);
+		glMultMatrixf(m);
+		const btBoxShape* shape = static_cast<const btBoxShape*>(body_->getCollisionShape());
+		btVector3 half_extent = shape->getHalfExtentsWithMargin();
+		glScaled(2 * half_extent[0], 2 * half_extent[1], 2 * half_extent[2]);
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 		glutSolidCube(1.0);
+		break;
+	}
+	case kCylinder: {
+		GLfloat m[16];
+		btDefaultMotionState *motion = static_cast<btDefaultMotionState*>(body_->getMotionState());
+		motion->m_graphicsWorldTrans.getOpenGLMatrix(m);
+		glMultMatrixf(m);
+		const btCylinderShape* shape = static_cast<const btCylinderShape*>(body_->getCollisionShape());
+		btScalar rad = shape->getRadius();
+		btScalar len = shape->getHalfExtentsWithMargin()[shape->getUpAxis()] * 2;
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
+		glutSolidCylinder(rad, len, 20, 20);
 		break;
 	}
 	default:

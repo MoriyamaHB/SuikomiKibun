@@ -7,6 +7,7 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <vector>
+#include <memory>
 
 #include "scene_mgr.h"
 #include "../input/input.h"
@@ -49,7 +50,7 @@ public:
 class StartBodys {
 public:
 	enum BodyType {
-		kSphere = 0, kCube, kBodyTypeNum
+		kSphere = 0, kCube, kCylinder, kBodyTypeNum
 	};
 private:
 	btRigidBody* body_;
