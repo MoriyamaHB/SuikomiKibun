@@ -26,6 +26,7 @@ private:
 	//図形
 	int start_rand_solid;
 	float start_rand_mate[4];
+	btRigidBody* ground_body_;
 	StartBodys *body1;
 
 	//bullet

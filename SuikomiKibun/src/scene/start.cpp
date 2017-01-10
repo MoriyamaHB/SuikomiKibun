@@ -26,6 +26,24 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		dynamics_world_->setGravity(btVector3(0, -9.8, 0));
 	}
 
+	//オブジェクト作成
+
+	//地面
+	{
+		btVector3 ground_pos = btVector3(0, 0, 0);
+		btVector3 ground_extents = btVector3(25, 0.00001, 25);
+		btScalar ground_mass = 0.0;
+		btScalar ground_rest = 1.0;
+		btVector3 ground_inertia(0, 0, 0);
+		btCollisionShape *ground_shape = new btBoxShape(ground_extents);
+		btQuaternion qrot(0, 0, 0, 1);
+		btDefaultMotionState* ground_motion_state = new btDefaultMotionState(btTransform(qrot, ground_pos));
+		ground_shape->calculateLocalInertia(ground_mass, ground_inertia);
+		ground_body_ = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
+		ground_body_->setRestitution(ground_rest);
+		dynamics_world_->addRigidBody(ground_body_);
+	}
+
 	body1 = new StartBodys(StartBodys::kSphere, dynamics_world_);
 
 	//描画図形乱数
@@ -47,7 +65,12 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 //デストラクタ
 StartScene::~StartScene() {
 	//オブジェクト破壊
+	delete ground_body_->getMotionState();
+	dynamics_world_->removeRigidBody(ground_body_);
+	delete ground_body_;
+
 	delete body1;
+
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
 	delete dynamics_world_;
@@ -85,9 +108,17 @@ void StartScene::Update() {
 
 //描画
 void StartScene::Draw() const {
-	//地面描画
-	uDrawGround(20);
+	//地面
+	btVector3 pos;
+	glPushMatrix();
+	pos = ground_body_->getCenterOfMassPosition();
+	glTranslatef(pos[0], pos[1], pos[2]);
+	const btBoxShape* ground_shape = static_cast<const btBoxShape*>(ground_body_->getCollisionShape());
+	btVector3 ground_half_extent = ground_shape->getHalfExtentsWithMargin();
+	uDrawGround(ground_half_extent[0] * 2);
+	glPopMatrix();
 
+	//オブジェクト
 	body1->Draw();
 
 	//文字描画
@@ -99,7 +130,7 @@ void StartScene::Draw() const {
 StartBodys::StartBodys(BodyType type, btDynamicsWorld *world) :
 		world_(world), type_(type) {
 	btVector3 pos = btVector3(0, 5, 0);	//中心座標
-	btScalar radius = 1.0;	//大きさ
+	btScalar radius = 0.2;	//大きさ
 	btScalar mass = 0.03;	//質量
 	btScalar rest = 0.8;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
