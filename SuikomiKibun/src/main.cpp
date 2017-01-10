@@ -61,6 +61,7 @@ void FirstInit(int argc, char *argv[]) {
 	fps.Init(); 				//fps初期化
 	output_display0.Init(); 	//ディスプレイ文字列初期化
 	//シーン遷移管理実体化
+	//引数があるときサーバーのみ
 	if (argc > 1)
 		scene_mgr = new SceneMgr(kSceneServerOnly);
 	else

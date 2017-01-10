@@ -78,10 +78,18 @@ void NetMain::Draw() const {
 
 //getter
 int NetMain::get_enemy_num() const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	return client_num_ - 1;
 }
 
 btVector3 NetMain::GetEnemyPos(int num) const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	btVector3 pos;
 	Vector3 pos_v = client_udp_->get_receive_data().player_data[num].pos;
 	pos[0] = pos_v.x;
@@ -91,26 +99,50 @@ btVector3 NetMain::GetEnemyPos(int num) const {
 }
 
 int NetMain::GetEnemyLevel(int num) const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	return client_udp_->get_receive_data().player_data[num].level;
 }
 
 int NetMain::GetColor(int num) const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	return client_udp_->get_receive_data().player_data[num].color;
 }
 
 GameState NetMain::GetGameState() const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	return client_udp_->get_receive_data().game_data.state;
 }
 
 //setter
 void NetMain::SetMePos(btVector3 pos) {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	client_data_.player_data.pos = pos;
 }
 
 void NetMain::SetMeLevel(int level) {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	client_data_.player_data.level = level;
 }
 
 void NetMain::SetMeColor(int color) {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
 	client_data_.player_data.color = color;
 }
