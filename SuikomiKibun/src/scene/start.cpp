@@ -147,7 +147,7 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	//他ステータスを設定
 	btVector3 pos = btVector3(0, 5, 0);	//中心座標
 	btScalar mass = 0.03;	//質量
-	btScalar rest = 0.1;	//反発係数
+	btScalar rest = 0.2;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
 	btQuaternion qrot(0, 0, 0, 1);	//姿勢
 
@@ -171,6 +171,10 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	case kCapsule:
 		memcpy(material_, uMaterial4fv_green, sizeof(material_));
 		shape = new btCapsuleShapeZ(radius, extents[1]);
+		break;
+	case kCone:
+		memcpy(material_, uMaterial4fv_white, sizeof(material_));
+		shape = new btConeShapeZ(radius, extents[1]);
 		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.球を作成します.");
@@ -203,6 +207,7 @@ void StartBodys::Draw() {
 	motion->m_graphicsWorldTrans.getOpenGLMatrix(m);
 	glMultMatrixf(m);
 
+	//各オブジェクト描画
 	switch (type_) {
 	case kSphere: {
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
@@ -218,24 +223,33 @@ void StartBodys::Draw() {
 		break;
 	}
 	case kCylinder: {
-		const btCylinderShape* shape = static_cast<const btCylinderShape*>(body_->getCollisionShape());
+		const btCylinderShapeZ* shape = static_cast<const btCylinderShapeZ*>(body_->getCollisionShape());
 		btScalar rad = shape->getRadius();
-		btScalar len = shape->getHalfExtentsWithMargin()[shape->getUpAxis()] * 2;
+		btScalar len = shape->getHalfExtentsWithMargin()[shape->getUpAxis()];
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 		glutSolidCylinder(rad, len, 20, 20);
 		break;
 	}
 	case kCapsule: {
-		const btCapsuleShape* shape = static_cast<const btCapsuleShape*>(body_->getCollisionShape());
+		const btCapsuleShapeZ* shape = static_cast<const btCapsuleShapeZ*>(body_->getCollisionShape());
 		btScalar rad = shape->getRadius();
 		btScalar len = shape->getHalfHeight() * 2;
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
 		DrawCapsule(rad, len, 20, 20);
 		break;
 	}
+	case kCone: {
+		const btConeShapeZ* shape = static_cast<const btConeShapeZ*>(body_->getCollisionShape());
+		btScalar rad = shape->getRadius() / 2.0;
+		btScalar len = shape->getHeight() / 2.0;
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
+		glutSolidCone(rad, len, 20, 20);
+		break;
+	}
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.");
 		break;
 	}
+
 	glPopMatrix();
 }
