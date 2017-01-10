@@ -2,6 +2,10 @@
 #define SUIKOMIKIBUN_SCENE_START_H_
 
 #include <FTGL/ftgl.h>
+#include <bullet/btBulletCollisionCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
+#include <GL/freeglut.h>
+#include <math.h>
 
 #include "scene_mgr.h"
 #include "../input/input.h"
@@ -12,13 +16,22 @@
 #include "../util/uGL.h"
 #include "../camera/camera.h"
 
+class StartBodys;
+
 class StartScene: public BaseScene {
 private:
+	//カメラ
 	Camera3D3P camera_;
 
+	//図形
 	int start_rand_solid;
 	float start_rand_mate[4];
+	StartBodys *body1;
 
+	//bullet
+	btDynamicsWorld* dynamics_world_;
+
+	//フォント
 	FTPixmapFont title_font; //タイトルフォント
 	FTPixmapFont description_font; //ゲーム説明フォント
 
@@ -31,6 +44,21 @@ public:
 	~StartScene();
 	void Update();
 	void Draw() const;
+};
+
+class StartBodys {
+public:
+	enum BodyType {
+		kSphere = 0
+	};
+private:
+	btRigidBody* body_;
+	btDynamicsWorld* world_;
+	BodyType type_;
+public:
+	StartBodys(BodyType type, btDynamicsWorld *world);
+	~StartBodys();
+	void Draw();
 };
 
 #endif /* SUIKOMIKIBUN_SCENE_START_H_ */
