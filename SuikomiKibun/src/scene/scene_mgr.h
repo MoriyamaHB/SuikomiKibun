@@ -14,6 +14,7 @@ typedef enum {
 	kSceneSelect, //選択
 	kSceneGame, //ゲーム
 	kSceneBtDemo, //bulletテスト
+	kSceneServerOnly, //サーバーだけ
 	//無し
 	kSceneNone
 } Scene;
@@ -50,6 +51,7 @@ public:
 #include "select.h"
 #include "game.h"
 #include "bt_demo.h"
+#include "server_only.h"
 #include "../util/uGL.h"
 
 //シーン遷移管理クラス
@@ -59,8 +61,11 @@ private:
 	Scene next_scene_;    //次のシーン管理変数
 	SceneParam scene_param_;    //次のシーンに渡すパラメータ
 
+	void MakeNewScene();    //シーンを作成する
+
 public:
-	SceneMgr();
+	SceneMgr(Scene Scene);
+	SceneMgr(Scene Scene, SceneParam param);
 	~SceneMgr();
 	void Update();    	//更新
 	void Draw() const;  //描画

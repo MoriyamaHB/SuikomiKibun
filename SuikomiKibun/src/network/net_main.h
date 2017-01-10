@@ -29,12 +29,14 @@ private:
 	//クライアント
 	ClientUdp *client_udp_;
 	ToServerContainer client_data_;
+	bool is_client_;
 	//サーバー
 	Server *server_;
 	bool is_server_;
 	ToClientContainer server_data_;
 public:
 	NetMain();
+	NetMain(bool enable_server_only);
 	~NetMain();
 	void Update();
 	void Draw() const;

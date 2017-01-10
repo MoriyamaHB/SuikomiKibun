@@ -60,7 +60,11 @@ void FirstInit(int argc, char *argv[]) {
 	input::Init();				//入力初期化
 	fps.Init(); 				//fps初期化
 	output_display0.Init(); 	//ディスプレイ文字列初期化
-	scene_mgr = new SceneMgr(); //シーン遷移管理実体化
+	//シーン遷移管理実体化
+	if (argc > 1)
+		scene_mgr = new SceneMgr(kSceneServerOnly);
+	else
+		scene_mgr = new SceneMgr(kSceneGame);
 
 	//タイマー関数を設定
 	glutTimerFunc(100, Timer, 0);
