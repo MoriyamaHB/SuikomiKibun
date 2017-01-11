@@ -2,9 +2,9 @@
 
 //コンストラクタ
 StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
-		BaseScene(changer), title_font("font/crayon.ttf"), description_font("font/jkgm.ttf"), kTitleFontSize(
+		BaseScene(changer), title_font_("font/crayon.ttf"), description_font_("font/jkgm.ttf"), kTitleFontSize(
 				150), kDescriptionFontSize(40) {
-	kLight0Pos[0] = 0.0, kLight0Pos[1] = 15.0, kLight0Pos[2] = 0.0, kLight0Pos[3] = 1.0;
+	kLight0Pos_[0] = 0.0, kLight0Pos_[1] = 15.0, kLight0Pos_[2] = 0.0, kLight0Pos_[3] = 1.0;
 
 	//input初期化
 	input::Init();
@@ -44,11 +44,11 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 	}
 
 // フォントの初期化
-	if (title_font.Error() || description_font.Error()) {
+	if (title_font_.Error() || description_font_.Error()) {
 		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
 	} else {
-		title_font.FaceSize(kTitleFontSize);
-		description_font.FaceSize(kDescriptionFontSize);
+		title_font_.FaceSize(kTitleFontSize);
+		description_font_.FaceSize(kDescriptionFontSize);
 	}
 }
 
@@ -83,7 +83,7 @@ void StartScene::Update() {
 	camera_.Update(3, 0); //カメラ更新
 
 	//ライト
-	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos_);
 
 	//オブジェクト追加
 	static int cnt = 0;
@@ -113,16 +113,16 @@ void StartScene::Update() {
 
 	//タイトル描画
 	u3Dto2D();
-	if (!title_font.Error()) {
+	if (!title_font_.Error()) {
 		glColor4fv(uColor4fv_purple);
 		glRasterPos2f(220, 180);
-		title_font.Render("吸い込み気分");
+		title_font_.Render("吸い込み気分");
 	}
 	//ゲーム説明描画
-	if (!description_font.Error()) {
+	if (!description_font_.Error()) {
 		glColor4fv(uColor4fv_gray);
 		glRasterPos2f(200, 260);
-		description_font.Render("このゲームは物体を吸い込んで大きくしていくゲームです。");
+		description_font_.Render("このゲームは物体を吸い込んで大きくしていくゲームです。");
 	}
 	u2Dto3D();
 

@@ -33,11 +33,11 @@ private:
 	btDynamicsWorld* dynamics_world_;
 
 	//フォント
-	FTPixmapFont title_font; //タイトルフォント
-	FTPixmapFont description_font; //ゲーム説明フォント
+	FTPixmapFont title_font_; //タイトルフォント
+	FTPixmapFont description_font_; //ゲーム説明フォント
 
 	//定数
-	GLfloat kLight0Pos[4];	//ライト位置
+	GLfloat kLight0Pos_[4];	//ライト位置
 	const unsigned long kTitleFontSize;  //タイトルフォントサイズ
 	const unsigned long kDescriptionFontSize;  //説明フォントサイズ
 public:
