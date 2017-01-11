@@ -427,3 +427,21 @@ bool uIsCollisionBallAndBall(Vector3 b1, double r1, Vector3 b2, double r2,
 		return true;
 	return false;
 }
+
+//btVector3中の最小の要素を返す
+btScalar uGetMinOfBtVector3(const btVector3& v) {
+	if (v[0] <= v[1] && v[0] <= v[2])
+		return v[0];
+	if (v[1] <= v[0] && v[1] <= v[2])
+		return v[1];
+	return v[2];
+}
+
+//btVector3中の最大の要素を返す
+btScalar uGetMaxOfBtVector3(const btVector3& v) {
+	if (v[0] >= v[1] && v[0] >= v[2])
+		return v[0];
+	if (v[1] >= v[0] && v[1] >= v[2])
+		return v[1];
+	return v[2];
+}

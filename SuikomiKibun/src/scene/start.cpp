@@ -150,6 +150,7 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	btScalar rest = 0.2;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
 	btQuaternion qrot(0, 0, 0, 1);	//姿勢
+	btScalar ccd_radius;	//すり抜け時に衝突判定する球の半径
 
 	btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(qrot, pos));	//姿勢,位置設定
 
@@ -159,22 +160,27 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	case kSphere:
 		memcpy(material_, uMaterial4fv_brown, sizeof(material_));
 		shape = new btSphereShape(radius);
+		ccd_radius = radius;
 		break;
 	case kCube:
 		memcpy(material_, uMaterial4fv_blue, sizeof(material_));
 		shape = new btBoxShape(extents);
+		ccd_radius = sqrt(pow(uGetMaxOfBtVector3(extents), 2.0) * 2.0);
 		break;
 	case kCylinder:
 		memcpy(material_, uMaterial4fv_red, sizeof(material_));
 		shape = new btCylinderShapeZ(extents);
+		ccd_radius = sqrt(pow(uGetMaxOfBtVector3(extents), 2.0) * 2.0);
 		break;
 	case kCapsule:
 		memcpy(material_, uMaterial4fv_green, sizeof(material_));
 		shape = new btCapsuleShapeZ(radius, extents[1]);
+		ccd_radius = radius > extents[1] ? radius : extents[1];
 		break;
 	case kCone:
 		memcpy(material_, uMaterial4fv_white, sizeof(material_));
-		shape = new btConeShapeZ(radius * 2.0, extents[1] * 2.0);
+		shape = new btConeShapeZ(radius, extents[1] * 2.0);
+		ccd_radius = radius > extents[1] * 2.0 ? radius : extents[1] * 2.0;
 		break;
 	default:
 		uErrorOut(__FILE__, __func__, __LINE__, "不明なタイプです.球を作成します.");
@@ -187,6 +193,8 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	shape->calculateLocalInertia(mass, inertia);	//慣性モーメントの計算
 	body_ = new btRigidBody(mass, motion_state, shape, inertia);	//剛体オブジェクト生成
 	body_->setRestitution(rest);	//反発係数設定
+	body_->setCcdSweptSphereRadius(ccd_radius);
+	body_->setCcdMotionThreshold(ccd_radius);
 	world_->addRigidBody(body_);	//ワールドに剛体オブジェクトを追加
 }
 
@@ -240,9 +248,10 @@ void StartBodys::Draw() {
 	}
 	case kCone: {
 		const btConeShapeZ* shape = static_cast<const btConeShapeZ*>(body_->getCollisionShape());
-		btScalar rad = shape->getRadius() / 2.0;
-		btScalar len = shape->getHeight() / 2.0;
+		btScalar rad = shape->getRadius();
+		btScalar len = shape->getHeight();
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material_);
+		glTranslated(0.0, 0.0, -len / 2.0);	//opengl標準のままだとずれるので調節
 		glutSolidCone(rad, len, 20, 20);
 		break;
 	}
