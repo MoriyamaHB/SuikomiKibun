@@ -3,6 +3,8 @@
 
 #include <GL/freeglut.h>
 #include <FTGL/ftgl.h>
+#include <bullet/btBulletCollisionCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,6 +93,9 @@ extern void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[]
 extern void uDrawQuadrangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vector3 v3, float color3[],
 		Vector3 v4, float color4[]);
 
+//カプセルを描画
+void DrawCapsule(double rad, double len, int axis, int slices);
+
 //黒白の地面を描画
 extern void uDrawGround(int size);
 
@@ -109,5 +114,11 @@ extern bool uOutOfRange(Vector3 place, Vector3 v1, Vector3 v2);
 
 //球と球の当たり判定
 extern bool uIsCollisionBallAndBall(Vector3 b1, double r1, Vector3 b2, double r2, double *distance);
+
+//btVector3中の最小の要素を返す
+extern btScalar uGetMinOfBtVector3(const btVector3& v);
+
+//btVector3中の最大の要素を返す
+btScalar uGetMaxOfBtVector3(const btVector3& v);
 
 #endif /* SUIKOMIKIBUN_UTIL_UGL_H_ */

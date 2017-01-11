@@ -267,6 +267,50 @@ void uDrawQuadrangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vec
 	u2Dto3D();
 }
 
+/*!
+ * カプセル描画(円筒の両端に半球をつけた形)
+ * @param[in] rad,len 半径と中心軸方向長さ
+ * @param[in] axis 軸方向
+ * @param[in] slices  ポリゴン近似する際の分割数
+ */
+void DrawCapsule(double rad, double len, int axis, int slices) {
+	GLUquadricObj *qobj;
+	qobj = gluNewQuadric();
+
+	glPushMatrix();
+	switch (axis) {
+	case 0:
+		glRotatef(-90.0, 0.0, 1.0, 0.0);
+		glTranslatef(0.0, 0.0, -0.5 * len);
+		break;
+	case 1:
+		glRotatef(-90.0, 1.0, 0.0, 0.0);
+		glTranslatef(0.0, 0.0, -0.5 * len);
+		break;
+	case 2:
+		glTranslatef(0.0, 0.0, -0.5 * len);
+		break;
+	default:
+		glTranslatef(0.0, 0.0, -0.5 * len);
+	}
+
+	gluQuadricDrawStyle(qobj, GLU_FILL);
+	gluQuadricNormals(qobj, GLU_SMOOTH);
+	gluCylinder(qobj, rad, rad, len, slices, slices);
+
+	glPushMatrix();
+	glutSolidSphere(rad, slices, slices);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, len);
+	glutSolidSphere(rad, slices, slices);
+	glPopMatrix();
+
+	glPopMatrix();
+
+}
+
 //黒白の地面を描画
 void uDrawGround(int size) {
 	if (size < 0 || 1000 < size) {
@@ -382,4 +426,22 @@ bool uIsCollisionBallAndBall(Vector3 b1, double r1, Vector3 b2, double r2,
 	if (d1 <= d2)
 		return true;
 	return false;
+}
+
+//btVector3中の最小の要素を返す
+btScalar uGetMinOfBtVector3(const btVector3& v) {
+	if (v[0] <= v[1] && v[0] <= v[2])
+		return v[0];
+	if (v[1] <= v[0] && v[1] <= v[2])
+		return v[1];
+	return v[2];
+}
+
+//btVector3中の最大の要素を返す
+btScalar uGetMaxOfBtVector3(const btVector3& v) {
+	if (v[0] >= v[1] && v[0] >= v[2])
+		return v[0];
+	if (v[1] >= v[0] && v[1] >= v[2])
+		return v[1];
+	return v[2];
 }
