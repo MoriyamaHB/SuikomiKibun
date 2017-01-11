@@ -1,7 +1,8 @@
 #include "client.h"
 
 ClientTcp::ClientTcp(std::string ip_adress, int port) :
-		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(ip_adress) {
+		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(
+				ip_adress) {
 	//メンバー変数初期化
 	port_ = port;
 	has_conected_ = false;
@@ -104,6 +105,27 @@ void ClientTcp::Draw() {
 	}
 }
 
+void ClientUdp::Draw() {
+	switch (state_) {
+	case kConnectWait: { //未接続
+		output_display0.Regist("client:サーバーと接続中です", uColor4fv_maroon);
+		break;
+	}
+	case kRun: //送受信開始
+		output_display0.Regist("client:接続を確認.送受信を開始.", uColor4fv_maroon, 60);
+		break;
+	case kCom: //送受信中
+		if (receive_data_.game_data.state == kConnect)
+			output_display0.Regist("client:他プレイヤーの接続を待機しています", uColor4fv_maroon);
+		if (receive_data_.game_data.state == kPlay)
+			output_display0.Regist("client:送受信中です", uColor4fv_maroon);
+		break;
+	default:
+		uErrorOut(__FILE__, __func__, __LINE__, "不明なcaseです");
+		break;
+	}
+}
+
 //io_serviceを実行する(別スレッドで呼び出し用)
 void ClientTcp::ThRun() {
 	io_service_.run();
@@ -129,7 +151,7 @@ void ClientUdp::Connect() {
 	//endpoint設定
 	udp::endpoint endpoint(boost::asio::ip::udp::v4(), port_ + 10 /*ポート番号*/);
 	udp::resolver resolver(io_service_);
-	udp::resolver::query query(udp::v4(), kIpAdress, uToStr (port_));
+	udp::resolver::query query(udp::v4(), kIpAdress, uToStr(port_));
 	send_endpoint_ = *resolver.resolve(query);
 	//ソケット作成
 	receive_socket_ = new udp::socket(io_service_, endpoint);
@@ -162,7 +184,8 @@ void ClientTcp::OnConnectTimeOut(const boost::system::error_code& error) {
 //クライアント情報送信
 void ClientTcp::Send() {
 	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToServerContainer)),
-			boost::bind(&ClientTcp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&ClientTcp::OnSend, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
 	send_timer_.async_wait(boost::bind(&ClientTcp::OnSendTimeOut, this, _1));
@@ -170,7 +193,8 @@ void ClientTcp::Send() {
 
 void ClientUdp::Send() {
 	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToServerContainer)), send_endpoint_,
-			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&ClientUdp::OnSend, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	send_timer_.expires_from_now(boost::posix_time::seconds(60));
 	send_timer_.async_wait(boost::bind(&ClientUdp::OnSendTimeOut, this, _1));
@@ -199,15 +223,18 @@ void ClientTcp::OnSendTimeOut(const boost::system::error_code& error) {
 //サーバー情報受信
 void ClientTcp::StartReceive() {
 	boost::asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
-			boost::bind(&ClientTcp::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+			boost::bind(&ClientTcp::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
 	receive_timer_.async_wait(boost::bind(&ClientTcp::OnReceiveTimeOut, this, _1));
 }
 
 void ClientUdp::StartReceive() {
-	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)), remote_endpoint_,
-			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error, asio::placeholders::bytes_transferred));
+	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)),
+			remote_endpoint_,
+			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error,
+					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
 	receive_timer_.expires_from_now(boost::posix_time::seconds(60));
 	receive_timer_.async_wait(boost::bind(&ClientUdp::OnReceiveTimeOut, this, _1));
