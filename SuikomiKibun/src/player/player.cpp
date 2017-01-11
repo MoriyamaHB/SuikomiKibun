@@ -11,7 +11,7 @@ Player::Player(btDynamicsWorld* world) :
 	level_ = 1;
 
 	//中心座標
-	btVector3 sphere_pos = btVector3(-1, 5, 0);
+	btVector3 sphere_pos = btVector3(-1, 10, 0);
 	//大きさ
 	player_radius_ = 1.0;
 	//質量
@@ -33,6 +33,9 @@ Player::Player(btDynamicsWorld* world) :
 	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
+	//すり抜け防止
+	sphere_body_->setCcdSweptSphereRadius(player_radius_);
+	sphere_body_->setCcdMotionThreshold(player_radius_ * 2.0);
 
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
@@ -160,27 +163,27 @@ void Player::Update(double angle, StageMap* map) {
 	btRigidBody* body;
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
-		if(color_judge_< 2)
-		color_judge_++;
+		if (color_judge_ < 2)
+			color_judge_++;
 		else
-		color_judge_ = 0;
+			color_judge_ = 0;
 	} else if (sphere_body_ == delete_body2_ && sphere_tekibody1_ == delete_body_) {
-		if(color_judge_< 2)
-				color_judge_++;
-				else
-				color_judge_ = 0;
+		if (color_judge_ < 2)
+			color_judge_++;
+		else
+			color_judge_ = 0;
 	}
 
 	else if (sphere_body_ == delete_body_ && sphere_tekibody2_ == delete_body2_) {
-		if(color_judge_< 2)
-				color_judge_++;
-				else
-				color_judge_ = 0;
+		if (color_judge_ < 2)
+			color_judge_++;
+		else
+			color_judge_ = 0;
 	} else if (sphere_body_ == delete_body2_ && sphere_tekibody2_ == delete_body_) {
-		if(color_judge_< 2)
-				color_judge_++;
-				else
-				color_judge_ = 0;
+		if (color_judge_ < 2)
+			color_judge_++;
+		else
+			color_judge_ = 0;
 	}
 
 	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
@@ -191,14 +194,14 @@ void Player::Update(double angle, StageMap* map) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
-				level_+= map->DestroyObject(i, level_);
+					level_ += map->DestroyObject(i, level_);
 				}
 			}
 
 		}
 	}
 
-	if (player_radius_ <= (double)level_ / 5.0)
+	if (player_radius_ <= (double) level_ / 5.0)
 		PlayerSize(player_radius_ += 0.05);
 
 	delete_body_ = NULL;
@@ -213,7 +216,7 @@ void Player::Draw() {
 
 	//中心円作成
 	u3Dto2D();
-	glBegin (GL_POLYGON); // ポリゴンの描画
+	glBegin(GL_POLYGON); // ポリゴンの描画
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	// 円を描画
 	for (i = 0; i < n; i++) {
@@ -362,16 +365,19 @@ void Player::Draw() {
 	 glPopMatrix();
 	 */
 
-	glDisable (GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	RenderScene();
 }
 
 void Player::PlayerSize(double size) {
-//形状を設定
+	//形状を設定
 	btCollisionShape *new_sphere_shape = new btSphereShape(size);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
 	player_radius_ = size;
+	//すり抜け防止
+	sphere_body_->setCcdSweptSphereRadius(player_radius_);
+	sphere_body_->setCcdMotionThreshold(player_radius_ * 2.0);
 }
 
 void Player::PlayerMove(btVector3 pos) {
@@ -383,20 +389,19 @@ void Player::PlayerMove(btVector3 pos) {
 	sphere_body_->translate(pos);
 }
 
-
 btVector3 Player::get_center_pos() const {
 	return sphere_body_->getCenterOfMassPosition();
 }
 
-int Player::get_level() const{
+int Player::get_level() const {
 	return level_;
 }
 
-double Player::get_camera_distance()const {
+double Player::get_camera_distance() const {
 	return player_radius_ * 3;
 }
 
-int Player::get_color()const{
+int Player::get_color() const {
 	return color_judge_;
 }
 
