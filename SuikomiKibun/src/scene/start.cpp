@@ -43,13 +43,6 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		dynamics_world_->addRigidBody(ground_body_);
 	}
 
-	//描画図形乱数
-//	start_rand_solid = cc_util::GetRandom(0, 5);
-//	start_rand_mate[0] = cc_util::GetRandom(0, 1000) / 1000.0;
-//	start_rand_mate[1] = cc_util::GetRandom(0, 1000) / 1000.0;
-//	start_rand_mate[2] = cc_util::GetRandom(0, 1000) / 1000.0;
-//	start_rand_mate[3] = cc_util::GetRandom(0, 1000) / 1000.0;
-
 // フォントの初期化
 	if (title_font.Error() || description_font.Error()) {
 		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
@@ -94,7 +87,26 @@ void StartScene::Update() {
 	if (cnt % 60 == 0)
 		bodys_.push_back(new StartBodys(dynamics_world_));
 
-	//↓Renderがconstでは使えないためここに記述
+	//////////////////////↓Renderがconstでは使えないためここに記述 /////////////////////////
+
+	//地面
+	btVector3 pos;
+	glPushMatrix();
+	pos = ground_body_->getCenterOfMassPosition();
+	glTranslatef(pos[0], pos[1], pos[2]);
+	const btBoxShape* ground_shape = static_cast<const btBoxShape*>(ground_body_->getCollisionShape());
+	btVector3 ground_half_extent = ground_shape->getHalfExtentsWithMargin();
+	uDrawGround(ground_half_extent[0] * 2);
+	glPopMatrix();
+
+	//オブジェクト
+	for (auto itr = bodys_.begin(); itr != bodys_.end(); ++itr) {
+		(*itr)->Draw();
+	}
+
+	//文字描画
+	uDrawString2("Aキーを押すとゲーム開始です", 940, 760, uColor4fv_red);
+
 	//タイトル描画
 	u3Dto2D();
 	if (!title_font.Error()) {
@@ -115,23 +127,7 @@ void StartScene::Update() {
 
 //描画
 void StartScene::Draw() const {
-	//地面
-	btVector3 pos;
-	glPushMatrix();
-	pos = ground_body_->getCenterOfMassPosition();
-	glTranslatef(pos[0], pos[1], pos[2]);
-	const btBoxShape* ground_shape = static_cast<const btBoxShape*>(ground_body_->getCollisionShape());
-	btVector3 ground_half_extent = ground_shape->getHalfExtentsWithMargin();
-	uDrawGround(ground_half_extent[0] * 2);
-	glPopMatrix();
 
-	//オブジェクト
-	for (auto itr = bodys_.begin(); itr != bodys_.end(); ++itr) {
-		(*itr)->Draw();
-	}
-
-	//文字描画
-	uDrawString2("Aキーを押すとゲーム開始です", 940, 760, uColor4fv_red);
 }
 
 ////////////////////////////   start_body   //////////////////////////////////////////////////////
