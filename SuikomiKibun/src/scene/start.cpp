@@ -139,9 +139,9 @@ void StartScene::Draw() const {
 StartBodys::StartBodys(btDynamicsWorld *world) :
 		world_(world) {
 	//乱数で大きさ,タイプ設定
-	btScalar radius = cc_util::GetRandom(0, 1000) / 1000.0;
-	btVector3 extents = btVector3(cc_util::GetRandom(0, 1000) / 1000.0, cc_util::GetRandom(0, 1000) / 1000.0,
-			cc_util::GetRandom(0, 1000) / 1000.0);
+	btScalar radius = cc_util::GetRandom(1, 1000) / 1000.0;
+	btVector3 extents = btVector3(cc_util::GetRandom(1, 1000) / 1000.0, cc_util::GetRandom(1, 1000) / 1000.0,
+			cc_util::GetRandom(1, 1000) / 1000.0);
 	type_ = static_cast<StartBodys::BodyType>(cc_util::GetRandom(0, kBodyTypeNum - 1));
 
 	//他ステータスを設定
