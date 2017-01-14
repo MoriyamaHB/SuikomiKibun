@@ -1,8 +1,8 @@
 #include "com_client.h"
 
-ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, Server* se) :
-		io_service_(io_service), server_(se), accept_timer_(io_service_), send_timer_(io_service_), receive_timer_(
-				io_service_), kPort(port) {
+ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, Server* se, int client_num) :
+		io_service_(io_service), send_data_(client_num - 1), server_(se), accept_timer_(io_service_), send_timer_(
+				io_service_), receive_timer_(io_service_), kPort(port) {
 	//メンバー変数初期化
 	memset(&send_data_, 0, sizeof(send_data_));
 	memset(&receive_data_, 0, sizeof(receive_data_));
@@ -14,8 +14,8 @@ ComClientTcp::ComClientTcp(asio::io_service &io_service, int port, Server* se) :
 	is_tcp_ = true;
 }
 
-ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se) :
-		ComClientTcp(io_service, port, se) {
+ComClientUdp::ComClientUdp(asio::io_service &io_service, int port, Server* se, int client_num) :
+		ComClientTcp(io_service, port, se, client_num) {
 	//StartAcceptで作成
 	send_socket_ = NULL;
 	receive_socket_ = NULL;
@@ -134,7 +134,7 @@ void ComClientTcp::Start() {
 
 //送信
 void ComClientTcp::Send() {
-	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(ToClientContainer)),
+	asio::async_write(*socket_, asio::buffer(&send_data_, sizeof(send_data_)),
 			bind(&ComClientTcp::OnSend, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト
@@ -143,7 +143,7 @@ void ComClientTcp::Send() {
 }
 
 void ComClientUdp::Send() {
-	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(ToClientContainer)), send_endpoint_,
+	send_socket_->async_send_to(asio::buffer(&send_data_, sizeof(send_data_)), send_endpoint_,
 			boost::bind(&ComClientUdp::OnSend, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//5秒でタイムアウト

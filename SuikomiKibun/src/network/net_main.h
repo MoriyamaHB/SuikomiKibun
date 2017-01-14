@@ -33,7 +33,7 @@ private:
 	//サーバー
 	Server *server_;
 	bool is_server_;
-	ToClientContainer server_data_;
+	ToClientContainer *server_data_;
 public:
 	NetMain();
 	NetMain(bool enable_server_only);

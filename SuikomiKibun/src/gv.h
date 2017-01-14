@@ -4,8 +4,11 @@
 #define SUIKOMIKIBUN_GV_H_
 
 #include <time.h>
+#include <vector>
+#include <memory>
 #include "util/output_display.h"
 #include "util/vector3.h"
+#include "util/uGL.h"
 
 extern OutputDisplay output_display0;
 
@@ -46,26 +49,38 @@ struct ToServerContainer {
 struct ToClientContainer {
 public:
 	CommandToClient command; //データの種類
-	PlayerData player_data[2];
+	PlayerData *player_data;
 	GameData game_data;
+	int client_num;
 	//コンストラクタ
-	ToClientContainer() {
+	ToClientContainer(int client_num) {
 		command = kPlayerDataToClient;
 		game_data.state = kConnect;
+		this->client_num = client_num;
+		player_data = (PlayerData*) malloc(sizeof(PlayerData) * client_num);
+	}
+	//デストラクタ
+	~ToClientContainer() {
+		free(player_data);
 	}
 	//コピーコンストラクタ
 	ToClientContainer(const ToClientContainer& o) {
 		command = o.command;
-		player_data[0] = o.player_data[0];
-		player_data[1] = o.player_data[1];
+		player_data = (PlayerData*) malloc(sizeof(PlayerData) * o.client_num);
+		memcpy(player_data, o.player_data, sizeof(PlayerData) * o.client_num);
 		game_data = o.game_data;
+		client_num = o.client_num;
 	}
 	//代入演算子オーバーロード
 	ToClientContainer &operator=(const ToClientContainer o) {
+		if (client_num != o.client_num) {
+			uErrorOut(__FILE__, __func__, __LINE__, "コピー先のデータ数が異なります");
+			//uExit();
+		}
 		command = o.command;
-		player_data[0] = o.player_data[0];
-		player_data[1] = o.player_data[1];
+		memcpy(player_data, o.player_data, sizeof(PlayerData) * o.client_num);
 		game_data = o.game_data;
+		client_num = o.client_num;
 		return (*this);
 	}
 };

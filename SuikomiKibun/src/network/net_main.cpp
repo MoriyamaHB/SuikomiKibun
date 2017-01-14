@@ -2,7 +2,11 @@
 
 NetMain::NetMain() {
 	client_num_ = 0;
+	std::cout << "client_num:";
+	std::cin >> client_num_;
+	server_data_ = new ToClientContainer(client_num_ - 1);
 	is_client_ = true;
+
 	//ネットワーク初期化
 	char is_server;
 	std::string server_ip;
@@ -10,9 +14,7 @@ NetMain::NetMain() {
 	std::cout << "s/c?";
 	std::cin >> is_server;
 	if (is_server == 's') {
-//		std::cout << "client_num:";
-//		std::cin >> client_num_;
-		server_ = new Server(31600, 3);
+		server_ = new Server(31600, client_num_);
 		is_server_ = true;
 		server_ip = "localhost";
 		port = 31600;
@@ -24,7 +26,7 @@ NetMain::NetMain() {
 		std::cout << "port:";
 		std::cin >> port;
 	}
-	client_udp_ = new ClientUdp(server_ip, port);
+	client_udp_ = new ClientUdp(server_ip, port, client_num_);
 	client_udp_->Connect();
 }
 
@@ -36,10 +38,13 @@ NetMain::NetMain(bool enable_server_only) {
 		uExit();
 		return;
 	}
+	client_num_ = 0;
+	std::cout << "client_num:";
+	std::cin >> client_num_;
+	server_data_ = new ToClientContainer(client_num_);
 	server_ = new Server(31600, 3);
 	is_server_ = true;
 	is_client_ = false;
-	client_num_ = 0;
 	client_udp_ = NULL;
 }
 
@@ -58,7 +63,7 @@ void NetMain::Update() {
 	}
 	//クライアント更新
 	if (is_client_) {
-		server_data_ = client_udp_->get_receive_data();
+		*server_data_ = client_udp_->get_receive_data();
 		client_udp_->Update();
 		client_udp_->set_send_data(client_data_);
 	}
@@ -87,6 +92,8 @@ btVector3 NetMain::GetEnemyPos(int num) const {
 		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
 		uExit();
 	}
+	if (num < 0 || num >= client_num_ - 1)
+		uErrorOut(__FILE__, __func__, __LINE__, "そのクライアントは存在しません");
 	btVector3 pos;
 	Vector3 pos_v = client_udp_->get_receive_data().player_data[num].pos;
 	pos[0] = pos_v.x;
@@ -100,6 +107,8 @@ int NetMain::GetEnemyLevel(int num) const {
 		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
 		uExit();
 	}
+	if (num < 0 || num >= client_num_ - 1)
+		uErrorOut(__FILE__, __func__, __LINE__, "そのクライアントは存在しません");
 	return client_udp_->get_receive_data().player_data[num].level;
 }
 
@@ -108,6 +117,8 @@ int NetMain::GetColor(int num) const {
 		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
 		uExit();
 	}
+	if (num < 0 || num >= client_num_ - 1)
+		uErrorOut(__FILE__, __func__, __LINE__, "そのクライアントは存在しません");
 	return client_udp_->get_receive_data().player_data[num].color;
 }
 

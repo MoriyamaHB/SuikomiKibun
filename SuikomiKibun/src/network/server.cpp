@@ -10,7 +10,7 @@ Server::Server(int start_port, int client_num) :
 		//io_service作成
 		io_service_.push_back(new asio::io_service());
 		//クライアント作成
-		client_.push_back(new ComClientUdp(*io_service_[i], start_port + i, this));
+		client_.push_back(new ComClientUdp(*io_service_[i], start_port + i, this, client_num));
 		client_[i]->StartAccept();
 		//スレッド作成,実行
 		thread_.push_back(new boost::thread());
@@ -70,7 +70,7 @@ void Server::Update() {
 	case kCom: {	//送受信中
 		time.Update();	//制限時間更新
 		for (int i = 0; i < kClientNum; i++) {
-			ToClientContainer server_data;
+			ToClientContainer server_data(kClientNum - 1);
 			for (int j = 0, cnt = 0; j < kClientNum; j++) {
 				if (i != j) {
 					server_data.player_data[cnt] = client_[j]->get_receive_data().player_data;

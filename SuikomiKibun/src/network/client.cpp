@@ -1,8 +1,8 @@
 #include "client.h"
 
-ClientTcp::ClientTcp(std::string ip_adress, int port) :
-		connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(io_service_), kIpAdress(
-				ip_adress) {
+ClientTcp::ClientTcp(std::string ip_adress, int port, int client_num) :
+		receive_data_(client_num - 1), connect_timer_(io_service_), send_timer_(io_service_), receive_timer_(
+				io_service_), kIpAdress(ip_adress) {
 	//メンバー変数初期化
 	port_ = port;
 	has_conected_ = false;
@@ -14,8 +14,8 @@ ClientTcp::ClientTcp(std::string ip_adress, int port) :
 	is_tcp_ = true;
 }
 
-ClientUdp::ClientUdp(std::string ip_adress, int start_port) :
-		ClientTcp(ip_adress, start_port) {
+ClientUdp::ClientUdp(std::string ip_adress, int start_port, int client_num) :
+		ClientTcp(ip_adress, start_port, client_num) {
 	send_socket_ = NULL;
 	receive_socket_ = NULL;
 	//状態
@@ -222,7 +222,7 @@ void ClientTcp::OnSendTimeOut(const boost::system::error_code& error) {
 
 //サーバー情報受信
 void ClientTcp::StartReceive() {
-	boost::asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(ToClientContainer)),
+	boost::asio::async_read(*socket_, receive_buff_, asio::transfer_exactly(sizeof(receive_data_)),
 			boost::bind(&ClientTcp::OnReceive, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));
 	//60秒でタイムアウト
@@ -231,7 +231,7 @@ void ClientTcp::StartReceive() {
 }
 
 void ClientUdp::StartReceive() {
-	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(ToClientContainer)),
+	receive_socket_->async_receive_from(asio::buffer(&receive_data_, sizeof(receive_data_)),
 			remote_endpoint_,
 			boost::bind(&ClientUdp::OnReceive, this, asio::placeholders::error,
 					asio::placeholders::bytes_transferred));

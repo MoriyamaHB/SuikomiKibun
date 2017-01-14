@@ -63,7 +63,7 @@ protected:
 	//io_serviceを実行する(別スレッドで呼び出し用)
 	void ThRun();
 public:
-	ClientTcp(std::string ip_adress, int start_port);
+	ClientTcp(std::string ip_adress, int start_port, int client_num);
 	virtual void Connect();	//接続開始
 	virtual ~ClientTcp();
 	void Update();
@@ -88,7 +88,7 @@ private:
 	void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 
 public:
-	ClientUdp(std::string ip_adress, int start_port);
+	ClientUdp(std::string ip_adress, int start_port, int client_num);
 	void Connect();	//接続開始
 	void Draw();
 	~ClientUdp();

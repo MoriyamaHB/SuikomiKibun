@@ -51,7 +51,7 @@ protected:
 	virtual void OnReceive(const boost::system::error_code& error, size_t bytes_transferred);
 	void OnReceiveTimeOut(const boost::system::error_code& error);
 public:
-	ComClientTcp(asio::io_service &io_service, int port, Server* se);
+	ComClientTcp(asio::io_service &io_service, int port, Server* se, int client_num);
 	virtual void StartAccept();	//接続待機
 	virtual ~ComClientTcp();
 	void Start();	//送受信スタート
@@ -78,7 +78,7 @@ private:
 	void IniReceive();
 	void OnIniReceive(const boost::system::error_code& error, size_t bytes_transferred);
 public:
-	ComClientUdp(asio::io_service &io_service, int port, Server* se);
+	ComClientUdp(asio::io_service &io_service, int port, Server* se, int client_num);
 	void StartAccept();	//接続
 	~ComClientUdp();
 };
