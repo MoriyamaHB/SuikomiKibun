@@ -32,6 +32,10 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 
 	//プレイヤー作成
 	player_ = new Player(dynamics_world_);
+
+	//BGM
+	bgm_ = new Bgm();
+	bgm_->Play(Bgm::kGameBgm);
 }
 
 //デストラクタ
@@ -82,6 +86,10 @@ void GameScene::Update() {
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
+	//BGM
+	Sound::SetListener(camera_);
+	bgm_->Update();
 }
 
 //描画
