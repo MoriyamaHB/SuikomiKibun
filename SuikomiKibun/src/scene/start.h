@@ -16,6 +16,7 @@
 #include "../util/output_display.h"
 #include "../util/cc_util.h"
 #include "../util/uGL.h"
+#include "../util/button.h"
 #include "../camera/camera.h"
 #include "../sound/bgm.h"
 
@@ -39,6 +40,9 @@ private:
 
 	//サウンド
 	Bgm *bgm_;
+
+	//ボタン
+	Button *button1;
 
 	//定数
 	GLfloat kLight0Pos_[4];	//ライト位置

@@ -94,7 +94,7 @@ extern void uDrawQuadrangle(Vector3 v1, float color1[], Vector3 v2, float color2
 		Vector3 v4, float color4[]);
 
 //カプセルを描画
-void DrawCapsule(double rad, double len, int axis, int slices);
+extern void DrawCapsule(double rad, double len, int axis, int slices);
 
 //黒白の地面を描画
 extern void uDrawGround(int size);
@@ -119,6 +119,10 @@ extern bool uIsCollisionBallAndBall(Vector3 b1, double r1, Vector3 b2, double r2
 extern btScalar uGetMinOfBtVector3(const btVector3& v);
 
 //btVector3中の最大の要素を返す
-btScalar uGetMaxOfBtVector3(const btVector3& v);
+extern btScalar uGetMaxOfBtVector3(const btVector3& v);
+
+//四角形と点の当たり判定
+extern bool uIsCollisionSquareAndPoint(int sx1, int sy1, int sx2, int sy2, int px, int py);
+
 
 #endif /* SUIKOMIKIBUN_UTIL_UGL_H_ */
