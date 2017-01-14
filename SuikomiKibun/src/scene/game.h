@@ -16,6 +16,7 @@
 #include "../player/player.h"
 #include "../player/playerteki.h"
 #include "../network/net_main.h"
+#include "../sound/bgm.h"
 
 class GameScene: public BaseScene {
 private:
@@ -26,6 +27,7 @@ private:
 	PlayerTeki *playerteki1_;
 	PlayerTeki *playerteki2_;
 	NetMain *net_main_;
+	Bgm *bgm_;
 
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);

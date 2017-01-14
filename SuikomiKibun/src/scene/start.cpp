@@ -43,13 +43,17 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 		dynamics_world_->addRigidBody(ground_body_);
 	}
 
-// フォントの初期化
+	// フォントの初期化
 	if (title_font_.Error() || description_font_.Error()) {
 		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
 	} else {
 		title_font_.FaceSize(kTitleFontSize);
 		description_font_.FaceSize(kDescriptionFontSize);
 	}
+
+	//サウンド
+	bgm_ = new Bgm();
+	bgm_->Play(Bgm::kStartBgm, 3.0);
 }
 
 //デストラクタ
@@ -68,6 +72,9 @@ StartScene::~StartScene() {
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
 	delete dynamics_world_;
+
+	//サウンド
+	delete bgm_;
 }
 
 //更新
@@ -91,6 +98,10 @@ void StartScene::Update() {
 	if (cnt % 60 == 0)
 		bodys_.push_back(new StartBodys(dynamics_world_));
 
+	//サウンド
+	Sound::SetListener(camera_);
+	bgm_->Update();
+
 	//////////////////////↓Renderがconstでは使えないためここに記述 /////////////////////////
 
 	//地面
@@ -109,7 +120,7 @@ void StartScene::Update() {
 	}
 
 	//文字描画
-	uDrawString2("Aキーを押すとゲーム開始です", 940, 760, uColor4fv_red);
+	//uDrawString2("クリックするとゲーム開始です", 640, 560, uColor4fv_red);
 
 	//タイトル描画
 	u3Dto2D();

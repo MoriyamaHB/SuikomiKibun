@@ -32,6 +32,10 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 
 	//プレイヤー作成
 	player_ = new Player(dynamics_world_);
+
+	//BGM
+	bgm_ = new Bgm();
+	bgm_->Play(Bgm::kGameBgm);
 }
 
 //デストラクタ
@@ -47,6 +51,8 @@ GameScene::~GameScene() {
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
 	delete dynamics_world_;
+	//bgm
+	delete bgm_;
 }
 
 //更新
@@ -82,16 +88,22 @@ void GameScene::Update() {
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
+	//BGM
+	Sound::SetListener(camera_);
+	bgm_->Update();
 }
 
 //描画
 void GameScene::Draw() const {
-	//ネットワーク
+//ネットワーク
 	net_main_->Draw();
-	//マップ描画
+//マップ描画
 	map_->Draw();
-	//プレイヤー描画
+//プレイヤー描画
 	player_->Draw();
 	playerteki1_->Draw();
 	playerteki2_->Draw();
+//制限時間描画
+	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
 }

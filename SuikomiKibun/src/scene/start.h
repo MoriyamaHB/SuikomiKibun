@@ -17,6 +17,7 @@
 #include "../util/cc_util.h"
 #include "../util/uGL.h"
 #include "../camera/camera.h"
+#include "../sound/bgm.h"
 
 class StartBodys;
 
@@ -35,6 +36,9 @@ private:
 	//フォント
 	FTPixmapFont title_font_; //タイトルフォント
 	FTPixmapFont description_font_; //ゲーム説明フォント
+
+	//サウンド
+	Bgm *bgm_;
 
 	//定数
 	GLfloat kLight0Pos_[4];	//ライト位置
