@@ -20,6 +20,9 @@ void UpdateFrame();
 int get_keyboard_frame(unsigned char key);
 int get_special_keyboard_frame(int key);
 int get_mouse_left_button_frame();
+int get_mouse_right_button_frame();
+int get_mouse_x();
+int get_mouse_y();
 //setter
 void set_is_enabled_mouse_motion(bool boo);
 //初期化
