@@ -51,6 +51,8 @@ GameScene::~GameScene() {
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
 	delete dynamics_world_;
+	//bgm
+	delete bgm_;
 }
 
 //更新
