@@ -54,6 +54,11 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 	//サウンド
 	bgm_ = new Bgm();
 	bgm_->Play(Bgm::kStartBgm, 3.0);
+
+	//ボタン
+	button1 = new Button(500, 600, 800, 680, "ゲームスタート", "font/jkgm.ttf", 40);
+	button1->set_text_color(uColor4fv_blue);
+	button1->set_text_active_color(uColor4fv_blue);
 }
 
 //デストラクタ
@@ -75,6 +80,9 @@ StartScene::~StartScene() {
 
 	//サウンド
 	delete bgm_;
+
+	//ボタン
+	delete button1;
 }
 
 //更新
@@ -119,9 +127,6 @@ void StartScene::Update() {
 		(*itr)->Draw();
 	}
 
-	//文字描画
-	//uDrawString2("クリックするとゲーム開始です", 640, 560, uColor4fv_red);
-
 	//タイトル描画
 	u3Dto2D();
 	if (!title_font_.Error()) {
@@ -136,6 +141,11 @@ void StartScene::Update() {
 		description_font_.Render("このゲームは物体を吸い込んで大きくしていくゲームです。");
 	}
 	u2Dto3D();
+
+	//ボタンによるシーン遷移
+	if (button1->Update())
+		scene_changer_->ChangeScene(kSceneGame);
+	button1->Draw();
 
 	return;
 }

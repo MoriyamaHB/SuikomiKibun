@@ -445,3 +445,13 @@ btScalar uGetMaxOfBtVector3(const btVector3& v) {
 		return v[1];
 	return v[2];
 }
+
+//四角形と点の当たり判定
+bool uIsCollisionSquareAndPoint(int sx1, int sy1, int sx2, int sy2, int px, int py) {
+	if (px >= sx1 && px <= sx2) {
+		if (py >= sy1 && py <= sy2) {
+			return true;
+		}
+	}
+	return false;
+}
