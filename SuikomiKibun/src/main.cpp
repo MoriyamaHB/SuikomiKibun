@@ -66,7 +66,7 @@ void FirstInit(int argc, char *argv[]) {
 	if (argc > 1)
 		scene_mgr = new SceneMgr(kSceneServerOnly);
 	else
-		scene_mgr = new SceneMgr(kSceneStart);
+		scene_mgr = new SceneMgr(kSceneGame);
 
 	//タイマー関数を設定
 	glutTimerFunc(100, Timer, 0);

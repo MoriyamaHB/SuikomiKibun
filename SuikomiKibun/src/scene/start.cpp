@@ -56,7 +56,7 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 	bgm_->Play(Bgm::kStartBgm, 3.0);
 
 	//ボタン
-	button1 = new Button(500, 600, 800, 680, "ゲームスタート", "font/jkgm.ttf", 40);
+	button1 = new Button(500, 600, 770, 680, "ゲームスタート", "font/jkgm.ttf", 40);
 	button1->set_text_color(uColor4fv_blue);
 	button1->set_text_active_color(uColor4fv_blue);
 }
