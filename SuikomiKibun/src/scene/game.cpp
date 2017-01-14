@@ -96,12 +96,14 @@ void GameScene::Update() {
 
 //描画
 void GameScene::Draw() const {
-	//ネットワーク
+//ネットワーク
 	net_main_->Draw();
-	//マップ描画
+//マップ描画
 	map_->Draw();
-	//プレイヤー描画
+//プレイヤー描画
 	player_->Draw();
 	playerteki1_->Draw();
 	playerteki2_->Draw();
+//制限時間描画
+	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
 }

@@ -70,9 +70,6 @@ void NetMain::Draw() const {
 		server_->Draw();
 	if (is_client_) {
 		client_udp_->Draw();
-		//制限時間描画
-		output_display0.Regist("残り時間:" + uToStr(client_udp_->get_receive_data().game_data.limited_time),
-				uColor4fv_orange, 1);
 	}
 }
 
@@ -120,6 +117,14 @@ GameState NetMain::GetGameState() const {
 		uExit();
 	}
 	return client_udp_->get_receive_data().game_data.state;
+}
+
+time_t NetMain::GetLimitedTime() const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	return client_udp_->get_receive_data().game_data.limited_time;
 }
 
 //setter

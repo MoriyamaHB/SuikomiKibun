@@ -47,6 +47,7 @@ public:
 	int GetEnemyLevel(int num) const;
 	int GetColor(int num) const;
 	GameState GetGameState() const;
+	time_t GetLimitedTime() const;
 
 	//setter
 	void SetMePos(btVector3 pos);
