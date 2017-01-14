@@ -41,7 +41,7 @@ private:
 	void CreateSpider(const btVector3& position, int level);
 	void CreateSnowman(const btVector3& position, int level);
 	void CreatePyramid(const btVector3& position, int level);
-	void CreateTriangle(const btVector3& position, int level, int co);
+	void CreateTriangle(const btVector3& position, int level);
 	void CreateTower(const btVector3& position, int level);
 	void CreatePonde(const btVector3& position, int level);
 	void CreateMush(const btVector3& position, int level, int co);
