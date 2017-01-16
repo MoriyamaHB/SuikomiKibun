@@ -41,59 +41,59 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 ground_pos2 = btVector3(-125, -16, 125);
 	btVector3 ground_pos3 = btVector3(-90, -5, -90);
 	btVector3 ten_pos = btVector3(0, 500, 0);
-	btVector3 stairs_pos = btVector3(-7, 148, 3);
-	btVector3 stairs_pos2 = btVector3(0, -0.7, 5);
-	btVector3 stairs_pos3 = btVector3(-10, 154, 10);
-	btVector3 stairs_pos4 = btVector3(10, 154, 10);
-	btVector3 stairs_pos5 = btVector3(10, 154, -10);
-	btVector3 stairs_pos6 = btVector3(-10, 154, -10);
+	btVector3 stairs_pos = btVector3(-7, 108, 3);
+	btVector3 stairs_pos2 = btVector3(0, -0.5, 5);
+	btVector3 stairs_pos3 = btVector3(-10, 110, 10);
+	btVector3 stairs_pos4 = btVector3(10, 110, 10);
+	btVector3 stairs_pos5 = btVector3(10, 110, -10);
+	btVector3 stairs_pos6 = btVector3(-10, 110, -10);
 	btVector3 wall_pos = btVector3(0, 250, 250);
 	btVector3 wall_pos2 = btVector3(0, 250, -250);
 	btVector3 wall_pos3 = btVector3(250, 250, 0);
 	btVector3 wall_pos4 = btVector3(-250, 250, 0);
 	btVector3 kan_pos1 = btVector3(-83, 20, 104);
 	btVector3 kan_pos2 = btVector3(-83, 20, 146);
-	btVector3 kan_pos3 = btVector3(-0.5, 20, 63);
-	btVector3 kan_pos4 = btVector3(-0.5, 20, 105);
-	btVector3 kan_pos5 = btVector3(-0.5, 20, 147);
-	btVector3 kan_pos6 = btVector3(-0.5, 20, 189);
+//	btVector3 kan_pos3 = btVector3(-0.5, 20, 63);
+//	btVector3 kan_pos4 = btVector3(-0.5, 20, 105);
+//	btVector3 kan_pos5 = btVector3(-0.5, 20, 147);
+//	btVector3 kan_pos6 = btVector3(-0.5, 20, 189);
 	btVector3 kan_pos7 = btVector3(-41.5, 20, 147);
 	btVector3 kan_pos8 = btVector3(-41.5, 20, 189);
 	btVector3 kan_pos9 = btVector3(-83, 20, 21);
 	btVector3 kan_pos10 = btVector3(-125, 20, 189);
 	btVector3 kan_pos11 = btVector3(-208, 20, 63);
-	btVector3 kan_pos12 = btVector3(-208, 20, 105);
+//	btVector3 kan_pos12 = btVector3(-208, 20, 105);
 	btVector3 kan_pos13 = btVector3(-166.5, 20, 104);
 	btVector3 kan_pos14 = btVector3(-166.5, 20, 146);
 	btVector3 kan_pos15 = btVector3(-21, 20, 83);
 	btVector3 kan_pos16 = btVector3(-62.5, 20, 41.5);
 	btVector3 kan_pos17 = btVector3(-146, 20, 41.5);
 	btVector3 kan_pos18 = btVector3(-187.5, 20, 41.5);
-	btVector3 kan_pos19 = btVector3(-104, 20, 83);
+//	btVector3 kan_pos19 = btVector3(-104, 20, 83);
 	btVector3 kan_pos20 = btVector3(-146, 20, 83);
-	btVector3 kan_pos21 = btVector3(-104, 20, 167);
+//	btVector3 kan_pos21 = btVector3(-104, 20, 167);
 	btVector3 kan_pos22 = btVector3(-188, 20, 167);
 	btVector3 kan_pos23 = btVector3(-63, 20, 210);
 	btVector3 kan_pos24 = btVector3(-105, 20, 210);
-	btVector3 kan_pos25 = btVector3(-147, 20, 210);
+//	btVector3 kan_pos25 = btVector3(-147, 20, 210);
 	btVector3 kan_pos26 = btVector3(-189, 20, 210);
 	btVector3 kan_pos27 = btVector3(-231, 20, 210);
-	btVector3 kan_pos28 = btVector3(-63, 20, 0.5);
-	btVector3 kan_pos29 = btVector3(-105, 20, 0.5);
-	btVector3 kan_pos30 = btVector3(-147, 20, 0.5);
-	btVector3 kan_pos31 = btVector3(-189, 20, 0.5);
+//	btVector3 kan_pos28 = btVector3(-63, 20, 0.5);
+//	btVector3 kan_pos29 = btVector3(-105, 20, 0.5);
+//	btVector3 kan_pos30 = btVector3(-147, 20, 0.5);
+//	btVector3 kan_pos31 = btVector3(-189, 20, 0.5);
 	btVector3 kan_pos32 = btVector3(-229, 20, 126);
-	btVector3 kan_pos33 = btVector3(-125, 20, 249.5);
-	btVector3 kan_pos34 = btVector3(-249.5, 20, 125);
+//	btVector3 kan_pos33 = btVector3(-125, 20, 249.5);
+//	btVector3 kan_pos34 = btVector3(-249.5, 20, 125);
 	btVector3 dai_pos = btVector3(80, 10, -110);
 	btVector3 dai_pos2 = btVector3(90, 3, -70);
 
-	btVector3 taki_pos = btVector3(190, 35.2, 50);
+	btVector3 taki_pos = btVector3(231, 35.5, 0);
 	btVector3 taki_pos2 = btVector3(2, 0, 0);
-	btVector3 taki_pos3 = btVector3(240, 74, 6);
-	btVector3 taki_pos4 = btVector3(217, 74, 40);
-	btVector3 taki_pos5 = btVector3(217, 74, -29);
-	btVector3 taki_pos6 = btVector3(181, 39.2, 5);
+	btVector3 taki_pos3 = btVector3(240, 76.5, 6);
+	btVector3 taki_pos4 = btVector3(217, 76.5, 40);
+	btVector3 taki_pos5 = btVector3(217, 76.5, -29);
+	btVector3 taki_pos6 = btVector3(179, 40, 5);
 	btVector3 hill_pos = btVector3(145.1, 0.4, -145.1);
 	btVector3 hill_pos2 = btVector3(38.5, 1.0, -145);
 	btVector3 hill_pos3 = btVector3(6, 10.0, 6);
@@ -118,10 +118,10 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *kan_shape = new btBoxShape(btVector3(125, 20, 0.5));
 	btCollisionShape *kan_shape2 = new btBoxShape(btVector3(21, 20, 0.5));
 	btCollisionShape *kan_shape3 = new btBoxShape(btVector3(0.5, 20, 21));
-	btCollisionShape *taki_shape = new btBoxShape(btVector3(1.01, 35, 1.01));
+	btCollisionShape *taki_shape = new btBoxShape(btVector3(1, 37, 55));
 	btCollisionShape *taki_shape2 = new btBoxShape(btVector3(10, 4, 46));
 	btCollisionShape *taki_shape3 = new btBoxShape(btVector3(13, 4, 11));
-	btCollisionShape *taki_shape4 = new btBoxShape(btVector3(0.1, 62, 15));
+	btCollisionShape *taki_shape4 = new btBoxShape(btVector3(0.1, 65, 15));
 	btCollisionShape *hill_shape = new btBoxShape(btVector3(104.9, 0.4, 104.9));
 	btCollisionShape *hill_shape2 = new btBoxShape(btVector3(0.01, 2.1, 104.9));
 	btCollisionShape *hill_shape3 = new btBoxShape(btVector3(104.9, 0.4, 99.9));
@@ -155,108 +155,113 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	color_[num_++] = btVector3(0.75, 1, 0.80);
 	color_[num_++] = btVector3(1.0, 1.0, 1.0);
 
-	//螺旋階段
-	double h, r, g, b;
-	int h2;
-	h = 0;
-	offset.setOrigin(stairs_pos);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 150; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		h += 2.2;
-		h2 = h / 60;
-		if (h2 == 5) {
-			r = 255;
-			g = 0;
-			b = ((360 - h) / 60) * 255;
-		} else if (h2 == 4) {
-			r = ((h - 240) / 60) * 255;
-			g = 0;
-			b = 255;
-		} else if (h2 == 3) {
-			r = 0;
-			g = ((240 - h) / 60) * 255;
-			b = 255;
-		} else if (h2 == 2) {
-			r = 0;
-			g = 255;
-			b = ((h - 120) / 60) * 255;
-		} else if (h2) {
-			r = ((120 - h) / 60) * 255;
-			g = 255;
-			b = 0;
-		} else {
-			r = 255;
-			g = (h / 60) * 255;
-			b = 0;
-		}
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
-		offset = offset * offset2;
-	}
-
-	//	赤階段
-	offset.setOrigin(stairs_pos3);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-		offset = offset * offset2;
-	}
-
-//	黄階段
-	offset.setOrigin(stairs_pos4);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1.0, 1.0, 0.0);
-		offset = offset * offset2;
-	}
-	// 	青階段
-	offset.setOrigin(stairs_pos5);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(0.0, 0.0, 1.0);
-		offset = offset * offset2;
-	}
-
-// 	緑階段
-	offset.setOrigin(stairs_pos6);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(0.0, 1.0, 0.0);
-		offset = offset * offset2;
-	}
+//	//螺旋階段
+//	double h, r, g, b;
+//	int h2;
+//	h = 0;
+//	offset.setOrigin(stairs_pos);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 50; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		h += 7.2;
+//		h2 = h / 60;
+//		if (h2 == 5) {
+//			r = 255;
+//			g = 0;
+//			b = ((360 - h) / 60) * 255;
+//		} else if (h2 == 4) {
+//			r = ((h - 240) / 60) * 255;
+//			g = 0;
+//			b = 255;
+//		} else if (h2 == 3) {
+//			r = 0;
+//			g = ((240 - h) / 60) * 255;
+//			b = 255;
+//		} else if (h2 == 2) {
+//			r = 0;
+//			g = 255;
+//			b = ((h - 120) / 60) * 255;
+//		} else if (h2) {
+//			r = ((120 - h) / 60) * 255;
+//			g = 255;
+//			b = 0;
+//		} else {
+//			r = 255;
+//			g = (h / 60) * 255;
+//			b = 0;
+//		}
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
+//		offset = offset * offset2;
+//	}
+//
+//	//	赤階段
+//	offset.setOrigin(stairs_pos3);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(1.0, 0.0, 0.0);
+//		offset = offset * offset2;
+//	}
+//
+////	黄階段
+//	offset.setOrigin(stairs_pos4);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(1.0, 1.0, 0.0);
+//		offset = offset * offset2;
+//	}
+//	// 	青階段
+//	offset.setOrigin(stairs_pos5);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(0.0, 0.0, 1.0);
+//		offset = offset * offset2;
+//	}
+//
+//// 	緑階段
+//	offset.setOrigin(stairs_pos6);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(0.0, 1.0, 0.0);
+//		offset = offset * offset2;
+//	}
 
 	//滝
+	offset.setIdentity();
 	offset.setOrigin(taki_pos);
 	offset2.setOrigin(taki_pos2);
 
-	for (int ten = 0; ten < 70; ten++) {
-		offset.setRotation(btQuaternion(PI_ * ten / 70, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, taki_shape);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1, 1, 1);
-
-		offset = offset * offset2;
-	}
+//	for (int ten = 0; ten < 14; ten++) {
+//		offset.setRotation(btQuaternion(PI_ * ten / 14, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, taki_shape);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(1, 1, 1);
+//
+//		offset = offset * offset2;
+//	}
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, taki_shape);
+	object_[num_] = object_num_;
+	level_[num_] = 0;
+	color_[num_++] = btVector3(1, 1, 1);
 
 	offset.setIdentity();
 	offset.setOrigin(taki_pos3);
@@ -295,7 +300,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	level_[num_] = 0;
 	color_[num_++] = btVector3(0.5, 1, 0.5);
 	offset.setOrigin(hill_pos4);
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 8; i++) {
 		btCollisionShape *hill_shape = new btBoxShape(
 				btVector3(64.9 - i * 6, 5.0, 64.9 - i * 6));
 		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, hill_shape);
@@ -318,7 +323,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	level_[num_] = 0;
 	color_[num_++] = btVector3(0.5, 1, 0.5);
 	offset.setOrigin(hill_pos6);
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 8; i++) {
 		btCollisionShape *hill_shape = new btBoxShape(
 				btVector3(64.9 - i * 6, 5.0, 64.9 - i * 6));
 		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, hill_shape);
@@ -378,34 +383,34 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos3);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos4);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos5);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos6);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos3);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos4);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos5);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos6);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos7);
 	offset.setRotation(btQuaternion(0, 0, 0));
@@ -441,13 +446,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos12);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos12);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos13);
 	offset.setRotation(btQuaternion(0, 0, 0));
@@ -490,13 +495,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos19);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos19);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos20);
 	offset.setRotation(btQuaternion(0, 0, 0));
@@ -504,13 +509,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos21);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos21);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos22);
 	offset.setRotation(btQuaternion(0, 0, 0));
@@ -532,13 +537,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos25);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos25);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos26);
 	offset.setRotation(btQuaternion(0, 0, 0));
@@ -553,20 +558,20 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos28);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos29);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos28);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos29);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 //	offset.setIdentity();
 //	offset.setOrigin(kan_pos30);
 //	offset.setRotation(btQuaternion(0, 0, 0));
@@ -574,13 +579,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	object_[num_] = object_num_;
 //	level_[num_] = 0;
 //	color_[num_++] = btVector3(0.5, 0.5, 0.5);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos31);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos31);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos32);
 	offset.setRotation(btQuaternion(0, 0, 0));
@@ -588,20 +593,20 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos33);
-	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
-	offset.setIdentity();
-	offset.setOrigin(kan_pos34);
-	offset.setRotation(btQuaternion(PI_ / 2, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
-	object_[num_] = object_num_;
-	level_[num_] = 0;
-	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos33);
+//	offset.setRotation(btQuaternion(0, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
+//	offset.setIdentity();
+//	offset.setOrigin(kan_pos34);
+//	offset.setRotation(btQuaternion(PI_ / 2, 0, 0));
+//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
+//	object_[num_] = object_num_;
+//	level_[num_] = 0;
+//	color_[num_++] = btVector3(1, 0., 0.);
 
 	//台
 //	offset.setIdentity();
@@ -613,7 +618,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	color_[num_++] = btVector3(1, 1, 1);
 
 //流動体
-	int total = 2 * (10 - 1) * (10 - 1);
+	int total = 2 * (5 - 1) * (5 - 1);
 	int verstride = sizeof(btVector3);
 	int indexstride = 3 * sizeof(int);
 	vertices_ = new btVector3[total];
@@ -622,19 +627,19 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btTriangleIndexVertexArray* arrays;
 
 	int index = 0;
-	for (int i = 0; i < 10 - 1; i++) {
-		for (int j = 0; j < 10 - 1; j++) {
-			indices_[index++] = j * 10 + i;
-			indices_[index++] = j * 10 + i + 1;
-			indices_[index++] = (j + 1) * 10 + i + 1;
-			indices_[index++] = j * 10 + i;
-			indices_[index++] = (j + 1) * 10 + i + 1;
-			indices_[index++] = (j + 1) * 10 + i;
+	for (int i = 0; i < 5 - 1; i++) {
+		for (int j = 0; j < 5 - 1; j++) {
+			indices_[index++] = j * 5 + i;
+			indices_[index++] = j * 5 + i + 1;
+			indices_[index++] = (j + 1) * 5 + i + 1;
+			indices_[index++] = j * 5 + i;
+			indices_[index++] = (j + 1) * 5 + i + 1;
+			indices_[index++] = (j + 1) * 5 + i;
 		}
 	}
 
 	arrays = new btTriangleIndexVertexArray(total, indices_, indexstride,
-			2 * (10 - 1) * (10 - 1), (btScalar*) &vertices_[0].x(), verstride);
+			2 * (5 - 1) * (5 - 1), (btScalar*) &vertices_[0].x(), verstride);
 	trimeshShape_ = new btBvhTriangleMeshShape(arrays, true);
 	btCollisionShape* groundShape4 = trimeshShape_;
 	offset.setIdentity();
@@ -643,8 +648,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	object_[num_] = 0;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(0, 0.63, 0.85);
-//	color_[num_++] = btVector3(0, 0, 1);
-//	color_[num_++] = btVector3(0, 0.63, 0.85);
+
 //反発係数
 	btScalar ground_rest = 0.6;
 	btScalar wall_rest = 0;
@@ -729,30 +733,38 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	 */
 	printf("%d ", world_->getNumCollisionObjects());
 //クモ
-	btVector3 posision_j(120, 20, -200);
-	CreateSpider(posision_j, 5);
+	btVector3 posision_ka(140, 20, -205);
+	CreateSpider(posision_ka, 5);
+	btVector3 posision_kb(70, 20, 100);
+	CreateSpider(posision_kb, 2);
 //雪だるま
-	btVector3 position_sa(240, 130, 60);
+	btVector3 position_sa(220, 110, 80);
 	CreateSnowman(position_sa, 4);
-	btVector3 position_sb(140, 0, -20);
-	CreateSnowman(position_sb, 3);
-	btVector3 position_sc(120, 0, 30);
-	CreateSnowman(position_sc, 3);
-	btVector3 position_sd(100, 0, -20);
-	CreateSnowman(position_sd, 3);
-	btVector3 position_se(80, 0, 30);
-	CreateSnowman(position_se, 3);
+	btVector3 position_sb(50, 0, -150);
+	CreateSnowman(position_sb, 1);
+	btVector3 position_sc(100, 0, 230);
+	CreateSnowman(position_sc, 1);
+	btVector3 position_sd(70, 0, -50);
+	CreateSnowman(position_sd, 1);
+	btVector3 position_se(90, 0, 70);
+	CreateSnowman(position_se, 2);
 	btVector3 position_sf(60, 0, -20);
-	CreateSnowman(position_sf, 3);
-	btVector3 position_sg(40, 0, 30);
-	CreateSnowman(position_sg, 3);
+	CreateSnowman(position_sf, 2);
+	btVector3 position_sg(30, 0, 230);
+	CreateSnowman(position_sg, 2);
+	btVector3 position_sh(90, 0, -170);
+	CreateSnowman(position_sh, 1);
+	btVector3 position_si(60, 0, -78);
+	CreateSnowman(position_si, 2);
+	btVector3 position_sj(30, 0, 1250);
+	CreateSnowman(position_sj, 1);
 //ピラミッド
-	btVector3 position_pa(-125, 7*4, -125);
-	CreatePyramid(position_pa, 5);
+	btVector3 position_pa(-230, 0, 150);
+	CreatePyramid(position_pa, 3);
 	btVector3 position_pb(100, 5, 220);
 	CreatePyramid(position_pb, 4);
-	btVector3 position_pc(-230, 0, 223);
-	CreatePyramid(position_pc, 4);
+//	btVector3 position_pc(-230, 0, 223);
+//	CreatePyramid(position_pc, 4);
 //	btVector3 position_pd(-125+14, 0, -125-70);
 //	CreatePyramid(position_pd, 0);
 //	btVector3 position_pe(-125+14, 0, -125+14);
@@ -762,7 +774,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //トライアングル
 	btVector3 position_ta(180, 0, -5);
 	CreateTriangle(position_ta, -3);
-	btVector3 position_tb(-95, 0, 95);
+	btVector3 position_tb(-220, 0, 95);
 	CreateTriangle(position_tb, -1);
 	btVector3 position_tc(-112, 0, 190);
 	CreateTriangle(position_tc, -4);
@@ -782,8 +794,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateMush(position_ma, 3, 2);
 	btVector3 position_mb(128, 10, -162);
 	CreateMush(position_mb, 3, 1);
-	btVector3 position_mc(235, 81, 95);
-	CreateMush(position_mc, 3, 1);
+//	btVector3 position_mc(235, 81, 95);
+//	CreateMush(position_mc, 3, 1);
 	btVector3 position_md(185, 61, 113);
 	CreateMush(position_md, 3, 3);
 	btVector3 position_me(160, 41, 80);
@@ -820,89 +832,89 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateMush(position_mt, 3, 1);
 	btVector3 position_mu(195, 71, -85);
 	CreateMush(position_mu, 3, 1);
-	btVector3 position_mv(235, 81, -85);
-	CreateMush(position_mv, 3, 2);
+//	btVector3 position_mv(235, 81, -85);
+//	CreateMush(position_mv, 3, 2);
 //りんご
-//	btVector3 position_aa(-200, 50, -200);
+//	btVector3 position_aa(-180, 0, -220);
 //	CreateApple(position_aa, 5);
-	btVector3 position_ab(240, 130, -50);
+	btVector3 position_ab(220, 110, -70);
 	CreateApple(position_ab, 4);
-//	btVector3 position_ac(80, 0, 0);
-//	CreateApple(position_ac, 4);
-//	btVector3 position_ad(60, 0, 0);
-//	CreateApple(position_ad, 3);
-//	btVector3 position_ae(40, 0, 0);
-//	CreateApple(position_ae, 4);
-//	btVector3 position_af(20, 0, 0);
-//	CreateApple(position_af, 2);
-//	btVector3 position_ag(40, 0, 0);
-//	CreateApple(position_ag, 2);
-//	btVector3 position_ah(45, 0, 0);
-//	CreateApple(position_ah, 2);
-//	btVector3 position_ai(50, 0, 0);
-//	CreateApple(position_ai, 2);
-//	btVector3 position_aj(175, 42, -65);
-//	CreateApple(position_aj, 2);
-//	btVector3 position_ak(175, 42, -75);
-//	CreateApple(position_ak, 2);
-//	btVector3 position_al(175, 42, -85);
-//	CreateApple(position_al, 2);
-//	btVector3 position_an(175, 42, -95);
-//	CreateApple(position_an, 2);
-//	btVector3 position_am(175, 42, -105);
-//	CreateApple(position_am, 2);
-//	btVector3 position_ao(175, 42, -115);
-//	CreateApple(position_ao, 2);
-//	btVector3 position_ap(185, 42, -115);
-//	CreateApple(position_ap, 2);
-//	btVector3 position_aq(195, 42, -115);
-//	CreateApple(position_aq, 2);
-//	btVector3 position_ar(205, 42, -115);
-//	CreateApple(position_ar, 2);
-//	btVector3 position_as(215, 42, -115);
-//	CreateApple(position_as, 2);
-//	btVector3 position_at(225, 42, -115);
-//	CreateApple(position_at, 2);
-//	btVector3 position_au(235, 42, -115);
-//	CreateApple(position_au, 2);
-//	btVector3 position_av(245, 42, -115);
-//	CreateApple(position_av, 2);
-//	btVector3 position_aw(160, 22, -45);
-//	CreateApple(position_aw, 2);
-//	btVector3 position_ax(160, 22, -75);
-//	CreateApple(position_ax, 1);
-//	btVector3 position_ay(160, 22, -100);
-//	CreateApple(position_ay, 3);
-//	btVector3 position_az(170, 22, -130);
-//	CreateApple(position_az, 2);
-//	btVector3 position_aaa(-10, 10, -10);
-//	CreateApple(position_aaa, 1);
-//	btVector3 position_aab(-15, 10, -15);
-//	CreateApple(position_aab, 2);
-//	btVector3 position_aac(-25, 10, -35);
-//	CreateApple(position_aac, 2);
-//	btVector3 position_aad(-35, 10, -25);
-//	CreateApple(position_aad, 2);
-//	btVector3 position_aae(-10, 10, -25);
-//	CreateApple(position_aae, 2);
-//	btVector3 position_aaf(-35, 10, -50);
-//	CreateApple(position_aaf, 1);
-//	btVector3 position_aag(-45, 10, -10);
-//	CreateApple(position_aag, 2);
-//	btVector3 position_aah(-10, 10, -45);
-//	CreateApple(position_aah, 2);
-//	btVector3 position_aai(-100, 10, -55);
-//	CreateApple(position_aai, 2);
-//	btVector3 position_aaj(-175, 10, -65);
-//	CreateApple(position_aaj, 2);
-//	btVector3 position_aak(-175, 10, -175);
-//	CreateApple(position_aak, 2);
-//	btVector3 position_aal(-200, 10, -10);
-//	CreateApple(position_aal, 2);
-//	btVector3 position_aan(-10, 10, -200);
-//	CreateApple(position_aan, 2);
-//	btVector3 position_aam(-200, 10, -105);
-//	CreateApple(position_aam, 2);
+	btVector3 position_ac(-100, 10, -100);
+	CreateApple(position_ac, 1);
+	btVector3 position_ad(-200, 10, -20);
+	CreateApple(position_ad, 1);
+	btVector3 position_ae(-20, 10, -200);
+	CreateApple(position_ae, 2);
+	btVector3 position_af(-125, 10, -50);
+	CreateApple(position_af, 2);
+	btVector3 position_ag(-100, 10, -125);
+	CreateApple(position_ag, 2);
+	btVector3 position_ah(-80, 10, -20);
+	CreateApple(position_ah, 1);
+	btVector3 position_ai(-200, 10, -200);
+	CreateApple(position_ai, 1);
+	btVector3 position_aj(-175, 10, -65);
+	CreateApple(position_aj, 1);
+	btVector3 position_ak(-120, 10, -230);
+	CreateApple(position_ak, 1);
+	btVector3 position_al(-80, 10, -185);
+	CreateApple(position_al, 2);
+	btVector3 position_an(-175, 10, -195);
+	CreateApple(position_an, 2);
+	btVector3 position_am(-20, 10, -105);
+	CreateApple(position_am, 1);
+	btVector3 position_ao(-17, 0, 20);
+	CreateApple(position_ao, 1);
+	btVector3 position_ap(-30, 0, 70);
+	CreateApple(position_ap, 2);
+	btVector3 position_aq(-50, 0, 100);
+	CreateApple(position_aq, 2);
+	btVector3 position_ar(-60, 0, 150);
+	CreateApple(position_ar, 1);
+	btVector3 position_as(-150, 0, 20);
+	CreateApple(position_as, 2);
+	btVector3 position_at(-10, 0, 200);
+	CreateApple(position_at, 1);
+	btVector3 position_au(-20, 0, 125);
+	CreateApple(position_au, 2);
+	btVector3 position_av(-150, 0, 240);
+	CreateApple(position_av, 1);
+	btVector3 position_aw(-220, 0, 225);
+	CreateApple(position_aw, 2);
+	btVector3 position_ax(-60, 0, 230);
+	CreateApple(position_ax, 1);
+	btVector3 position_ay(-160, 0, 100);
+	CreateApple(position_ay, 3);
+	btVector3 position_az(-200, 0, 130);
+	CreateApple(position_az, 2);
+	btVector3 position_aaa(-230, 0, 80);
+	CreateApple(position_aaa, 1);
+	btVector3 position_aab(-220, 0, 190);
+	CreateApple(position_aab, 2);
+	btVector3 position_aac(-180, 0, 174);
+	CreateApple(position_aac, 1);
+	btVector3 position_aad(-200, 0, 60);
+	CreateApple(position_aad, 2);
+	btVector3 position_aae(-230, 0, 50);
+	CreateApple(position_aae, 2);
+	btVector3 position_aaf(-135, 0, 150);
+	CreateApple(position_aaf, 1);
+	btVector3 position_aag(10, 0, -100);
+	CreateApple(position_aag, 2);
+	btVector3 position_aah(50, 10, -145);
+	CreateApple(position_aah, 1);
+	btVector3 position_aai(100, 10, -55);
+	CreateApple(position_aai, 2);
+	btVector3 position_aaj(-175, 10, -65);
+	CreateApple(position_aaj, 2);
+	btVector3 position_aak(30, 0, -175);
+	CreateApple(position_aak, 2);
+	btVector3 position_aal(30, 0, 40);
+	CreateApple(position_aal, 1);
+	btVector3 position_aan(50, 0, 0);
+	CreateApple(position_aan, 2);
+	btVector3 position_aam(100, 0, -15);
+	CreateApple(position_aam, 2);
 //	btVector3 position_aao(-175, 10, -215);
 //	CreateApple(position_aao, 2);
 //	btVector3 position_aap(-220, 10, -60);
@@ -933,32 +945,32 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateTower(position_wa, 5);
 //	btVector3 position_wb(150, 0, -20);
 //	CreateTower(position_wb, 3);
-	btVector3 position_wc(140, 0, 30);
-	CreateTower(position_wc, 3);
-	btVector3 position_wd(120, 0, -20);
-	CreateTower(position_wd, 3);
+//	btVector3 position_wc(140, 0, 30);
+//	CreateTower(position_wc, 3);
+//	btVector3 position_wd(120, 0, -20);
+//	CreateTower(position_wd, 3);
 //	btVector3 position_we(110, 0, 30);
 //	CreateTower(position_we, 3);
 //	btVector3 position_wf(70, 0, -20);
 //	CreateTower(position_wf, 3);
-	btVector3 position_wg(100, 0, 30);
-	CreateTower(position_wg, 3);
-	btVector3 position_wh(80, 0, -20);
-	CreateTower(position_wh, 3);
-	btVector3 position_wi(60, 0, 30);
-	CreateTower(position_wi, 3);
-	btVector3 position_wj(40, 0, -20);
-	CreateTower(position_wj, 3);
+//	btVector3 position_wg(100, 0, 30);
+//	CreateTower(position_wg, 3);
+//	btVector3 position_wh(80, 0, -20);
+//	CreateTower(position_wh, 3);
+//	btVector3 position_wi(60, 0, 30);
+//	CreateTower(position_wi, 3);
+//	btVector3 position_wj(40, 0, -20);
+//	CreateTower(position_wj, 3);
 //ポンデリング
-	btVector3 position_oa(-200, 20, -200);
+	btVector3 position_oa(-170, 20, -170);
 	CreatePonde(position_oa, 5);
-	btVector3 position_ob(200, 0, -5);
-	CreatePonde(position_ob, 4);
-	btVector3 position_oc(200, 5, -5);
-	CreatePonde(position_oc, 3);
-	btVector3 position_od(200, 10, -5);
-	CreatePonde(position_od, 2);
-	btVector3 position_oe(200, 15, -5);
+	btVector3 position_ob(-100, 10, -150);
+	CreatePonde(position_ob, 1);
+	btVector3 position_oc(-30, 10, -30);
+	CreatePonde(position_oc, 2);
+	btVector3 position_od(-20, 10, -200);
+	CreatePonde(position_od, 1);
+	btVector3 position_oe(-150, 10, -5);
 	CreatePonde(position_oe, 1);
 //プレイヤー
 
@@ -966,7 +978,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
-	printf("%d", world_->getNumCollisionObjects());
+	printf("%d\n", world_->getNumCollisionObjects());
 
 }
 
@@ -1286,10 +1298,10 @@ void StageMap::CreateSnowman(const btVector3& position, int level) {
 		size = 3.2;
 		mass = 0.01;
 	} else if (level == 2) {
-		size = 1.5;
+		size = 1.2;
 		mass = 0.01;
 	} else {
-		size = 1;
+		size = 0.7;
 		mass = 0.01;
 	}
 
@@ -1366,7 +1378,7 @@ void StageMap::CreatePyramid(const btVector3& position, int level) {
 		cube_size = 1.9;
 		cube_mass = 8;
 	} else if (level == 3) {
-		cube_size = 1.5;
+		cube_size = 1.2;
 		cube_mass = 8;
 	} else if (level == 2) {
 
@@ -2305,16 +2317,16 @@ void StageMap::CreatePonde(const btVector3& position, int level) {
 		size = 2.5;
 		mass = 0.01;
 	} else if (level == 3) {
-		r = 3.5;
-		size = 2;
+		r = 2.5;
+		size = 0.8;
 		mass = 0.01;
 	} else if (level == 2) {
-		r = 2.5;
-		size = 1.5;
-		mass = 0.01;
+		r = 1.2;
+		size = 0.7;
+		mass = 0.001;
 	} else {
-		r = 2;
-		size = 1;
+		r = 0.7;
+		size = 0.4;
 		mass = 0.01;
 	}
 
@@ -2467,7 +2479,7 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 		size = 7;
 		mass = 0;
 	} else if (level == 3) {
-		size = 4;
+		size = 3.4;
 		mass = 0;
 	} else if (level == 2) {
 		size = 2;
@@ -2739,8 +2751,8 @@ int StageMap::DestroyObject(int num, int level) {
 		if (l == 0 || l == 5) {
 			//乱数の初期化
 			srand((unsigned) time(NULL));
-//			btVector3 vec = btVector3((rand() % 500 - 250), 160, rand() % 500 - 250);
-			btVector3 vec = btVector3(-50, 160, -50);
+			btVector3 vec = btVector3((rand() % 500 - 250), 160, rand() % 500 - 250);
+//			btVector3 vec = btVector3(-50, 120, -50);
 			for (i = 0; num2 + i <= num_; i++) {
 				if (objectnum == object_[num2 + i]) {
 
@@ -2785,13 +2797,13 @@ int StageMap::DestroyObject(int num, int level) {
 //流動体の計算
 void StageMap::SetVertexPositions(float waveheight, float offset) {
 	int i, j;
-	int verts = 10;
+	int verts = 5;
 	for (i = 0; i < verts; i++) {
 		for (j = 0; j < verts; j++) {
-			vertices_[i + j * verts].setValue((i - verts * 0.5f) * 33,
+			vertices_[i + j * verts].setValue((i - verts * 0.5f) * 66,
 					waveheight * sinf((float) i + offset)
 							* cosf((float) j + offset),
-					(j - verts * 0.5f) * 33);
+					(j - verts * 0.5f) * 66);
 
 		}
 	}
