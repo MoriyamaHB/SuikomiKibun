@@ -19,4 +19,7 @@ const int kWindowInitPosY = 0;
 //fps
 const int kFps = 60;
 
+//制限時間
+const int kLimitedTime = 180;
+
 #endif /* SUIKOMIKIBUN_DEFINE_H_ */

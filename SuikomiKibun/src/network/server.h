@@ -12,6 +12,7 @@
 #include "../util/uGL.h"
 #include "../gv.h"
 #include "../time/time.h"
+#include "../define.h"
 
 class Server;
 #include "com_client.h"
