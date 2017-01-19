@@ -14,7 +14,7 @@ public:
 	ServerOnlyScene(ISceneChanger* changer, SceneParam param);
 	~ServerOnlyScene();
 	void Update();
-	void Draw() const;
+	void Draw();
 };
 
 #endif /* SUIKOMIKIBUN_SCENE_SERVERONLY_H_ */

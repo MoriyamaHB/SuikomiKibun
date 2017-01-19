@@ -47,7 +47,7 @@ void InputIniInfo::Update() {
 }
 
 //描画
-void InputIniInfo::Draw() const {
+void InputIniInfo::Draw() {
 }
 
 //入力スレッド

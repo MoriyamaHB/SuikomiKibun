@@ -42,7 +42,7 @@ private:
 	Bgm *bgm_;
 
 	//ボタン
-	Button *button1;
+	Button *button1_;
 
 	//定数
 	GLfloat kLight0Pos_[4];	//ライト位置
@@ -52,7 +52,7 @@ public:
 	StartScene(ISceneChanger* changer, SceneParam param);
 	~StartScene();
 	void Update();
-	void Draw() const;
+	void Draw();
 };
 
 class StartBodys {

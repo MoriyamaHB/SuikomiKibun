@@ -18,6 +18,7 @@
 #include "../network/net_main.h"
 #include "../sound/bgm.h"
 #include "../ranking/ranking.h"
+#include "../util/button.h"
 
 class GameScene: public BaseScene {
 private:
@@ -29,12 +30,14 @@ private:
 	PlayerTeki *playerteki2_;
 	NetMain *net_main_;
 	Bgm *bgm_;
-	Ranking ranking;
+	Ranking ranking_;
+	Button *button_;
+
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();
 	void Update();
-	void Draw() const;
+	void Draw();
 };
 
 #endif /* SUIKOMIKIBUN_SCENE_GAME_H_ */

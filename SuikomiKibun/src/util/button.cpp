@@ -28,7 +28,15 @@ Button::~Button() {
 }
 
 bool Button::Update() {
-	//renderがdrawで使えないのでここで描画
+	//クリックされていたらtrueを返す
+	if (input::get_mouse_left_button_frame() == 1 || input::get_mouse_right_button_frame() == 1) {
+		if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
+			return true;
+	}
+	return false;
+}
+
+void Button::Draw() {
 	if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
 		uSquare2D(x1_, y1_, x2_, y2_, 2.0, button_active_color_); //アクティブ時
 	else
@@ -42,16 +50,6 @@ bool Button::Update() {
 	if (!font_.Error())
 		font_.Render(text_.c_str());
 	u2Dto3D();
-
-	//クリックされていたらtrueを返す
-	if (input::get_mouse_left_button_frame() == 1 || input::get_mouse_right_button_frame() == 1) {
-		if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
-			return true;
-	}
-	return false;
-}
-
-void Button::Draw() const {
 }
 
 //setter

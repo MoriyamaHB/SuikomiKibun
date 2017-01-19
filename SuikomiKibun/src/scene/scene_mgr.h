@@ -48,7 +48,7 @@ public:
 	virtual ~BaseScene() {
 	}
 	virtual void Update()=0;
-	virtual void Draw() const=0;
+	virtual void Draw()=0;
 };
 
 #include "start.h"
@@ -72,7 +72,7 @@ public:
 	SceneMgr(Scene Scene, SceneParam param);
 	~SceneMgr();
 	void Update();    	//更新
-	void Draw() const;  //描画
+	void Draw();  //描画
 
 	// 引数 nextScene にシーンを変更する
 	void ChangeScene(Scene NextScene);  //パラーメータ不要時

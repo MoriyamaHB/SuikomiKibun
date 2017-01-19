@@ -39,6 +39,11 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	//BGM
 	bgm_ = new Bgm();
 	bgm_->Play(Bgm::kGameBgm);
+
+	//ボタン
+	button_ = new Button(500, 600, 850, 680, "スタート画面に戻る", "font/jkgm.ttf", 40);
+	button_->set_text_color(uColor4fv_red);
+	button_->set_text_active_color(uColor4fv_red);
 }
 
 //デストラクタ
@@ -56,6 +61,8 @@ GameScene::~GameScene() {
 	delete dynamics_world_;
 	//bgm
 	delete bgm_;
+	//ボタン
+	delete button_;
 }
 
 //更新
@@ -89,7 +96,7 @@ void GameScene::Update() {
 	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1));
 
 	//ランキング
-	ranking.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
+	ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
 			net_main_->GetEnemyLevel(0), net_main_->GetEnemyName(1), net_main_->GetEnemyLevel(1));
 
 	//ライト
@@ -99,10 +106,19 @@ void GameScene::Update() {
 	//BGM
 	Sound::SetListener(camera_);
 	bgm_->Update();
+
+	//終了時
+	if (net_main_->GetLimitedTime() < 0) {
+		//マウス移動量取得を解除
+		input::set_is_enabled_mouse_motion(false);
+		//シーン遷移
+		if (button_->Update())
+			scene_changer_->ChangeScene(kSceneStart);
+	}
 }
 
 //描画
-void GameScene::Draw() const {
+void GameScene::Draw() {
 	//ネットワーク
 	net_main_->Draw();
 	//マップ描画
@@ -114,5 +130,9 @@ void GameScene::Draw() const {
 	//制限時間描画
 	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
 	//ランキング
-	ranking.Draw();
+	ranking_.Draw();
+	//終了時
+	if (net_main_->GetLimitedTime() < 0) {
+		button_->Draw();
+	}
 }

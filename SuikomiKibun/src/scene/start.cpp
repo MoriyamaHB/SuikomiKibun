@@ -56,9 +56,9 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 	bgm_->Play(Bgm::kStartBgm, 3.0);
 
 	//ボタン
-	button1 = new Button(500, 600, 770, 680, "ゲームスタート", "font/jkgm.ttf", 40);
-	button1->set_text_color(uColor4fv_red);
-	button1->set_text_active_color(uColor4fv_red);
+	button1_ = new Button(500, 600, 770, 680, "ゲームスタート", "font/jkgm.ttf", 40);
+	button1_->set_text_color(uColor4fv_red);
+	button1_->set_text_active_color(uColor4fv_red);
 }
 
 //デストラクタ
@@ -82,7 +82,7 @@ StartScene::~StartScene() {
 	delete bgm_;
 
 	//ボタン
-	delete button1;
+	delete button1_;
 }
 
 //更新
@@ -110,8 +110,15 @@ void StartScene::Update() {
 	Sound::SetListener(camera_);
 	bgm_->Update();
 
-	//////////////////////↓Renderがconstでは使えないためここに記述 /////////////////////////
+	//ボタンによるシーン遷移
+	if (button1_->Update())
+		scene_changer_->ChangeScene(kSceneInputIniInfo);
 
+	return;
+}
+
+//描画
+void StartScene::Draw() {
 	//地面
 	btVector3 pos;
 	glPushMatrix();
@@ -142,17 +149,8 @@ void StartScene::Update() {
 	}
 	u2Dto3D();
 
-	//ボタンによるシーン遷移
-	if (button1->Update())
-		scene_changer_->ChangeScene(kSceneInputIniInfo);
-	button1->Draw();
-
-	return;
-}
-
-//描画
-void StartScene::Draw() const {
-
+	//ボタン描画
+	button1_->Draw();
 }
 
 ////////////////////////////   start_body   //////////////////////////////////////////////////////

@@ -20,7 +20,7 @@ public:
 	InputIniInfo(ISceneChanger* changer, SceneParam param);
 	~InputIniInfo();
 	void Update();
-	void Draw() const;
+	void Draw();
 };
 
 #endif /* SUIKOMIKIBUN_SCENE_SELECT_H_ */

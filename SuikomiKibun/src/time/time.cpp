@@ -19,8 +19,6 @@ int LimitedTime::Update() {
 	if (is_measuring) { //測定中なら
 		//残り時間計算
 		time_remaining_ = limited_time_sec_ - (time(NULL) - start_);
-		if (time_remaining_ < 0)
-			time_remaining_ = 0;
 		//時間切れなら-1を返す
 		if (time_remaining_ <= 0)
 			return -1;

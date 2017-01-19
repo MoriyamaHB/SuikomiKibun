@@ -25,7 +25,7 @@ void SceneMgr::Update() {
 }
 
 //描画
-void SceneMgr::Draw() const {
+void SceneMgr::Draw() {
 	scene_->Draw();		//シーンの描画
 }
 

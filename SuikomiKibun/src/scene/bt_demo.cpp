@@ -203,7 +203,7 @@ void BtDemoScene::Update() {
 }
 
 //描画
-void BtDemoScene::Draw() const {
+void BtDemoScene::Draw() {
 	//ネットワーク描画
 	net_main_->Draw();
 	btVector3 pos;

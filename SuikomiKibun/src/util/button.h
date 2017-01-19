@@ -27,7 +27,7 @@ public:
 			unsigned int font_size);
 	~Button();
 	bool Update(); //押された時trueを返す
-	void Draw() const;
+	void Draw();
 
 	//setter
 	void set_button_color(const float col[]);

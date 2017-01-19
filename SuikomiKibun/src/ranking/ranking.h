@@ -24,8 +24,8 @@ private:
 		bool is_me;
 	};
 
-	OutputDisplay *disp;
-	std::vector<RankItem> item;
+	OutputDisplay *disp_;
+	std::vector<RankItem> item_;
 public:
 	Ranking();
 	~Ranking();
