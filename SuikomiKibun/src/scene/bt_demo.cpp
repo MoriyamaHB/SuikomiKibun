@@ -111,8 +111,8 @@ BtDemoScene::~BtDemoScene() {
 //更新
 void BtDemoScene::Update() {
 	//ネットワーク更新
-	net_main_->SetMePos(sphere_body_->getCenterOfMassPosition());
-	net_main_->SetMeLevel(static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius());
+	net_main_->SetMyPos(sphere_body_->getCenterOfMassPosition());
+	net_main_->SetMyLevel(static_cast<btSphereShape*>(sphere_body_->getCollisionShape())->getRadius());
 	net_main_->Update();
 
 	//ほかプレイヤー情報を反映

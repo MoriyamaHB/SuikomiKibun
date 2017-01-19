@@ -12,7 +12,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <iostream>
-#include <string.h>
+#include <string>
 
 #include "server.h"
 #include "../util/uGL.h"
@@ -29,6 +29,7 @@ private:
 	//クライアント
 	ClientUdp *client_udp_;
 	ToServerContainer client_data_;
+	std::string client_name_;
 	bool is_client_;
 	//サーバー
 	Server *server_;
@@ -48,11 +49,13 @@ public:
 	int GetColor(int num) const;
 	GameState GetGameState() const;
 	time_t GetLimitedTime() const;
+	std::string GetEnemyName(int num) const;
+	std::string GetMyName() const;
 
 	//setter
-	void SetMePos(btVector3 pos);
-	void SetMeLevel(int level);
-	void SetMeColor(int color);
+	void SetMyPos(btVector3 pos);
+	void SetMyLevel(int level);
+	void SetMyColor(int color);
 };
 
 #endif /* SUIKOMIKIBUN_NET_NETMAIN_H_ */

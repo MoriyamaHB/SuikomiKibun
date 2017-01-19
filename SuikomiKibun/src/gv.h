@@ -11,9 +11,13 @@ extern OutputDisplay output_display0;
 
 //プレイヤーデータ
 struct PlayerData {
+	//定数
+	static const int kNameLength = 24;
+
 	Vector3 pos;
 	int level;
 	int color;
+	char name[kNameLength];
 };
 
 enum GameState {

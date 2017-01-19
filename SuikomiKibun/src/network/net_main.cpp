@@ -7,7 +7,7 @@ NetMain::NetMain() {
 	char is_server;
 	std::string server_ip;
 	int port;
-	std::cout << "s/c?";
+	std::cout << "サーバーなら's',クライアントなら'c'を入力してください:";
 	std::cin >> is_server;
 	if (is_server == 's') {
 //		std::cout << "client_num:";
@@ -19,13 +19,20 @@ NetMain::NetMain() {
 	} else {
 		server_ = NULL;
 		is_server_ = false;
-		std::cout << "server_ip:";
+		std::cout << "サーバーのPC名:";
 		std::cin >> server_ip;
-		std::cout << "port:";
+		std::cout << "ポート番号(1人目:31601,2人目:31602):";
 		std::cin >> port;
+		std::cout << "あなたの名前:";
+		std::cin >> client_name_;
 	}
+	//クライアント作成
 	client_udp_ = new ClientUdp(server_ip, port);
+	//接続
 	client_udp_->Connect();
+	//名前登録
+	strncpy(client_data_.player_data.name, client_name_.c_str(), PlayerData::kNameLength);
+	client_data_.player_data.name[PlayerData::kNameLength - 1] = '\0'; //null文字追加
 }
 
 NetMain::NetMain(bool enable_server_only) {
@@ -127,8 +134,25 @@ time_t NetMain::GetLimitedTime() const {
 	return client_udp_->get_receive_data().game_data.limited_time;
 }
 
+std::string NetMain::GetEnemyName(int num) const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	std::string s(client_udp_->get_receive_data().player_data[num].name);
+	return s;
+}
+
+std::string NetMain::GetMyName() const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	return client_name_;
+}
+
 //setter
-void NetMain::SetMePos(btVector3 pos) {
+void NetMain::SetMyPos(btVector3 pos) {
 	if (!is_client_) {
 		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
 		uExit();
@@ -136,7 +160,7 @@ void NetMain::SetMePos(btVector3 pos) {
 	client_data_.player_data.pos = pos;
 }
 
-void NetMain::SetMeLevel(int level) {
+void NetMain::SetMyLevel(int level) {
 	if (!is_client_) {
 		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
 		uExit();
@@ -144,7 +168,7 @@ void NetMain::SetMeLevel(int level) {
 	client_data_.player_data.level = level;
 }
 
-void NetMain::SetMeColor(int color) {
+void NetMain::SetMyColor(int color) {
 	if (!is_client_) {
 		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
 		uExit();

@@ -70,9 +70,9 @@ void GameScene::Update() {
 
 	//ネットワーク
 	net_main_->Update();
-	net_main_->SetMePos(player_->get_center_pos());
-	net_main_->SetMeLevel(player_->get_level());
-	net_main_->SetMeColor(player_->get_color());
+	net_main_->SetMyPos(player_->get_center_pos());
+	net_main_->SetMyLevel(player_->get_level());
+	net_main_->SetMyColor(player_->get_color());
 
 	//マップ更新
 	map_->Update();
@@ -96,14 +96,18 @@ void GameScene::Update() {
 
 //描画
 void GameScene::Draw() const {
-//ネットワーク
+	//ネットワーク
 	net_main_->Draw();
-//マップ描画
+	//マップ描画
 	map_->Draw();
-//プレイヤー描画
+	//プレイヤー描画
 	player_->Draw();
 	playerteki1_->Draw();
 	playerteki2_->Draw();
-//制限時間描画
+	//制限時間描画
 	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
+	//名前(テスト描画)
+	output_display0.Regist("自分の名前:" + net_main_->GetMyName(), uColor4fv_green, 1);
+	output_display0.Regist("クライアント1:" + net_main_->GetEnemyName(0), uColor4fv_green, 1);
+	output_display0.Regist("クライアント2:" + net_main_->GetEnemyName(1), uColor4fv_green, 1);
 }
