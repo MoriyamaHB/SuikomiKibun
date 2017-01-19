@@ -17,6 +17,7 @@
 #include "../player/playerteki.h"
 #include "../network/net_main.h"
 #include "../sound/bgm.h"
+#include "../ranking/ranking.h"
 
 class GameScene: public BaseScene {
 private:
@@ -28,6 +29,7 @@ private:
 	PlayerTeki *playerteki2_;
 	NetMain *net_main_;
 	Bgm *bgm_;
+	Ranking ranking;
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();
