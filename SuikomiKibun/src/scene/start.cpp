@@ -88,7 +88,7 @@ StartScene::~StartScene() {
 //更新
 void StartScene::Update() {
 	//bulletをすすめる
-	static int ptime = glutGet(GLUT_ELAPSED_TIME) - 25; //初期フレームは25ミリ秒すすめる(すり抜けにより調節)
+	static int ptime = glutGet(GLUT_ELAPSED_TIME);
 	static int ntime;
 	ntime = glutGet(GLUT_ELAPSED_TIME);
 	dynamics_world_->stepSimulation((ntime - ptime) / 1000.0, 0); //前回フレームから経過した時間分すすめる
@@ -164,7 +164,7 @@ StartBodys::StartBodys(btDynamicsWorld *world) :
 	type_ = static_cast<StartBodys::BodyType>(cc_util::GetRandom(0, kBodyTypeNum - 1));
 
 	//他ステータスを設定
-	btVector3 pos = btVector3(0, 10, 0);	//中心座標
+	btVector3 pos = btVector3(0, 8, 0);	//中心座標
 	btScalar mass = 0.03;	//質量
 	btScalar rest = 0.2;	//反発係数
 	btVector3 inertia(0, 0, 0);	//慣性モーメント
