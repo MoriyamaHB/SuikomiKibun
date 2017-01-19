@@ -32,9 +32,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 
 	//オブジェクト
 	btRigidBody* ground_body[7];
-	btRigidBody* wall_body[4];
-	btRigidBody* kan_body[50];
-	btRigidBody* cube[100];
 
 	//中心座標
 	btVector3 ground_pos = btVector3(125, -16, 0);
@@ -53,40 +50,24 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 wall_pos4 = btVector3(-250, 250, 0);
 	btVector3 kan_pos1 = btVector3(-83, 20, 104);
 	btVector3 kan_pos2 = btVector3(-83, 20, 146);
-//	btVector3 kan_pos3 = btVector3(-0.5, 20, 63);
-//	btVector3 kan_pos4 = btVector3(-0.5, 20, 105);
-//	btVector3 kan_pos5 = btVector3(-0.5, 20, 147);
-//	btVector3 kan_pos6 = btVector3(-0.5, 20, 189);
 	btVector3 kan_pos7 = btVector3(-41.5, 20, 147);
 	btVector3 kan_pos8 = btVector3(-41.5, 20, 189);
 	btVector3 kan_pos9 = btVector3(-83, 20, 21);
 	btVector3 kan_pos10 = btVector3(-125, 20, 189);
 	btVector3 kan_pos11 = btVector3(-208, 20, 63);
-//	btVector3 kan_pos12 = btVector3(-208, 20, 105);
 	btVector3 kan_pos13 = btVector3(-166.5, 20, 104);
 	btVector3 kan_pos14 = btVector3(-166.5, 20, 146);
 	btVector3 kan_pos15 = btVector3(-21, 20, 83);
 	btVector3 kan_pos16 = btVector3(-62.5, 20, 41.5);
 	btVector3 kan_pos17 = btVector3(-146, 20, 41.5);
 	btVector3 kan_pos18 = btVector3(-187.5, 20, 41.5);
-//	btVector3 kan_pos19 = btVector3(-104, 20, 83);
 	btVector3 kan_pos20 = btVector3(-146, 20, 83);
-//	btVector3 kan_pos21 = btVector3(-104, 20, 167);
 	btVector3 kan_pos22 = btVector3(-188, 20, 167);
 	btVector3 kan_pos23 = btVector3(-63, 20, 210);
 	btVector3 kan_pos24 = btVector3(-105, 20, 210);
-//	btVector3 kan_pos25 = btVector3(-147, 20, 210);
 	btVector3 kan_pos26 = btVector3(-189, 20, 210);
 	btVector3 kan_pos27 = btVector3(-231, 20, 210);
-//	btVector3 kan_pos28 = btVector3(-63, 20, 0.5);
-//	btVector3 kan_pos29 = btVector3(-105, 20, 0.5);
-//	btVector3 kan_pos30 = btVector3(-147, 20, 0.5);
-//	btVector3 kan_pos31 = btVector3(-189, 20, 0.5);
 	btVector3 kan_pos32 = btVector3(-229, 20, 126);
-//	btVector3 kan_pos33 = btVector3(-125, 20, 249.5);
-//	btVector3 kan_pos34 = btVector3(-249.5, 20, 125);
-	btVector3 dai_pos = btVector3(80, 10, -110);
-	btVector3 dai_pos2 = btVector3(90, 3, -70);
 
 	btVector3 taki_pos = btVector3(231, 35.5, 0);
 	btVector3 taki_pos2 = btVector3(2, 0, 0);
@@ -95,13 +76,13 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 taki_pos5 = btVector3(217, 76.5, -29);
 	btVector3 taki_pos6 = btVector3(179, 40, 5);
 	btVector3 hill_pos = btVector3(145.1, 0.4, -145.1);
-	btVector3 hill_pos2 = btVector3(38.5, 1.0, -145);
+
 	btVector3 hill_pos3 = btVector3(6, 10.0, 6);
 	btVector3 hill_pos4 = btVector3(185, 5.8, -105);
 	btVector3 hill_pos5 = btVector3(145.1, 0.4, 150.1);
 	btVector3 hill_pos6 = btVector3(185, 5.8, 116);
 	btVector3 hill_pos7 = btVector3(6, 10.0, -6);
-	btVector3 hill_pos8 = btVector3(199, 7, -91);
+
 
 	btTransform offset;
 	offset.setIdentity();
@@ -114,8 +95,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *ten_shape = new btBoxShape(btVector3(250, 0.01, 250));
 	btCollisionShape *stairs = new btBoxShape(btVector3(4, 0.3, 2));
 	btCollisionShape *wall_shape = new btBoxShape(btVector3(250, 300, 0.1));
-//	btCollisionShape *kan_shape = new btBoxShape(btVector3(2, 10, 2));
-	btCollisionShape *kan_shape = new btBoxShape(btVector3(125, 20, 0.5));
 	btCollisionShape *kan_shape2 = new btBoxShape(btVector3(21, 20, 0.5));
 	btCollisionShape *kan_shape3 = new btBoxShape(btVector3(0.5, 20, 21));
 	btCollisionShape *taki_shape = new btBoxShape(btVector3(1, 37, 55));
@@ -123,9 +102,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btCollisionShape *taki_shape3 = new btBoxShape(btVector3(13, 4, 11));
 	btCollisionShape *taki_shape4 = new btBoxShape(btVector3(0.1, 65, 15));
 	btCollisionShape *hill_shape = new btBoxShape(btVector3(104.9, 0.4, 104.9));
-	btCollisionShape *hill_shape2 = new btBoxShape(btVector3(0.01, 2.1, 104.9));
 	btCollisionShape *hill_shape3 = new btBoxShape(btVector3(104.9, 0.4, 99.9));
-	btCollisionShape *dai_shape = new btBoxShape(btVector3(5, 0.1, 20));
+
 
 	//bulletに登録（地面&天井）
 	offset.setOrigin(ground_pos);
@@ -155,94 +133,94 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	color_[num_++] = btVector3(0.75, 1, 0.80);
 	color_[num_++] = btVector3(1.0, 1.0, 1.0);
 
-//	//螺旋階段
-//	double h, r, g, b;
-//	int h2;
-//	h = 0;
-//	offset.setOrigin(stairs_pos);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 50; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		h += 7.2;
-//		h2 = h / 60;
-//		if (h2 == 5) {
-//			r = 255;
-//			g = 0;
-//			b = ((360 - h) / 60) * 255;
-//		} else if (h2 == 4) {
-//			r = ((h - 240) / 60) * 255;
-//			g = 0;
-//			b = 255;
-//		} else if (h2 == 3) {
-//			r = 0;
-//			g = ((240 - h) / 60) * 255;
-//			b = 255;
-//		} else if (h2 == 2) {
-//			r = 0;
-//			g = 255;
-//			b = ((h - 120) / 60) * 255;
-//		} else if (h2) {
-//			r = ((120 - h) / 60) * 255;
-//			g = 255;
-//			b = 0;
-//		} else {
-//			r = 255;
-//			g = (h / 60) * 255;
-//			b = 0;
-//		}
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
-//		offset = offset * offset2;
-//	}
-//
-//	//	赤階段
-//	offset.setOrigin(stairs_pos3);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-//		offset = offset * offset2;
-//	}
-//
-////	黄階段
-//	offset.setOrigin(stairs_pos4);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(1.0, 1.0, 0.0);
-//		offset = offset * offset2;
-//	}
-//	// 	青階段
-//	offset.setOrigin(stairs_pos5);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(0.0, 0.0, 1.0);
-//		offset = offset * offset2;
-//	}
-//
-//// 	緑階段
-//	offset.setOrigin(stairs_pos6);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(0.0, 1.0, 0.0);
-//		offset = offset * offset2;
-//	}
+	//螺旋階段
+	double h, r, g, b;
+	int h2;
+	h = 0;
+	offset.setOrigin(stairs_pos);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 50; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		h += 7.2;
+		h2 = h / 60;
+		if (h2 == 5) {
+			r = 255;
+			g = 0;
+			b = ((360 - h) / 60) * 255;
+		} else if (h2 == 4) {
+			r = ((h - 240) / 60) * 255;
+			g = 0;
+			b = 255;
+		} else if (h2 == 3) {
+			r = 0;
+			g = ((240 - h) / 60) * 255;
+			b = 255;
+		} else if (h2 == 2) {
+			r = 0;
+			g = 255;
+			b = ((h - 120) / 60) * 255;
+		} else if (h2) {
+			r = ((120 - h) / 60) * 255;
+			g = 255;
+			b = 0;
+		} else {
+			r = 255;
+			g = (h / 60) * 255;
+			b = 0;
+		}
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
+		offset = offset * offset2;
+	}
+
+	//	赤階段
+	offset.setOrigin(stairs_pos3);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(1.0, 0.0, 0.0);
+		offset = offset * offset2;
+	}
+
+//	黄階段
+	offset.setOrigin(stairs_pos4);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(1.0, 1.0, 0.0);
+		offset = offset * offset2;
+	}
+	// 	青階段
+	offset.setOrigin(stairs_pos5);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(0.0, 0.0, 1.0);
+		offset = offset * offset2;
+	}
+
+// 	緑階段
+	offset.setOrigin(stairs_pos6);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(0.0, 1.0, 0.0);
+		offset = offset * offset2;
+	}
 
 	//滝
 	offset.setIdentity();
@@ -339,14 +317,14 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//壁
 	offset.setIdentity();
 	offset.setOrigin(wall_pos);
-	wall_body[0] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
 //	object_[num_] = object_num_;
 	object_[num_] = -1;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(0.94, 0.94, 0.82);
 	offset.setIdentity();
 	offset.setOrigin(wall_pos2);
-	wall_body[1] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
 //	object_[num_] = object_num_;
 	object_[num_] = -1;
 	level_[num_] = 0;
@@ -354,7 +332,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset.setIdentity();
 	offset.setOrigin(wall_pos3);
 	offset.setRotation(btQuaternion(PI_ / 2, 0, 0));
-	wall_body[2] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
 //	object_[num_] = object_num_;
 	object_[num_] = -1;
 	level_[num_] = 0;
@@ -362,7 +340,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset.setIdentity();
 	offset.setOrigin(wall_pos4);
 	offset.setRotation(btQuaternion(-PI_ / 2, 0, 0));
-	wall_body[3] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0.), offset, wall_shape);
 //	object_[num_] = object_num_;
 	object_[num_] = -1;
 	level_[num_] = 0;
@@ -372,250 +350,143 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	offset.setIdentity();
 	offset.setOrigin(kan_pos1);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos2);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos3);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos4);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos5);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos6);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos7);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos8);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos9);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos10);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos11);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos12);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos13);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos14);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape3);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos15);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos16);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos17);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos18);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos19);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos20);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos21);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos22);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos23);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos24);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos25);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos26);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos27);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos28);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos29);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos30);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(0.5, 0.5, 0.5);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos31);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
 	offset.setIdentity();
 	offset.setOrigin(kan_pos32);
 	offset.setRotation(btQuaternion(0, 0, 0));
-	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
+	ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, kan_shape2);
 	object_[num_] = object_num_;
 	level_[num_] = 0;
 	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos33);
-//	offset.setRotation(btQuaternion(0, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-//	offset.setIdentity();
-//	offset.setOrigin(kan_pos34);
-//	offset.setRotation(btQuaternion(PI_ / 2, 0, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, kan_shape);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 0., 0.);
-
-	//台
-//	offset.setIdentity();
-//	offset.setOrigin(dai_pos);
-//	offset.setRotation(btQuaternion(-PI_ / 4, PI_ / 5, 0));
-//	kan_body[1] = LocalCreateRigidBody(btScalar(0), offset, dai_shape);
-//	object_[num_] = object_num_;
-//	level_[num_] = 0;
-//	color_[num_++] = btVector3(1, 1, 1);
 
 //流動体
 	int total = 2 * (5 - 1) * (5 - 1);
@@ -651,8 +522,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 
 //反発係数
 	btScalar ground_rest = 0.6;
-	btScalar wall_rest = 0;
-	btScalar kan_rest = 0;
+//	btScalar wall_rest = 0;
+//	btScalar kan_rest = 0;
 
 	//反発係数設定
 	for (int i = 0; i < 4; i++) {
@@ -666,71 +537,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	for (int i = 1; i < 21; i++) {
 //		kan_body[i]->setRestitution(kan_rest);
 //	}
-	/*
-	 //大きさ
-	 btVector3 ground_extents = btVector3(200, 0.00001, 200);
-	 double a = 200.0, b = 100.0, c = 1.0;
-	 btVector3 cube_extents = btVector3(a, b, c);
-	 btVector3 cube_extents2 = btVector3(c, b, a);
-	 btVector3 cube_extents3 = btVector3(3, 3, 3);
 
-
-
-	 //質量
-	 btScalar ground_mass = 0.0;
-	 btScalar cube_mass = 0.0;
-	 //反発係数
-	 btScalar ground_rest = 1.0;
-	 btScalar cube_rest = 0.5;
-	 //慣性モーメント
-	 btVector3 ground_inertia(0, 0, 0);
-	 btVector3 cube_inertia(cube_mass * (b * b + c * c) / 3.0, cube_mass * (a * a + c * c) / 3.0,
-	 cube_mass * (b * b + a * a) / 3.0);
-
-	 //形状を設定
-	 btCollisionShape *ground_shape = new btBoxShape(ground_extents);
-	 btCollisionShape *cube_shape = new btBoxShape(cube_extents);
-	 btCollisionShape *cube_shape2 = new btBoxShape(cube_extents2);
-	 btCollisionShape *cube_shape3 = new btBoxShape(cube_extents3);
-
-
-	 //初期位置姿勢
-	 btQuaternion qrot2(0, 0, 0, 1);
-	 btDefaultMotionState* ground_motion_state = new btDefaultMotionState(btTransform(qrot2, ground_pos));
-	 btDefaultMotionState* cube_motion_state = new btDefaultMotionState(btTransform(qrot2, cube_pos));
-	 btDefaultMotionState* cube_motion_state2 = new btDefaultMotionState(btTransform(qrot2, cube_pos2));
-	 btDefaultMotionState* cube_motion_state3 = new btDefaultMotionState(btTransform(qrot2, cube_pos3));
-	 btDefaultMotionState* cube_motion_state4 = new btDefaultMotionState(btTransform(qrot2, cube_pos4));
-	 btDefaultMotionState* cube_motion_state5 = new btDefaultMotionState(btTransform(qrot2, cube_pos5));
-
-	 //慣性モーメントの計算
-	 ground_shape->calculateLocalInertia(ground_mass, ground_inertia);
-	 cube_shape->calculateLocalInertia(cube_mass, cube_inertia);
-	 //剛体オブジェクト生成
-	 ground_body = new btRigidBody(ground_mass, ground_motion_state, ground_shape, ground_inertia);
-	 cube_body_ = new btRigidBody(cube_mass, cube_motion_state, cube_shape, cube_inertia);
-	 cube_body2_ = new btRigidBody(cube_mass, cube_motion_state2, cube_shape, cube_inertia);
-	 cube_body3_ = new btRigidBody(cube_mass, cube_motion_state3, cube_shape2, cube_inertia);
-	 cube_body4_ = new btRigidBody(cube_mass, cube_motion_state4, cube_shape2, cube_inertia);
-	 cube_body5_ = new btRigidBody(cube_mass, cube_motion_state5, cube_shape3, cube_inertia);
-
-	 //反発係数
-	 ground_body->setRestitution(ground_rest);
-	 cube_body_->setRestitution(cube_rest);
-	 cube_body2_->setRestitution(cube_rest);
-	 cube_body3_->setRestitution(cube_rest);
-	 cube_body4_->setRestitution(cube_rest);
-	 cube_body5_->setRestitution(cube_rest);
-
-	 //ワールドに剛体オブジェクトを追加
-
-	 world_->addRigidBody(ground_body);
-	 world_->addRigidBody(cube_body_);
-	 world_->addRigidBody(cube_body2_);
-	 world_->addRigidBody(cube_body3_);
-	 world_->addRigidBody(cube_body4_);
-	 world_->addRigidBody(cube_body5_);
-	 */
 	printf("%d ", world_->getNumCollisionObjects());
 //クモ
 	btVector3 posision_ka(140, 20, -205);
@@ -2649,7 +2456,7 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 	} else if (level == 2) {
 		size = 1.5;
 		size2 = 0.2;
-		mass = 1.0;
+		mass = 0.01;
 	} else {
 		size = 1;
 		size2 = 0.1;
