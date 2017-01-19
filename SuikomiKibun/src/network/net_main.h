@@ -37,6 +37,7 @@ private:
 	ToClientContainer server_data_;
 public:
 	NetMain();
+	NetMain(InputIniInfoData i_data);
 	NetMain(bool enable_server_only);
 	~NetMain();
 	void Update();

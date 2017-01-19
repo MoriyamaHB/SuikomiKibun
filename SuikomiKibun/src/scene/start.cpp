@@ -144,7 +144,7 @@ void StartScene::Update() {
 
 	//ボタンによるシーン遷移
 	if (button1->Update())
-		scene_changer_->ChangeScene(kSceneGame);
+		scene_changer_->ChangeScene(kSceneInputIniInfo);
 	button1->Draw();
 
 	return;
