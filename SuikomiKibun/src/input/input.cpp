@@ -120,7 +120,7 @@ int mouse_right_button_frame = 0;
 namespace input {
 void TakeMouseMotionAndInit(int *dx, int *dy) {
 	if (!is_enabled_mouse_motion) {
-		uErrorOut(__FILE__, __func__, __LINE__, "マウス移動量取得が無効になっています");
+		//uErrorOut(__FILE__, __func__, __LINE__, "マウス移動量取得が無効になっています");
 		*dx = 0;
 		*dy = 0;
 		return;
