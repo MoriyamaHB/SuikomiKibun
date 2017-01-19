@@ -8,6 +8,7 @@ SceneMgr::SceneMgr(Scene Scene) :
 
 SceneMgr::SceneMgr(Scene Scene, SceneParam param) :
 		scene_(NULL), next_scene_(Scene), scene_param_(param) {
+	param.is_param = true;
 	MakeNewScene();
 }
 
@@ -35,8 +36,8 @@ void SceneMgr::MakeNewScene() {
 	case kSceneStart:
 		scene_ = (BaseScene*) new StartScene(this, scene_param_);
 		break;
-	case kSceneSelect:
-		scene_ = (BaseScene*) new SelectScene(this, scene_param_);
+	case kSceneInputIniInfo:
+		scene_ = (BaseScene*) new InputIniInfo(this, scene_param_);
 		break;
 	case kSceneGame:
 		scene_ = (BaseScene*) new GameScene(this, scene_param_);
@@ -62,4 +63,5 @@ void SceneMgr::ChangeScene(Scene NextScene) {
 void SceneMgr::ChangeScene(Scene NextScene, SceneParam param) {
 	next_scene_ = NextScene;    //次のシーンをセットする
 	scene_param_ = param;		//パラメータを記録
+	param.is_param = true;
 }

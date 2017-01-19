@@ -4,11 +4,14 @@
 #include "scene_mgr.h"
 #include "../input/input.h"
 #include "../util/output_display.h"
+#include "../gv.h"
 
-class SelectScene: public BaseScene {
+class InputIniInfo: public BaseScene {
+private:
+	InputIniInfoData data;
 public:
-	SelectScene(ISceneChanger* changer, SceneParam param);
-	~SelectScene();
+	InputIniInfo(ISceneChanger* changer, SceneParam param);
+	~InputIniInfo();
 	void Update();
 	void Draw() const;
 };

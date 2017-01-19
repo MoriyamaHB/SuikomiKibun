@@ -11,7 +11,7 @@
 //各シーンを示す列挙型
 typedef enum {
 	kSceneStart, //スタート
-	kSceneSelect, //選択
+	kSceneInputIniInfo, //ゲーム初期情報入力
 	kSceneGame, //ゲーム
 	kSceneBtDemo, //bulletテスト
 	kSceneServerOnly, //サーバーだけ
@@ -19,8 +19,12 @@ typedef enum {
 	kSceneNone
 } Scene;
 
+#include "../gv.h"
+
 //シーン変更時に渡すデータ
 typedef struct {
+	InputIniInfoData input_ini_info_data;
+	bool is_param;	//パラメータを入力したか
 } SceneParam;
 
 //シーンを変更するためのインターフェイスクラス
@@ -48,7 +52,7 @@ public:
 };
 
 #include "start.h"
-#include "select.h"
+#include "input_ini_info.h"
 #include "game.h"
 #include "bt_demo.h"
 #include "server_only.h"
