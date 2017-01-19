@@ -8,7 +8,10 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
 
 	//ネットワーク
-	net_main_ = new NetMain();
+	if (param.is_param)
+		net_main_ = new NetMain(param.input_ini_info_data); //初期情報あり
+	else
+		net_main_ = new NetMain(); //初期情報なし
 
 	//ワールド作成
 	{

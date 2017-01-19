@@ -8,7 +8,7 @@ SceneMgr::SceneMgr(Scene Scene) :
 
 SceneMgr::SceneMgr(Scene Scene, SceneParam param) :
 		scene_(NULL), next_scene_(Scene), scene_param_(param) {
-	param.is_param = true;
+	scene_param_.is_param = true;
 	MakeNewScene();
 }
 
@@ -63,5 +63,5 @@ void SceneMgr::ChangeScene(Scene NextScene) {
 void SceneMgr::ChangeScene(Scene NextScene, SceneParam param) {
 	next_scene_ = NextScene;    //次のシーンをセットする
 	scene_param_ = param;		//パラメータを記録
-	param.is_param = true;
+	scene_param_.is_param = true;
 }

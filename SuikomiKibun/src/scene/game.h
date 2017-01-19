@@ -28,7 +28,6 @@ private:
 	PlayerTeki *playerteki2_;
 	NetMain *net_main_;
 	Bgm *bgm_;
-
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();

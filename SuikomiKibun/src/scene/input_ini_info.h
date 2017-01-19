@@ -9,6 +9,9 @@
 class InputIniInfo: public BaseScene {
 private:
 	InputIniInfoData data;
+	FTPixmapFont font_;
+
+	void ThreadInput();
 public:
 	InputIniInfo(ISceneChanger* changer, SceneParam param);
 	~InputIniInfo();
