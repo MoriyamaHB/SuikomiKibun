@@ -38,9 +38,9 @@ bool Button::Update() {
 
 void Button::Draw() {
 	if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
-		uSquare2D(x1_, y1_, x2_, y2_, 2.0, button_active_color_); //アクティブ時
+		uSquare2D(x1_, y1_, x2_, y2_, 4.0, button_active_color_); //アクティブ時
 	else
-		uSquare2D(x1_, y1_, x2_, y2_, 2.0, button_color_); //アクティブ時
+		uSquare2D(x1_, y1_, x2_, y2_, 4.0, button_color_); //アクティブ時
 	u3Dto2D();
 	if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
 		glColor4fv(text_active_color_); //アクティブ時
