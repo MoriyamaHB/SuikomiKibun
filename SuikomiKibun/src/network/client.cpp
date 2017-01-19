@@ -47,8 +47,10 @@ ClientUdp::~ClientUdp() {
 	send_timer_.cancel();
 	receive_timer_.cancel();
 	//接続を切る
-	send_socket_->close();
-	receive_socket_->close();
+	if (send_socket_)
+		send_socket_->close();
+	if (receive_socket_)
+		receive_socket_->close();
 	//io_serviceを止める
 	io_service_.stop();
 	//スレッド終了まで待機
@@ -90,7 +92,7 @@ void ClientTcp::Update() {
 void ClientTcp::Draw() {
 	switch (state_) {
 	case kConnectWait: { //未接続
-		output_display0.Regist("client:サーバーと接続中です", uColor4fv_maroon);
+		output_display0.Regist("client:サーバーと接続します", uColor4fv_maroon);
 		break;
 	}
 	case kRun: //送受信開始
@@ -108,7 +110,7 @@ void ClientTcp::Draw() {
 void ClientUdp::Draw() {
 	switch (state_) {
 	case kConnectWait: { //未接続
-		output_display0.Regist("client:サーバーと接続中です", uColor4fv_maroon);
+		output_display0.Regist("client:サーバーと接続します", uColor4fv_maroon);
 		break;
 	}
 	case kRun: //送受信開始
@@ -148,18 +150,26 @@ void ClientTcp::Connect() {
 }
 
 void ClientUdp::Connect() {
-	//endpoint設定
-	udp::endpoint endpoint(boost::asio::ip::udp::v4(), port_ + 10 /*ポート番号*/);
-	udp::resolver resolver(io_service_);
-	udp::resolver::query query(udp::v4(), kIpAdress, uToStr(port_));
-	send_endpoint_ = *resolver.resolve(query);
-	//ソケット作成
-	receive_socket_ = new udp::socket(io_service_, endpoint);
-	send_socket_ = new udp::socket(io_service_);
-	send_socket_->open(udp::v4());
-	//登録完了
-	printf("client(%d):登録完了\n", port_);
-	has_conected_ = true;
+	try {
+		//endpoint設定
+		udp::endpoint endpoint(boost::asio::ip::udp::v4(), port_ + 10 /*ポート番号*/);
+		udp::resolver resolver(io_service_);
+		udp::resolver::query query(udp::v4(), kIpAdress, uToStr(port_));
+		send_endpoint_ = *resolver.resolve(query);
+		//ソケット作成
+		receive_socket_ = new udp::socket(io_service_, endpoint);
+		send_socket_ = new udp::socket(io_service_);
+		send_socket_->open(udp::v4());
+		//登録完了
+		printf("client(%d):登録完了\n", port_);
+		has_conected_ = true;
+	} catch (const boost::system::system_error& ex) {
+		receive_socket_ = NULL;
+		send_socket_ = NULL;
+		uErrorOut(__FILE__, __func__, __LINE__, "UDPサーバーとの接続に失敗");
+		output_display0.Regist("エラー:UDPサーバーとの接続に失敗しました", uColor4fv_red, 360);
+		return;
+	}
 }
 
 //接続完了
@@ -215,6 +225,7 @@ void ClientTcp::OnSend(const boost::system::error_code &error, size_t bytes_tran
 //送信タイムアウト
 void ClientTcp::OnSendTimeOut(const boost::system::error_code& error) {
 	if (!error) {
+		output_display0.Regist("エラー:サーバーへの送信がタイムアウトしました", uColor4fv_red, 360);
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(port_) + "):送信タイムアウト\n");
 		return;
 	}
@@ -276,6 +287,7 @@ void ClientUdp::OnReceive(const boost::system::error_code& error, size_t bytes_t
 //受信タイムアウト
 void ClientTcp::OnReceiveTimeOut(const boost::system::error_code& error) {
 	if (!error) {
+		output_display0.Regist("エラー:サーバーからの受信がタイムアウトしました", uColor4fv_red, 360);
 		uErrorOut(__FILE__, __func__, __LINE__, "server(" + uToStr(port_) + "):受信タイムアウト\n");
 		return;
 	}
