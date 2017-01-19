@@ -88,6 +88,10 @@ void GameScene::Update() {
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0));
 	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1));
 
+	//ランキング
+	ranking.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
+			net_main_->GetEnemyLevel(0), net_main_->GetEnemyName(1), net_main_->GetEnemyLevel(1));
+
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
@@ -109,8 +113,6 @@ void GameScene::Draw() const {
 	playerteki2_->Draw();
 	//制限時間描画
 	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
-	//名前(テスト描画)
-	output_display0.Regist("自分の名前:" + net_main_->GetMyName(), uColor4fv_green, 1);
-	output_display0.Regist("クライアント1:" + net_main_->GetEnemyName(0), uColor4fv_green, 1);
-	output_display0.Regist("クライアント2:" + net_main_->GetEnemyName(1), uColor4fv_green, 1);
+	//ランキング
+	ranking.Draw();
 }
