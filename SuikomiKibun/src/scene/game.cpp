@@ -68,7 +68,7 @@ GameScene::~GameScene() {
 //更新
 void GameScene::Update() {
 	//bulletをすすめる
-	static int ptime = glutGet(GLUT_ELAPSED_TIME) - 25; //初期フレームは25ミリ秒すすめる(すり抜けにより調節)
+	static int ptime = glutGet(GLUT_ELAPSED_TIME);
 	static int ntime;
 	ntime = glutGet(GLUT_ELAPSED_TIME);
 	dynamics_world_->stepSimulation((ntime - ptime) / 1000.0, 0); //前回フレームから経過した時間分すすめる
