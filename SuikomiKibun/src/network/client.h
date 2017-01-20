@@ -67,7 +67,7 @@ public:
 	virtual void Connect();	//接続開始
 	virtual ~ClientTcp();
 	void Update();
-	void Draw();
+	virtual void Draw();
 
 	void set_send_data(const ToServerContainer &send_data);
 	ToClientContainer get_receive_data() const;
@@ -90,6 +90,7 @@ private:
 public:
 	ClientUdp(std::string ip_adress, int start_port);
 	void Connect();	//接続開始
+	void Draw();
 	~ClientUdp();
 };
 

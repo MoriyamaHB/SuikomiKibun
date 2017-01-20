@@ -8,7 +8,10 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
 
 	//ネットワーク
-	net_main_ = new NetMain();
+	if (param.is_param)
+		net_main_ = new NetMain(param.input_ini_info_data); //初期情報あり
+	else
+		net_main_ = new NetMain(); //初期情報なし
 
 	//ワールド作成
 	{
@@ -32,6 +35,15 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 
 	//プレイヤー作成
 	player_ = new Player(dynamics_world_);
+
+	//BGM
+	bgm_ = new Bgm();
+	bgm_->Play(Bgm::kGameBgm);
+
+	//ボタン
+	button_ = new Button(500, 600, 850, 680, "スタート画面に戻る", "font/jkgm.ttf", 40);
+	button_->set_text_color(uColor4fv_red);
+	button_->set_text_active_color(uColor4fv_red);
 }
 
 //デストラクタ
@@ -47,19 +59,20 @@ GameScene::~GameScene() {
 	//ワールド破壊
 	delete dynamics_world_->getBroadphase();
 	delete dynamics_world_;
+	//bgm
+	delete bgm_;
+	//ボタン
+	delete button_;
 }
 
 //更新
 void GameScene::Update() {
 	//bulletをすすめる
-	dynamics_world_->stepSimulation(1.0 / kFps, 0); //前回フレームから経過した時間分すすめる
-
-	//すり抜けるのでコメントアウト
-//	static int ptime = glutGet(GLUT_ELAPSED_TIME) - 25; //初期フレームは25ミリ秒すすめる(すり抜けにより調節)
-//	static int ntime;
-//	ntime = glutGet(GLUT_ELAPSED_TIME);
-//	dynamics_world_->stepSimulation((ntime - ptime) / 1000.0, 0); //前回フレームから経過した時間分すすめる
-//	ptime = ntime;
+	static int ptime = glutGet(GLUT_ELAPSED_TIME);
+	static int ntime;
+	ntime = glutGet(GLUT_ELAPSED_TIME);
+	dynamics_world_->stepSimulation((ntime - ptime) / 1000.0, 0); //前回フレームから経過した時間分すすめる
+	ptime = ntime;
 
 	//カメラ更新
 	camera_.Update(player_->get_center_pos());
@@ -67,9 +80,9 @@ void GameScene::Update() {
 
 	//ネットワーク
 	net_main_->Update();
-	net_main_->SetMePos(player_->get_center_pos());
-	net_main_->SetMeLevel(player_->get_level());
-	net_main_->SetMeColor(player_->get_color());
+	net_main_->SetMyPos(player_->get_center_pos());
+	net_main_->SetMyLevel(player_->get_level());
+	net_main_->SetMyColor(player_->get_color());
 
 	//マップ更新
 	map_->Update();
@@ -83,13 +96,30 @@ void GameScene::Update() {
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0),map_);
 	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1),map_);
 
+	//ランキング
+	ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
+			net_main_->GetEnemyLevel(0), net_main_->GetEnemyName(1), net_main_->GetEnemyLevel(1));
+
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
+
+	//BGM
+	Sound::SetListener(camera_);
+	bgm_->Update();
+
+	//終了時
+	if (net_main_->GetLimitedTime() < 0) {
+		//マウス移動量取得を解除
+		input::set_is_enabled_mouse_motion(false);
+		//シーン遷移
+		if (button_->Update())
+			scene_changer_->ChangeScene(kSceneStart);
+	}
 }
 
 //描画
-void GameScene::Draw() const {
+void GameScene::Draw() {
 	//ネットワーク
 	net_main_->Draw();
 	//マップ描画
@@ -98,4 +128,12 @@ void GameScene::Draw() const {
 	player_->Draw();
 	playerteki1_->Draw();
 	playerteki2_->Draw();
+	//制限時間描画
+	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
+	//ランキング
+	ranking_.Draw();
+	//終了時
+	if (net_main_->GetLimitedTime() < 0) {
+		button_->Draw();
+	}
 }

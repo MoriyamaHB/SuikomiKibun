@@ -33,7 +33,7 @@ public:
 	BtDemoScene(ISceneChanger* changer, SceneParam param);
 	~BtDemoScene();
 	void Update();
-	void Draw() const;
+	void Draw();
 };
 
 #endif /* SUIKOMIKIBUN_SCENE_BTDEMO_H_ */

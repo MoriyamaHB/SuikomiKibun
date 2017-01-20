@@ -106,17 +106,21 @@ void CheckUpSpecialkey(int key, int x, int y) {
 
 //マウスの移動量
 namespace {
+int mouse_x = 0;
+int mouse_y = 0;
 int mouse_dx = 0;
 int mouse_dy = 0;
 bool is_down_mouse_left_button = false;
 int mouse_left_button_frame = 0;
+bool is_down_mouse_right_button = false;
+int mouse_right_button_frame = 0;
 }
 
 //前回の呼び出しからのマウス移動量を返します
 namespace input {
 void TakeMouseMotionAndInit(int *dx, int *dy) {
 	if (!is_enabled_mouse_motion) {
-		uErrorOut(__FILE__, __func__, __LINE__, "マウス移動量取得が無効になっています");
+		//uErrorOut(__FILE__, __func__, __LINE__, "マウス移動量取得が無効になっています");
 		*dx = 0;
 		*dy = 0;
 		return;
@@ -132,16 +136,36 @@ namespace input {
 int get_mouse_left_button_frame() {
 	return mouse_left_button_frame;
 }
+int get_mouse_right_button_frame() {
+	return mouse_right_button_frame;
+}
+}
+
+//マウス座標取得
+namespace input {
+int get_mouse_x() {
+	return mouse_x;
+}
+int get_mouse_y() {
+	return mouse_y;
+}
 }
 
 //OpenGLコールバック関数
 //マウスクリックしたor放した時に呼び出されます
 namespace input {
 void CheckMouse(int button, int state, int x, int y) {
+	//左クリック
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		is_down_mouse_left_button = true;
 	} else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		is_down_mouse_left_button = false;
+	}
+	//右クリック
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		is_down_mouse_right_button = true;
+	} else if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
+		is_down_mouse_right_button = false;
 	}
 }
 }
@@ -168,6 +192,11 @@ void set_is_enabled_mouse_motion(bool boo) {
 //ボタンを押している時 & 押していない時の両方で呼び出されます
 namespace input {
 void CheckMouseMotion(int x, int y) {
+	//マウス座標記録
+	mouse_x = x;
+	mouse_y = y;
+
+	//マウスラップ(マウスを中心に戻しそこからの移動量を記録)
 	if (!is_enabled_mouse_motion)
 		return;
 	static int wrap_flag = 0;
@@ -218,6 +247,11 @@ void UpdateFrame() {
 		mouse_left_button_frame++;
 	else
 		mouse_left_button_frame = 0;
+	//右マウスクリック
+	if (is_down_mouse_right_button)
+		mouse_right_button_frame++;
+	else
+		mouse_right_button_frame = 0;
 }
 }
 
@@ -234,10 +268,14 @@ void Init() {
 	enter_frame = 0;
 	space = 0;
 	space_frame = 0;
+	mouse_x = 0;
+	mouse_y = 0;
 	mouse_dx = 0;
 	mouse_dy = 0;
 	is_down_mouse_left_button = false;
 	mouse_left_button_frame = 0;
+	is_down_mouse_right_button = false;
+	mouse_right_button_frame = 0;
 	is_enabled_mouse_motion = false;
 }
 }

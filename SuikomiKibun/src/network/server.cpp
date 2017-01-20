@@ -64,7 +64,7 @@ void Server::Update() {
 		}
 		//送受信中状態へ移行
 		state_ = kCom;
-		time.Init(180);	//制限時間180秒に設定
+		time.Init(kLimitedTime);	//制限時間を設定
 		break;
 	}
 	case kCom: {	//送受信中

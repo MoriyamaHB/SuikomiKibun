@@ -17,7 +17,7 @@ void ServerOnlyScene::Update() {
 	net_main_->Update();
 }
 
-void ServerOnlyScene::Draw() const {
+void ServerOnlyScene::Draw() {
 	//ネットワーク
 	net_main_->Draw();
 }

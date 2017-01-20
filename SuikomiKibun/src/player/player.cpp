@@ -12,7 +12,7 @@ Player::Player(btDynamicsWorld* world) :
 	level_ = 1;
 
 	//中心座標
-	btVector3 sphere_pos = btVector3(-1, 5, 0);
+	btVector3 sphere_pos = btVector3(-1, 10, 0);
 	//大きさ
 	player_radius_ = 1.0;
 	//質量
@@ -36,6 +36,9 @@ Player::Player(btDynamicsWorld* world) :
 			sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
+	//すり抜け防止
+	sphere_body_->setCcdSweptSphereRadius(player_radius_);
+	sphere_body_->setCcdMotionThreshold(player_radius_ * 2.0);
 
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
@@ -228,6 +231,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
 }
+	
 
 //描画
 void Player::Draw() {
@@ -367,16 +371,49 @@ void Player::Draw() {
 		}
 	}
 	u2Dto3D();
+<<<<<<< HEAD
+=======
+
+//		u3Dto2D();
+//		glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+//		glTranslatef(0, 0, 1);
+//		glBegin(GL_QUADS);
+//		glNormal3d(0.0, 1.0, 0.0);
+//		glVertex3f(50 * i, 30, 0);
+//		glVertex3f(50 * i, 50, 0);
+//		glVertex3f(20 + 50 * i, 50, 0);
+//		glVertex3f(20 + 50 * i, 30, 0);
+//		glEnd();
+//		u2Dto3D();
+//}
+
+//球
+	/*
+	 btVector3 pos = sphere_body_->getCenterOfMassPosition();
+	 glPushMatrix();
+	 glTranslatef(pos[0], pos[1], pos[2]);
+	 btScalar player_radius;
+	 player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
+	 glScalef(player_radius, player_radius, player_radius);
+	 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
+	 glutSolidSphere(1.0, 20, 20);
+	 glPopMatrix();
+	 */
+
+>>>>>>> refs/remotes/origin/master
 	glDisable(GL_LIGHTING);
 	RenderScene();
 }
 
 void Player::PlayerSize(double size) {
-//形状を設定
+	//形状を設定
 	btCollisionShape *new_sphere_shape = new btSphereShape(size);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
 	player_radius_ = size;
+	//すり抜け防止
+	sphere_body_->setCcdSweptSphereRadius(player_radius_);
+	sphere_body_->setCcdMotionThreshold(player_radius_ * 2.0);
 }
 
 void Player::PlayerMove(btVector3 pos) {

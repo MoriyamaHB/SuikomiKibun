@@ -26,17 +26,16 @@ PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 	btCollisionShape *sphere_shape = new btSphereShape(player_radius_);
 	//球体の初期位置、姿勢
 	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
-			btTransform(qrot, sphere_pos));
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, sphere_pos));
 	//剛体オブジェクト生成
-	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state,
-			sphere_shape, sphere_inertia);
+	sphere_body_ = new btRigidBody(sphere_mass, sphere_motion_state, sphere_shape, sphere_inertia);
 	//反発係数
 	sphere_body_->setRestitution(sphere_rest);
+	//すり抜け防止
+	sphere_body_->setCcdSweptSphereRadius(player_radius_);
+	sphere_body_->setCcdMotionThreshold(player_radius_ * 2.0);
 	//ワールドに剛体オブジェクトを追加
 	world_->addRigidBody(sphere_body_);
-
-
 
 	color_[0] = btVector3(1, 0, 0);
 	color_[1] = btVector3(0, 1, 0);
@@ -54,7 +53,6 @@ PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 
 }
 
-
 PlayerTeki::~PlayerTeki() {
 	delete sphere_body_->getMotionState();
 	world_->removeRigidBody(sphere_body_);
@@ -67,32 +65,31 @@ void PlayerTeki::RenderScene() {
 	btMatrix3x3 rot;
 	rot.setIdentity();
 	btVector3 wireColor(1, 0, 0);
-		btCollisionObject* colObj = world_->getCollisionObjectArray()[playerteki_num_];
-		btRigidBody* body = btRigidBody::upcast(colObj);
-		if (body && body->getMotionState()) {
-			btDefaultMotionState* myMotionState =
-					(btDefaultMotionState*) body->getMotionState();
-			myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(m);
-			rot = myMotionState->m_graphicsWorldTrans.getBasis();
-		} else {
-			colObj->getWorldTransform().getOpenGLMatrix(m);
-			rot = colObj->getWorldTransform().getBasis();
-		}
+	btCollisionObject* colObj = world_->getCollisionObjectArray()[playerteki_num_];
+	btRigidBody* body = btRigidBody::upcast(colObj);
+	if (body && body->getMotionState()) {
+		btDefaultMotionState* myMotionState = (btDefaultMotionState*) body->getMotionState();
+		myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(m);
+		rot = myMotionState->m_graphicsWorldTrans.getBasis();
+	} else {
+		colObj->getWorldTransform().getOpenGLMatrix(m);
+		rot = colObj->getWorldTransform().getBasis();
+	}
 
-		if (color_judge_ == 1)
-			wireColor = color_[0];
-		else if (color_judge_ == 2)
-			wireColor = color_[1];
-		else
-			wireColor = color_[2];
+	if (color_judge_ == 1)
+		wireColor = color_[0];
+	else if (color_judge_ == 2)
+		wireColor = color_[1];
+	else
+		wireColor = color_[2];
 
-		btVector3 aabbMin, aabbMax;
-		world_->getBroadphase()->getBroadphaseAabb(aabbMin, aabbMax);
+	btVector3 aabbMin, aabbMax;
+	world_->getBroadphase()->getBroadphaseAabb(aabbMin, aabbMax);
 
-		aabbMin -= btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
-		aabbMax += btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
+	aabbMin -= btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
+	aabbMax += btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
 
-		m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(),wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
+	m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(), wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
 
 
 
@@ -104,9 +101,9 @@ void PlayerTeki::Draw() {
 	RenderScene();
 }
 
-
 //プレイヤー敵データ更新
 void PlayerTeki::Update(btVector3 pos,int level,int color_change, StageMap* map) {
+
 	PlayerTekiMove(pos);
 	if(player_radius_ <= (double)level / 5.0)
 		PlayerTekiResize(player_radius_+= 0.05);
@@ -134,25 +131,28 @@ void PlayerTeki::Update(btVector3 pos,int level,int color_change, StageMap* map)
 //			delete_body2_ = NULL;
 //	}
 
+
 	PlayerColorChange(color_change);
 }
 
 //プレイヤー敵サイズ変更
-void PlayerTeki::PlayerTekiResize(double size){
+void PlayerTeki::PlayerTekiResize(double size) {
 	btCollisionShape *new_sphere_shape = new btSphereShape(size);
 	delete sphere_body_->getCollisionShape();
 	sphere_body_->setCollisionShape(new_sphere_shape);
 	player_radius_ = size;
+	//すり抜け防止
+	sphere_body_->setCcdSweptSphereRadius(player_radius_);
+	sphere_body_->setCcdMotionThreshold(player_radius_ * 2.0);
 }
 
 void PlayerTeki::PlayerTekiMove(btVector3 pos) {
 	btQuaternion qrot(0, 0, 0, 1);
-	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
-			btTransform(qrot, pos));
+	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, pos));
 	sphere_body_->setMotionState(sphere_motion_state);
 }
 
-void PlayerTeki::PlayerColorChange(int color_change){
+void PlayerTeki::PlayerColorChange(int color_change) {
 	color_judge_ = color_change;
 }
 
@@ -161,5 +161,6 @@ bool PlayerTeki::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	delete_body2_ = static_cast<btRigidBody*>(b);
 	return true;
 }
+
 
 
