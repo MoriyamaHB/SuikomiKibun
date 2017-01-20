@@ -32,7 +32,7 @@ private:
 	Bgm *bgm_;
 	Ranking ranking_;
 	Button *button_;
-
+	FTPixmapFont nav_font_, nav_font_1;
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();

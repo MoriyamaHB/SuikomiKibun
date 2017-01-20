@@ -1,7 +1,7 @@
 #include "ranking.h"
 
 Ranking::Ranking() {
-	disp_ = new OutputDisplay("font/kanjuku.otf", 850, 60, 40);
+	disp_ = new OutputDisplay("font/kanjuku.otf", 850, 150, 40);
 	RankItem r;
 	for (int i = 0; i < 3; i++)
 		item_.push_back(r);
