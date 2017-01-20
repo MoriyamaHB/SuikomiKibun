@@ -447,13 +447,13 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 1 && color2 == 2){
-		level_ += ((double)tekilevel / 2);
+		level_ += (tekilevel / 2) + 1;
 	}
 	else if(color1 == 1 && color2 == 2){
-		level_ += ((double)tekilevel / 2);
+		level_ += (tekilevel / 2) + 1;
 	}
 	else if(color1 == 1 && color2 == 2){
-		level_ += ((double)tekilevel / 2);
+		level_ += (tekilevel / 2) + 1;
 		}
 }
 
