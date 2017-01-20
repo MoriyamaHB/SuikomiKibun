@@ -12,7 +12,7 @@ Player::Player(btDynamicsWorld* world) :
 	level_ = 1;
 
 	//中心座標
-	btVector3 sphere_pos = btVector3(-1, 10, 0);
+	btVector3 sphere_pos = btVector3(0, 120, 0);
 	//大きさ
 	player_radius_ = 1.0;
 	//質量
@@ -481,7 +481,7 @@ int Player::ColorChange(int colorchange){
 
 void Player::ResMove(btRigidBody* sphere_res_body_){
 		level_ = 1;
-		btVector3 pos = btVector3(0,150,0);
+		btVector3 pos = btVector3(0,120,0);
 		btQuaternion qrot(0, 0, 0, 1);
 		btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, pos));
 		sphere_res_body_->setMotionState(sphere_motion_state);
