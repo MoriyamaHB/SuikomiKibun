@@ -371,36 +371,7 @@ void Player::Draw() {
 		}
 	}
 	u2Dto3D();
-<<<<<<< HEAD
-=======
 
-//		u3Dto2D();
-//		glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
-//		glTranslatef(0, 0, 1);
-//		glBegin(GL_QUADS);
-//		glNormal3d(0.0, 1.0, 0.0);
-//		glVertex3f(50 * i, 30, 0);
-//		glVertex3f(50 * i, 50, 0);
-//		glVertex3f(20 + 50 * i, 50, 0);
-//		glVertex3f(20 + 50 * i, 30, 0);
-//		glEnd();
-//		u2Dto3D();
-//}
-
-//球
-	/*
-	 btVector3 pos = sphere_body_->getCenterOfMassPosition();
-	 glPushMatrix();
-	 glTranslatef(pos[0], pos[1], pos[2]);
-	 btScalar player_radius;
-	 player_radius = static_cast<const btSphereShape*>(sphere_body_->getCollisionShape())->getRadius();
-	 glScalef(player_radius, player_radius, player_radius);
-	 glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, uMaterial4fv_brown);
-	 glutSolidSphere(1.0, 20, 20);
-	 glPopMatrix();
-	 */
-
->>>>>>> refs/remotes/origin/master
 	glDisable(GL_LIGHTING);
 	RenderScene();
 }
