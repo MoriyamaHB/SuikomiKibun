@@ -9,9 +9,6 @@ InputIniInfo::InputIniInfo(ISceneChanger* changer, SceneParam param) :
 	} else {
 		font_.FaceSize(90);
 	}
-	//std::stringの初期化(空の状態でシーン遷移しようとするとコアダンプするため)
-	data.client_name = "no";
-	data.server_ip = "no";
 	//入力終了フラグセット
 	is_finish_input = false;
 	//入力開始
@@ -39,7 +36,7 @@ void InputIniInfo::Update() {
 	//案内表示
 	u3Dto2D();
 	if (!font_.Error()) {
-		glColor4fv(uColor4fv_orange);
+		glColor4fv (uColor4fv_orange);
 		glRasterPos2f(10, 200);
 		font_.Render("端末で情報を入力してください");
 	}
@@ -60,7 +57,7 @@ void InputIniInfo::ThreadInput() {
 		std::cout << "ポート番号(1人目:31601,2人目:31602):";
 		std::cin >> data.port;
 	} else if (data.s_or_c == 's') {
-		data.server_ip = "localhost";
+		strcpy(data.server_ip, "localhost");
 		data.port = 31600;
 	}
 	std::cout << "あなたの名前:";

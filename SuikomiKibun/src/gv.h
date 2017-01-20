@@ -12,9 +12,9 @@ extern OutputDisplay output_display0;
 //ゲーム初期情報
 struct InputIniInfoData {
 	char s_or_c;
-	std::string server_ip;
+	char server_ip[48];
 	int port;
-	std::string client_name;
+	char client_name[48];
 };
 
 //プレイヤーデータ
