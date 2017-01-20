@@ -10,6 +10,7 @@
 #include "../define.h"
 #include "../input/input.h"
 #include "../map/map.h"
+#include "../util/cc_util.h"
 
 #include "../map/GL_ShapeDrawer.h"
 
@@ -47,6 +48,7 @@ public:
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);
 	void Pwinlosejudge(int color1,int color2,int tekilevel);
+	int ColorChange(int colorchange);
 	int Pwinlosejudge2(int color1,int color2, int tekilevel);
 	void ResMove(btRigidBody* sphere_res_body);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);

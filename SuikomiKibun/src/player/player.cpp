@@ -99,7 +99,7 @@ void Player::RenderScene() {
 		wireColor = color_[0];
 	else if (color_judge_ == 2)
 		wireColor = color_[1];
-	else
+	else if(color_judge_ == 3)
 		wireColor = color_[2];
 
 	btVector3 aabbMin, aabbMax;
@@ -190,7 +190,11 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
-					level_ += map->DestroyObject(i, level_);
+					int level_item = map->DestroyObject(i,level_);
+					if(level_item < 0)
+						color_judge_ = ColorChange(level_item);
+					else
+						level_ += level_item;
 				}
 			}
 		}
@@ -448,6 +452,8 @@ int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
 	if(color1 == color2){
 		if(tekilevel > level_)
 		ResMove(sphere_body_);
+		if(tekilevel == level_)
+			return 0;
 	}
 	else if(color1 == 1 && color2 == 2){
 		ResMove(sphere_body_);
@@ -460,6 +466,17 @@ int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
 	}
 
 	return 0;
+}
+
+int Player::ColorChange(int colorchange){
+	if(colorchange == -1)
+		return 1;
+	else if(colorchange == -2)
+		return 2;
+	else if(colorchange == -3)
+		return 3;
+	else if(colorchange == -4)
+		return cc_util::GetRandom(1,3);
 }
 
 void Player::ResMove(btRigidBody* sphere_res_body_){
