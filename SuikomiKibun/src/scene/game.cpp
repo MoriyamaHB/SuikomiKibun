@@ -99,7 +99,8 @@ void GameScene::Update() {
 	//プレイヤー更新
 	if (net_main_->GetGameState() == kPlay)
 		player_->Update(camera_.get_angle_w() + M_PI, map_, net_main_->GetColor(0), net_main_->GetColor(1),
-				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1));
+				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1),net_main_->GetEnemyPos(0),net_main_->GetEnemyPos(1)
+				,(double)net_main_->GetEnemyLevel(0) / 5.0 + 0.5,(double)net_main_->GetEnemyLevel(1) / 5.0 + 0.5);
 
 	//敵プレイヤー更新
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_);

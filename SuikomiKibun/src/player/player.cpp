@@ -1,5 +1,4 @@
 #include "player.h"
-#include "playerteki.h"
 
 btRigidBody* Player::delete_body_ = NULL;
 btRigidBody* Player::delete_body2_ = NULL;
@@ -114,7 +113,8 @@ void Player::RenderScene() {
 }
 
 //更新
-void Player::Update(double angle, StageMap* map, int color_judge1, int color_judge2,int teki1_level,int teki2_level){
+void Player::Update(double angle, StageMap* map, int color_judge1, int color_judge2,
+		int teki1_level, int teki2_level, Vector3 teki1_pos, Vector3 teki2_pos, double teki1_radius, double teki2_radius){
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
@@ -171,16 +171,22 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	btCollisionObject* obj;
 	btRigidBody* body;
 
+	if(uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),(double)level_/5,teki1_pos,teki1_radius,NULL))
+		Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
+	if(uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),(double)level_/5,teki2_pos,teki2_radius,NULL))
+		Player::Pwinlosejudge(color_judge_,color_judge1,teki2_level);
+
+
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
-		Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
+		//Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
 	}else if (sphere_body_ == delete_body2_&& sphere_tekibody1_ == delete_body_) {
-		Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
+		//Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
 	}
 	else if (sphere_body_ == delete_body_&& sphere_tekibody2_ == delete_body2_) {
-		Player::Pwinlosejudge(color_judge_,color_judge2,teki2_level);
+		//Player::Pwinlosejudge(color_judge_,color_judge2,teki2_level);
 	}
 	else if (sphere_body_ == delete_body2_&& sphere_tekibody2_ == delete_body_) {
-		Player::Pwinlosejudge(color_judge_,color_judge2,teki2_level);
+		//Player::Pwinlosejudge(color_judge_,color_judge2,teki2_level);
 	}
 	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
 		if (sphere_body_ == delete_body_)
@@ -457,25 +463,6 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 		}
 }
 
-int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
-	if(color1 == color2){
-		if(tekilevel > level_)
-		ResMove(sphere_body_);
-		if(tekilevel == level_)
-			return 0;
-	}
-	else if(color1 == 2 && color2 == 1){
-		ResMove(sphere_body_);
-	}
-	else if(color1 == 3 && color2 == 2){
-		ResMove(sphere_body_);
-	}
-	else if(color1 == 1 && color2 == 3){
-		ResMove(sphere_body_);
-	}
-
-	return 0;
-}
 
 int Player::ColorChange(int colorchange){
 	if(colorchange == -1)
@@ -489,6 +476,7 @@ int Player::ColorChange(int colorchange){
 }
 
 void Player::ResMove(btRigidBody* sphere_res_body_){
+		player_radius_ = 1;
 		level_ = 1;
 		color_judge_ = cc_util::GetRandom(1,3);
 		sphere_res_body_->clearForces();
