@@ -437,15 +437,24 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 		if(tekilevel > level_)
 		ResMove(sphere_body_);
 	}
+	else if(color1 == 2 && color2 == 1){
+		ResMove(sphere_body_);
+	}
+	else if(color1 == 3 && color2 == 2){
+		ResMove(sphere_body_);
+	}
+	else if(color1 == 1 && color2 == 3){
+		ResMove(sphere_body_);
+	}
 	else if(color1 == 1 && color2 == 2){
-		ResMove(sphere_body_);
+		level_ += ((double)tekilevel / 2);
 	}
-	else if(color1 == 2 && color2 == 3){
-		ResMove(sphere_body_);
+	else if(color1 == 1 && color2 == 2){
+		level_ += ((double)tekilevel / 2);
 	}
-	else if(color1 == 3 && color2 == 1){
-		ResMove(sphere_body_);
-	}
+	else if(color1 == 1 && color2 == 2){
+		level_ += ((double)tekilevel / 2);
+		}
 }
 
 int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
@@ -455,13 +464,13 @@ int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
 		if(tekilevel == level_)
 			return 0;
 	}
-	else if(color1 == 1 && color2 == 2){
+	else if(color1 == 2 && color2 == 1){
 		ResMove(sphere_body_);
 	}
-	else if(color1 == 2 && color2 == 3){
+	else if(color1 == 3 && color2 == 2){
 		ResMove(sphere_body_);
 	}
-	else if(color1 == 3 && color2 == 1){
+	else if(color1 == 1 && color2 == 3){
 		ResMove(sphere_body_);
 	}
 
@@ -481,6 +490,8 @@ int Player::ColorChange(int colorchange){
 
 void Player::ResMove(btRigidBody* sphere_res_body_){
 		level_ = 1;
+		color_judge_ = cc_util::GetRandom(1,3);
+		sphere_res_body_->clearForces();
 		btVector3 pos = btVector3(0,120,0);
 		btQuaternion qrot(0, 0, 0, 1);
 		btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(btTransform(qrot, pos));
