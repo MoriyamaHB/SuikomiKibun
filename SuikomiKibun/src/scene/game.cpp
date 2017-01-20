@@ -88,12 +88,13 @@ void GameScene::Update() {
 	map_->Update();
 
 	//プレイヤー更新
-	if (net_main_->GetGameState() == kPlay)
-		player_->Update(camera_.get_angle_w() + M_PI, map_);
+		if (net_main_->GetGameState() == kPlay)
+	player_->Update(camera_.get_angle_w() + M_PI, map_,net_main_->GetColor(0),net_main_->GetColor(1),net_main_->GetEnemyLevel(0),net_main_->GetEnemyLevel(1));
+	
 
 	//敵プレイヤー更新
-	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0));
-	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1));
+	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0),map_);
+	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1),map_);
 
 	//ランキング
 	ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
