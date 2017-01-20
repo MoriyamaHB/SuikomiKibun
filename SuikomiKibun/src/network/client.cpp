@@ -41,9 +41,20 @@ ClientTcp::~ClientTcp() {
 }
 
 ClientUdp::~ClientUdp() {
+	// タイムアウトのタイマーを切る
+	connect_timer_.cancel();
+	send_timer_.cancel();
+	receive_timer_.cancel();
 	//接続を切る
 	send_socket_->close();
 	receive_socket_->close();
+	//io_serviceを止める
+	io_service_.stop();
+	//スレッド終了まで待機
+	if (conect_thread_.joinable())
+		conect_thread_.join();
+	if (run_thread_.joinable())
+		run_thread_.join();
 	//開放
 	delete send_socket_;
 	delete receive_socket_;
@@ -117,7 +128,9 @@ void ClientTcp::Connect() {
 void ClientUdp::Connect() {
 	//endpoint設定
 	udp::endpoint endpoint(boost::asio::ip::udp::v4(), port_ + 10 /*ポート番号*/);
-	send_endpoint_ = udp::endpoint(asio::ip::address::from_string(kIpAdress), port_);
+	udp::resolver resolver(io_service_);
+	udp::resolver::query query(udp::v4(), kIpAdress, uToStr (port_));
+	send_endpoint_ = *resolver.resolve(query);
 	//ソケット作成
 	receive_socket_ = new udp::socket(io_service_, endpoint);
 	send_socket_ = new udp::socket(io_service_);
@@ -215,7 +228,7 @@ void ClientTcp::OnReceive(const boost::system::error_code& error, size_t bytes_t
 	receive_buff_.consume(receive_buff_.size());
 	//データ処理
 	receive_data_ = *recive_data;
-	printf("client_receive(%d):%f\n", port_, receive_data_.player_data[0].level);
+	printf("client_receive(%d):%d\n", port_, receive_data_.player_data[0].level);
 	//再度受信
 	StartReceive();
 }

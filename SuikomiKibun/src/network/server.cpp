@@ -64,14 +64,18 @@ void Server::Update() {
 		}
 		//送受信中状態へ移行
 		state_ = kCom;
+		time.Init(180);	//制限時間180秒に設定
 		break;
 	}
 	case kCom: {	//送受信中
+		time.Update();	//制限時間更新
 		for (int i = 0; i < kClientNum; i++) {
 			ToClientContainer server_data;
 			for (int j = 0, cnt = 0; j < kClientNum; j++) {
 				if (i != j) {
 					server_data.player_data[cnt] = client_[j]->get_receive_data().player_data;
+					server_data.game_data.state = kPlay;
+					server_data.game_data.limited_time = time.get_time_remaining();
 					cnt++;
 				}
 			}

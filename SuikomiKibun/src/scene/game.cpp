@@ -52,7 +52,14 @@ GameScene::~GameScene() {
 //更新
 void GameScene::Update() {
 	//bulletをすすめる
-	dynamics_world_->stepSimulation(1.0 / kFps, 0);
+	dynamics_world_->stepSimulation(1.0 / kFps, 0); //前回フレームから経過した時間分すすめる
+
+	//すり抜けるのでコメントアウト
+//	static int ptime = glutGet(GLUT_ELAPSED_TIME) - 25; //初期フレームは25ミリ秒すすめる(すり抜けにより調節)
+//	static int ntime;
+//	ntime = glutGet(GLUT_ELAPSED_TIME);
+//	dynamics_world_->stepSimulation((ntime - ptime) / 1000.0, 0); //前回フレームから経過した時間分すすめる
+//	ptime = ntime;
 
 	//カメラ更新
 	camera_.Update(player_->get_center_pos());
@@ -68,7 +75,9 @@ void GameScene::Update() {
 	map_->Update();
 
 	//プレイヤー更新
+		if (net_main_->GetGameState() == kPlay)
 	player_->Update(camera_.get_angle_w() + M_PI, map_,net_main_->GetColor(0),net_main_->GetColor(1),net_main_->GetEnemyLevel(0),net_main_->GetEnemyLevel(1));
+	
 
 	//敵プレイヤー更新
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0),map_);

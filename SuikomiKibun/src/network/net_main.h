@@ -17,6 +17,7 @@
 #include "server.h"
 #include "../util/uGL.h"
 #include "client.h"
+#include "../gv.h"
 
 namespace asio = boost::asio;
 using asio::ip::tcp;
@@ -28,12 +29,14 @@ private:
 	//クライアント
 	ClientUdp *client_udp_;
 	ToServerContainer client_data_;
+	bool is_client_;
 	//サーバー
 	Server *server_;
 	bool is_server_;
 	ToClientContainer server_data_;
 public:
 	NetMain();
+	NetMain(bool enable_server_only);
 	~NetMain();
 	void Update();
 	void Draw() const;
@@ -43,6 +46,7 @@ public:
 	btVector3 GetEnemyPos(int num) const;
 	int GetEnemyLevel(int num) const;
 	int GetColor(int num) const;
+	GameState GetGameState() const;
 
 	//setter
 	void SetMePos(btVector3 pos);
