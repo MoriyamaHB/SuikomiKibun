@@ -2,7 +2,7 @@
 
 //コンストラクタ
 GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
-		BaseScene(changer) {
+		BaseScene(changer), nav_font_("font/hui.ttf"), nav_font_1("font/hui.ttf") {
 	//input初期化
 	input::Init();
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
@@ -44,6 +44,14 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	button_ = new Button(500, 600, 850, 680, "スタート画面に戻る", "font/jkgm.ttf", 40);
 	button_->set_text_color(uColor4fv_red);
 	button_->set_text_active_color(uColor4fv_red);
+
+	// フォントの初期化
+	if (nav_font_.Error() || nav_font_1.Error()) {
+		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
+	} else {
+		nav_font_.FaceSize(90);
+		nav_font_1.FaceSize(60);
+	}
 }
 
 //デストラクタ
@@ -130,9 +138,25 @@ void GameScene::Draw() {
 	playerteki1_->Draw();
 	playerteki2_->Draw();
 	//制限時間描画
-	output_display0.Regist("残り時間:" + uToStr(net_main_->GetLimitedTime()), uColor4fv_orange, 1);
+	u3Dto2D();
+	if (!nav_font_.Error()) {
+		glColor4fv (uColor4fv_blue);
+		glRasterPos2f(840, 80);
+		nav_font_1.Render(("残り" + uToStr(net_main_->GetLimitedTime()) + "秒").c_str());
+	}
+	u2Dto3D();
 	//ランキング
 	ranking_.Draw();
+	//案内表示
+	u3Dto2D();
+	if (net_main_->GetGameState() == kConnect) {
+		if (!nav_font_.Error()) {
+			glColor4fv (uColor4fv_orange);
+			glRasterPos2f(10, 500);
+			nav_font_.Render("ほかプレイヤーの接続待機中");
+		}
+	}
+	u2Dto3D();
 	//終了時
 	if (net_main_->GetLimitedTime() < 0) {
 		button_->Draw();
