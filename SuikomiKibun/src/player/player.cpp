@@ -475,7 +475,7 @@ int Player::ColorChange(int colorchange){
 		return 2;
 	else if(colorchange == -3)
 		return 3;
-	else if(colorchange == -4)
+	else
 		return cc_util::GetRandom(1,3);
 }
 
