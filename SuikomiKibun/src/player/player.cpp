@@ -174,10 +174,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 		Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
 	}
 	else if (sphere_body_ == delete_body_&& sphere_tekibody2_ == delete_body2_) {
-		Player::Pwinlosejudge2(color_judge_,color_judge2,teki2_level);
+		Player::Pwinlosejudge(color_judge_,color_judge2,teki2_level);
 	}
 	else if (sphere_body_ == delete_body2_&& sphere_tekibody2_ == delete_body_) {
-		Player::Pwinlosejudge2(color_judge_,color_judge2,teki2_level);
+		Player::Pwinlosejudge(color_judge_,color_judge2,teki2_level);
 	}
 	else if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
 		if (sphere_body_ == delete_body_)
@@ -420,14 +420,10 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	return true;
 }
 
-int Player::Pwinlosejudge(int color1, int color2, int tekilevel){
+void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 	if(color1 == color2){
-		if(tekilevel > level_){
+		if(tekilevel > level_)
 		ResMove(sphere_body_);
-		return 0;
-		}
-		else if(tekilevel <= level_)
-			return 0;
 	}
 	else if(color1 == 1 && color2 == 2){
 		ResMove(sphere_body_);
@@ -438,17 +434,12 @@ int Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 	else if(color1 == 3 && color2 == 1){
 		ResMove(sphere_body_);
 	}
-
-	return 0;
 }
 
 int Player::Pwinlosejudge2(int color1, int color2, int tekilevel){
 	if(color1 == color2){
-		if(tekilevel > level_){
+		if(tekilevel > level_)
 		ResMove(sphere_body_);
-		}
-		else if(tekilevel <= level_)
-			return 0;
 	}
 	else if(color1 == 1 && color2 == 2){
 		ResMove(sphere_body_);

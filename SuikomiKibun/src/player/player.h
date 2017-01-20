@@ -46,7 +46,7 @@ public:
 	int get_color()const;
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);
-	int Pwinlosejudge(int color1,int color2,int tekilevel);
+	void Pwinlosejudge(int color1,int color2,int tekilevel);
 	int Pwinlosejudge2(int color1,int color2, int tekilevel);
 	void ResMove(btRigidBody* sphere_res_body);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);
