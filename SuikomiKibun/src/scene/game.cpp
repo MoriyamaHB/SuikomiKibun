@@ -103,8 +103,10 @@ void GameScene::Update() {
 				,(double)net_main_->GetEnemyLevel(0) / 5.0 + 0.5,(double)net_main_->GetEnemyLevel(1) / 5.0 + 0.5);
 
 	//敵プレイヤー更新
-	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_);
-	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1), map_);
+	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_,
+			net_main_->GetEnemyName(0));
+	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1), map_,
+			net_main_->GetEnemyName(1));
 
 	//ランキング
 	ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
