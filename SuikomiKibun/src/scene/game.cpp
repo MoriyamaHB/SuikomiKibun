@@ -85,16 +85,17 @@ void GameScene::Update() {
 	net_main_->SetMyColor(player_->get_color());
 
 	//マップ更新
-	map_->Update();
+	if (net_main_->GetGameState() == kPlay)
+		map_->Update();
 
 	//プレイヤー更新
-		if (net_main_->GetGameState() == kPlay)
-	player_->Update(camera_.get_angle_w() + M_PI, map_,net_main_->GetColor(0),net_main_->GetColor(1),net_main_->GetEnemyLevel(0),net_main_->GetEnemyLevel(1));
-	
+	if (net_main_->GetGameState() == kPlay)
+		player_->Update(camera_.get_angle_w() + M_PI, map_, net_main_->GetColor(0), net_main_->GetColor(1),
+				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1));
 
 	//敵プレイヤー更新
-	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0),map_);
-	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1),map_);
+	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_);
+	playerteki2_->Update(net_main_->GetEnemyPos(1), net_main_->GetEnemyLevel(1), net_main_->GetColor(1), map_);
 
 	//ランキング
 	ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
@@ -105,7 +106,7 @@ void GameScene::Update() {
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
 	//BGM
-	Sound::SetListener(camera_);
+	Sound::SetListener (camera_);
 	bgm_->Update();
 
 	//終了時
