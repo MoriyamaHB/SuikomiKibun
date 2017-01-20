@@ -449,10 +449,10 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 	else if(color1 == 1 && color2 == 2){
 		level_ += (tekilevel / 2) + 1;
 	}
-	else if(color1 == 1 && color2 == 2){
+	else if(color1 == 2 && color2 == 3){
 		level_ += (tekilevel / 2) + 1;
 	}
-	else if(color1 == 1 && color2 == 2){
+	else if(color1 == 3 && color2 == 1){
 		level_ += (tekilevel / 2) + 1;
 		}
 }
