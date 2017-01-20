@@ -2,9 +2,14 @@
 
 //コンストラクタ
 StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
-		BaseScene(changer), title_font_("font/crayon.ttf"), description_font_("font/jkgm.ttf"), kTitleFontSize(
-				150), kDescriptionFontSize(40) {
+		BaseScene(changer), title_font_("font/crayon.ttf"), description_font_("font/jkgm.ttf"), kTitleFontSize(150), kDescriptionFontSize(
+				40) {
 	kLight0Pos_[0] = 0.0, kLight0Pos_[1] = 15.0, kLight0Pos_[2] = 0.0, kLight0Pos_[3] = 1.0;
+
+	//opengl設定
+	glEnable (GL_LIGHTING);
+	glDisable (GL_TEXTURE_2D);
+	glDisable (GL_COLOR_MATERIAL);
 
 	//input初期化
 	input::Init();
@@ -107,7 +112,7 @@ void StartScene::Update() {
 		bodys_.push_back(new StartBodys(dynamics_world_));
 
 	//サウンド
-	Sound::SetListener(camera_);
+	Sound::SetListener (camera_);
 	bgm_->Update();
 
 	//ボタンによるシーン遷移
@@ -137,13 +142,13 @@ void StartScene::Draw() {
 	//タイトル描画
 	u3Dto2D();
 	if (!title_font_.Error()) {
-		glColor4fv(uColor4fv_purple);
+		glColor4fv (uColor4fv_purple);
 		glRasterPos2f(220, 180);
 		title_font_.Render("吸い込み気分");
 	}
 	//ゲーム説明描画
 	if (!description_font_.Error()) {
-		glColor4fv(uColor4fv_gray);
+		glColor4fv (uColor4fv_gray);
 		glRasterPos2f(200, 260);
 		description_font_.Render("このゲームは物体を吸い込んで大きくしていくゲームです。");
 	}
