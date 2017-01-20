@@ -11,7 +11,7 @@ btRigidBody* PlayerTeki::delete_body_ = NULL;
 btRigidBody* PlayerTeki::delete_body2_ = NULL;
 
 PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
-		world_(world) {
+		world_(world), name_font_("font/kanjuku.otf") {
 	//中心座標
 	btVector3 sphere_pos = pos;
 	//大きさ
@@ -44,12 +44,19 @@ PlayerTeki::PlayerTeki(btDynamicsWorld* world, btVector3 pos) :
 
 	playerteki_num_ = world_->getNumCollisionObjects() - 1;
 
-		//描画
-		m_shapeDrawer = new GL_ShapeDrawer();
-		m_shapeDrawer->enableTexture(true);
+	//描画
+	m_shapeDrawer = new GL_ShapeDrawer();
+	m_shapeDrawer->enableTexture(true);
 
-		// 衝突のコールバック関数をセット
-			gContactProcessedCallback = PlayerTeki::HandleContactProcess;
+	// 衝突のコールバック関数をセット
+	gContactProcessedCallback = PlayerTeki::HandleContactProcess;
+
+	// フォントの初期化
+	if (name_font_.Error()) {
+		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
+	} else {
+		name_font_.FaceSize(50);
+	}
 
 }
 
@@ -91,28 +98,30 @@ void PlayerTeki::RenderScene() {
 
 	m_shapeDrawer->drawOpenGL(m, colObj->getCollisionShape(), wireColor * btScalar(0.3), 0, aabbMin, aabbMax);
 
-
-
-
 }
 
 void PlayerTeki::Draw() {
-	glDisable(GL_LIGHTING);
+	glDisable (GL_LIGHTING);
 	RenderScene();
+	//名前描画
+	if (!name_font_.Error()) {
+		glColor4fv (uColor4fv_red);
+		glRasterPos3f(pos_[0], pos_[1] + player_radius_, pos_[2]);
+		name_font_.Render(("↓" + name_).c_str());
+	}
 }
 
 //プレイヤー敵データ更新
-void PlayerTeki::Update(btVector3 pos,int level,int color_change, StageMap* map) {
-
+void PlayerTeki::Update(btVector3 pos, int level, int color_change, StageMap* map, std::string name) {
+	pos_ = pos;
+	name_ = name;
 	PlayerTekiMove(pos);
-	if(player_radius_ <= (double)level / 5.0)
-		PlayerTekiResize(player_radius_+= 0.05);
+	if (player_radius_ <= (double) level / 5.0)
+		PlayerTekiResize(player_radius_ += 0.05);
 
 	int i;
 	btCollisionObject* obj;
 	btRigidBody* body;
-
-
 
 //
 //	if (sphere_body_ == delete_body_ || sphere_body_ == delete_body2_) {
@@ -130,7 +139,6 @@ void PlayerTeki::Update(btVector3 pos,int level,int color_change, StageMap* map)
 //			delete_body_ = NULL;
 //			delete_body2_ = NULL;
 //	}
-
 
 	PlayerColorChange(color_change);
 }
@@ -161,6 +169,4 @@ bool PlayerTeki::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	delete_body2_ = static_cast<btRigidBody*>(b);
 	return true;
 }
-
-
 
