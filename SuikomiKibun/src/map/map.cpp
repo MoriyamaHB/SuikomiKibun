@@ -36,7 +36,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//中心座標
 	btVector3 ground_pos = btVector3(125, -16, 0);
 	btVector3 ground_pos2 = btVector3(-125, -16, 125);
-	btVector3 ground_pos3 = btVector3(-90, -5, -90);
+	btVector3 ground_pos3 = btVector3(-90, -6, -90);
 	btVector3 ten_pos = btVector3(0, 500, 0);
 	btVector3 stairs_pos = btVector3(-7, 108, 3);
 	btVector3 stairs_pos2 = btVector3(0, -0.5, 5);
@@ -494,7 +494,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	int indexstride = 3 * sizeof(int);
 	vertices_ = new btVector3[total];
 	indices_ = new int[3 * total];
-	SetVertexPositions(8, 0.f);
+	SetVertexPositions(10, 0.f);
 	btTriangleIndexVertexArray* arrays;
 
 	int index = 0;
@@ -521,7 +521,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	color_[num_++] = btVector3(0, 0.63, 0.85);
 
 //反発係数
-	btScalar ground_rest = 0.6;
+	btScalar ground_rest = 0.4;
 //	btScalar wall_rest = 0;
 //	btScalar kan_rest = 0;
 
@@ -566,10 +566,10 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 position_sj(30, 1, 1250);
 	CreateSnowman(position_sj, 2);
 //ピラミッド
-	btVector3 position_pa(-230, 0, 150);
+	btVector3 position_pa(-40, 10, -40);
 	CreatePyramid(position_pa, 3);
 	btVector3 position_pb(100, 5, 220);
-	CreatePyramid(position_pb, 4);
+	CreatePyramid(position_pb, 3);
 //	btVector3 position_pc(-230, 0, 223);
 //	CreatePyramid(position_pc, 4);
 //	btVector3 position_pd(-125+14, 0, -125-70);
@@ -602,7 +602,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	btVector3 position_mb(128, 10, -162);
 	CreateMush(position_mb, 3, 1);
 //	btVector3 position_mc(235, 81, 95);
-//	CreateMush(position_mc, 3, 1);
+//	CreateMush(position_mc, 4, 1);
 	btVector3 position_md(185, 61, 113);
 	CreateMush(position_md, 3, 3);
 	btVector3 position_me(160, 41, 80);
@@ -750,24 +750,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //タワー
 	btVector3 position_wa(-125, 0, 125);
 	CreateTower(position_wa, 5);
-//	btVector3 position_wb(150, 0, -20);
-//	CreateTower(position_wb, 3);
-//	btVector3 position_wc(140, 0, 30);
-//	CreateTower(position_wc, 3);
-//	btVector3 position_wd(120, 0, -20);
-//	CreateTower(position_wd, 3);
-//	btVector3 position_we(110, 0, 30);
-//	CreateTower(position_we, 3);
-//	btVector3 position_wf(70, 0, -20);
-//	CreateTower(position_wf, 3);
-//	btVector3 position_wg(100, 0, 30);
-//	CreateTower(position_wg, 3);
-//	btVector3 position_wh(80, 0, -20);
-//	CreateTower(position_wh, 3);
-//	btVector3 position_wi(60, 0, 30);
-//	CreateTower(position_wi, 3);
-//	btVector3 position_wj(40, 0, -20);
-//	CreateTower(position_wj, 3);
+
 //ポンデリング
 	btVector3 position_oa(-170, 20, -170);
 	CreatePonde(position_oa, 3);
@@ -814,7 +797,7 @@ void StageMap::Update() {
 	//流動体
 	static float offset = 0;
 	offset += 0.01;
-	SetVertexPositions(7, offset);
+	SetVertexPositions(10, offset);
 	btVector3 worldMin(-1000, -1000, -1000);
 	btVector3 worldMax(1000, 1000, 1000);
 	trimeshShape_->refitTree(worldMin, worldMax);
@@ -1185,8 +1168,8 @@ void StageMap::CreatePyramid(const btVector3& position, int level) {
 		cube_size = 1.9;
 		cube_mass = 8;
 	} else if (level == 3) {
-		cube_size = 1.2;
-		cube_mass = 8;
+		cube_size = 2.3;
+		cube_mass = 0.01;
 	} else if (level == 2) {
 
 	} else if (level == 1) {
@@ -2286,7 +2269,7 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 		size = 7;
 		mass = 0;
 	} else if (level == 3) {
-		size = 6;
+		size = 5;
 		mass = 0;
 	} else if (level == 2) {
 		size = 2;
@@ -2427,7 +2410,7 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 	world_->addConstraint(joint, true);
 
 	//反発係数
-	btScalar cube_rest = 1.8;
+	btScalar cube_rest = 1.3;
 
 	//反発係数設定
 	cube_body[5]->setRestitution(cube_rest);
@@ -2469,7 +2452,6 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 	btVector3 position3(0, size * 2 + size2 * 3, 0);
 
 	//形状設定
-//	btCollisionShape *cube_shape = new btBoxShape(btVector3(0.7, 0.7,  0.7));
 	btCollisionShape *cube_shape = new btSphereShape(size);
 	btCollisionShape *cube_shape2 = new btBoxShape(
 			btVector3(size2, size2, size2));
@@ -2539,9 +2521,9 @@ int StageMap::DestroyObject(int num, int level) {
 	if (level_[num] == 5) {
 		l = 55;
 	} else if (level_[num] == 4) {
-		l = 33;
+		l = 63;
 	} else if (level_[num] == 3) {
-		l = 39;
+		l = 45;
 	} else if (level_[num] == 2) {
 		l = 15;
 	}
@@ -2558,8 +2540,7 @@ int StageMap::DestroyObject(int num, int level) {
 		if (l == 0 || l == 5) {
 			//乱数の初期化
 			srand((unsigned) time(NULL));
-			btVector3 vec = btVector3((rand() % 500 - 250), 160, rand() % 500 - 250);
-//			btVector3 vec = btVector3(-50, 120, -50);
+			btVector3 vec = btVector3((rand() % 480 - 240), 160, rand() % 480 - 240);
 			for (i = 0; num2 + i <= num_; i++) {
 				if (objectnum == object_[num2 + i]) {
 
@@ -2579,10 +2560,8 @@ int StageMap::DestroyObject(int num, int level) {
 			//ワールド外へ転送
 			for (i = 0; num2 + i <= num_; i++) {
 				if (objectnum == object_[num2 + i]) {
-
 					obj = world_->getCollisionObjectArray()[num2 + i];
 					body = btRigidBody::upcast(obj);
-
 					btQuaternion qrot(0, 0, 0, 1);
 					btDefaultMotionState* sphere_motion_state =
 							new btDefaultMotionState(btTransform(qrot, vec2));
@@ -2590,15 +2569,24 @@ int StageMap::DestroyObject(int num, int level) {
 					body->activate(true);
 					object_[num2 + i] = -1;
 				} else
-
 					break;
 			}
 		}
 	} else {
 		return 0;
 	}
-
-	return level_[num]*3;
+	if(level_[num] == 1)
+		return 3;
+	else if(level_[num] == 2)
+		return 6;
+	else if(level_[num] == 3)
+		return 12;
+	else if(level_[num] == 4)
+		return 24;
+	else if(level_[num] == 5)
+		return 40;
+	else
+		return level_[num];
 }
 
 //流動体の計算
