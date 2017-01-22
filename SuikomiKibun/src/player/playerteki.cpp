@@ -101,11 +101,16 @@ void PlayerTeki::RenderScene() {
 }
 
 void PlayerTeki::Draw() {
-	glDisable (GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	RenderScene();
 	//名前描画
 	if (!name_font_.Error()) {
-		glColor4fv (uColor4fv_red);
+		if (color_judge_ == 1)
+			glColor3fv(color_[0]);
+		else if (color_judge_ == 2)
+			glColor3fv(color_[1]);
+		else
+			glColor3fv(color_[2]);
 		glRasterPos3f(pos_[0], pos_[1] + player_radius_, pos_[2]);
 		name_font_.Render(("↓" + name_).c_str());
 	}
