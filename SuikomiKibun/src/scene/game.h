@@ -35,6 +35,8 @@ private:
 	Button *button_;
 	Result result_;
 	FTPixmapFont nav_font_, nav_font_1;
+
+	void DrawRelation(int x, int y); //3すくみの関係を描画
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();

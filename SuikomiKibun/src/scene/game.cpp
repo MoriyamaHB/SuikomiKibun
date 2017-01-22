@@ -165,6 +165,8 @@ void GameScene::Draw() {
 		}
 	}
 	u2Dto3D();
+	//3すくみ
+	DrawRelation(1100, 550);
 	//ランキング
 	if (net_main_->GetLimitedTime() >= 0 && net_main_->GetGameState() == kPlay)
 		ranking_.Draw();
@@ -173,4 +175,18 @@ void GameScene::Draw() {
 		button_->Draw();
 		result_.Draw();
 	}
+}
+
+//3すくみの関係を描画
+void GameScene::DrawRelation(int x, int y) {
+	glColor4fv(uColor4fv_blue);
+	uCircle2DFill(30.0, x + 50, y);
+	glColor4fv(uColor4fv_red);
+	uCircle2DFill(30.0, x, y + 100);
+	glColor4fv(uColor4fv_green);
+	uCircle2DFill(30.0, x + 100, y + 100);
+	glColor4fv(uColor4fv_maroon);
+	uDrawArrowd(x + 35, y + 30, x + 15, y + 70, 40, 5, 1.0);
+	uDrawArrowd(x + 35, y + 100, x + 60, y + 100, 35, 5, 1.0);
+	uDrawArrowd(x + 90, y + 65, x + 70, y + 30, 40, 5, 1.0);
 }
