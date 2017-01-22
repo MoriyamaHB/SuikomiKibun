@@ -17,13 +17,13 @@
 #include "../util/uGL.h"
 
 class Ranking {
-private:
+public:
 	struct RankItem {
 		std::string name;
 		int level;
 		bool is_me;
 	};
-
+private:
 	OutputDisplay *disp_;
 	std::vector<RankItem> item_;
 public:
@@ -32,6 +32,8 @@ public:
 	void Update(std::string my_name, int my_level, std::string enemy1_name, int enemy1_level,
 			std::string enemy2_name, int enemy2_level);
 	void Draw() const;
+
+	std::vector<RankItem>& get_item();
 };
 
 #endif /* SUIKOMIKIBUN_RANKING_RANKING_H_ */
