@@ -36,7 +36,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	//中心座標
 	btVector3 ground_pos = btVector3(125, -16, 0);
 	btVector3 ground_pos2 = btVector3(-125, -16, 125);
-	btVector3 ground_pos3 = btVector3(-90, -6, -90);
+	btVector3 ground_pos3 = btVector3(-90, -8, -90);
 	btVector3 ten_pos = btVector3(0, 500, 0);
 	btVector3 stairs_pos = btVector3(-7, 108, 3);
 	btVector3 stairs_pos2 = btVector3(0, -0.5, 5);
@@ -175,7 +175,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 		offset = offset * offset2;
 	}
 
-	//	赤階段
+//	赤階段
 	offset.setOrigin(stairs_pos3);
 	offset2.setOrigin(stairs_pos2);
 	for (int ten = 0; ten < 10; ten++) {
@@ -540,44 +540,85 @@ StageMap::StageMap(btDynamicsWorld* world) :
 
 	printf("%d ", world_->getNumCollisionObjects());
 //クモ
-	btVector3 posision_ka(140, 20, -205);
+	btVector3 posision_ka(130, 20, -205);
 	CreateSpider(posision_ka, 5);
-	btVector3 posision_kb(80, 3, 90);
+	btVector3 posision_kb(-64, 10, -64);
 	CreateSpider(posision_kb, 2);
+	btVector3 posision_kc(-9, 10, -121);
+	CreateSpider(posision_kc, 2);
+	btVector3 posision_kd(-111, 10, -77);
+	CreateSpider(posision_kd, 2);
+	btVector3 posision_ke(-233, 10, -200);
+	CreateSpider(posision_ke, 2);
+	btVector3 posision_kf(-144, 10, -237);
+	CreateSpider(posision_kf, 2);
+	btVector3 posision_kg(-77, 3, 151);
+	CreateSpider(posision_kg, 2);
+	btVector3 posision_kh(-8, 3, 73);
+	CreateSpider(posision_kh, 2);
+	btVector3 posision_ki(-244, 3, 9);
+	CreateSpider(posision_ki, 2);
+	btVector3 posision_kj(-155, 3, 178);
+	CreateSpider(posision_kj, 2);
+	btVector3 posision_kk(-210, 3, 240);
+	CreateSpider(posision_kk, 2);
+	btVector3 posision_kl(13, 3, 177);
+	CreateSpider(posision_kl, 2);
+	btVector3 posision_km(77, 3, 198);
+	CreateSpider(posision_km, 2);
+	btVector3 posision_kn(40, 3, 0);
+	CreateSpider(posision_kn, 2);
+	btVector3 posision_ko(90, 3, -89);
+	CreateSpider(posision_ko, 2);
+	btVector3 posision_kp(105, 3, -190);
+	CreateSpider(posision_kp, 2);
+	btVector3 posision_kq(70, 3, -230);
+	CreateSpider(posision_kq, 2);
+
 //雪だるま
-//	btVector3 position_sa(220, 110, 80);
-//	CreateSnowman(position_sa, 4);
-	btVector3 position_sb(50, 1, -150);
+	btVector3 position_sa(220, 110, 80);
+	CreateSnowman(position_sa, 3);
+	btVector3 position_sb(-10, 10, -15);
 	CreateSnowman(position_sb, 2);
-	btVector3 position_sc(100, 1, 230);
+	btVector3 position_sc(-72, 10, -20);
 	CreateSnowman(position_sc, 2);
-	btVector3 position_sd(70, 1, -50);
+	btVector3 position_sd(-172, 10, -172);
 	CreateSnowman(position_sd, 2);
-	btVector3 position_se(90, 1, 70);
+	btVector3 position_se(-240, 10, -123);
 	CreateSnowman(position_se, 2);
-	btVector3 position_sf(60, 1, -20);
+	btVector3 position_sf(-8, 10, -233);
 	CreateSnowman(position_sf, 2);
-	btVector3 position_sg(30, 1, 230);
+	btVector3 position_sg(-33, 1, 130);
 	CreateSnowman(position_sg, 2);
-	btVector3 position_sh(90, 1, -170);
+	btVector3 position_sh(-62, 1, 80);
 	CreateSnowman(position_sh, 2);
-	btVector3 position_si(60, 1, -78);
+	btVector3 position_si(-111, 1, 220);
 	CreateSnowman(position_si, 2);
-	btVector3 position_sj(30, 1, 1250);
+	btVector3 position_sj(-166, 1, 230);
 	CreateSnowman(position_sj, 2);
+	btVector3 position_sk(-198, 1, 55);
+	CreateSnowman(position_sk, 2);
+	btVector3 position_sl(33, 1, 190);
+	CreateSnowman(position_sl, 2);
+	btVector3 position_sm(90, 1, 80);
+	CreateSnowman(position_sm, 2);
+	btVector3 position_sn(70, 1, -133);
+	CreateSnowman(position_sn, 2);
+	btVector3 position_so(70, 1, -30);
+	CreateSnowman(position_so, 2);
+	btVector3 position_sp(11, 1, -90);
+	CreateSnowman(position_sp, 2);
+	btVector3 position_sq(100, 1, 150);
+	CreateSnowman(position_sq, 2);
+
 //ピラミッド
-	btVector3 position_pa(-40, 10, -40);
-	CreatePyramid(position_pa, 3);
-	btVector3 position_pb(100, 5, 220);
-	CreatePyramid(position_pb, 3);
-//	btVector3 position_pc(-230, 0, 223);
-//	CreatePyramid(position_pc, 4);
-//	btVector3 position_pd(-125+14, 0, -125-70);
-//	CreatePyramid(position_pd, 0);
-//	btVector3 position_pe(-125+14, 0, -125+14);
-//	CreatePyramid(position_pe, 0);
-//	btVector3 position_pf(-200, 0, -200);
-//	CreatePyramid(position_pf, 5);
+	btVector3 position_pa(-230, 20, -100);
+	CreatePyramid(position_pa, 4);
+	btVector3 position_pb(220, 5, 215);
+	CreatePyramid(position_pb, 4);
+	btVector3 position_pc(-70, 0, 13);
+	CreatePyramid(position_pc, 4);
+
 //トライアングル
 	btVector3 position_ta(180, 0, -5);
 	CreateTriangle(position_ta, -3);
@@ -601,8 +642,6 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateMush(position_ma, 3, 2);
 	btVector3 position_mb(128, 10, -162);
 	CreateMush(position_mb, 3, 1);
-//	btVector3 position_mc(235, 81, 95);
-//	CreateMush(position_mc, 4, 1);
 	btVector3 position_md(185, 61, 113);
 	CreateMush(position_md, 3, 3);
 	btVector3 position_me(160, 41, 80);
@@ -639,129 +678,82 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateMush(position_mt, 3, 1);
 	btVector3 position_mu(195, 71, -85);
 	CreateMush(position_mu, 3, 1);
-//	btVector3 position_mv(235, 81, -85);
-//	CreateMush(position_mv, 3, 2);
 //りんご
-//	btVector3 position_aa(-180, 0, -220);
-//	CreateApple(position_aa, 5);
-//	btVector3 position_ab(220, 110, -70);
-//	CreateApple(position_ab, 4);
-	btVector3 position_ac(-100, 10, -100);
+	btVector3 position_ab(220, 110, -50);
+	CreateApple(position_ab, 3);
+	btVector3 position_ac(-30, 10, -30);
 	CreateApple(position_ac, 1);
-	btVector3 position_ad(-200, 10, -20);
+	btVector3 position_ad(-50, 10, -70);
 	CreateApple(position_ad, 1);
-	btVector3 position_ae(-20, 10, -200);
+	btVector3 position_ae(-70, 10, -10);
 	CreateApple(position_ae, 1);
-	btVector3 position_af(-125, 10, -50);
+	btVector3 position_af(-120, 10, -120);
 	CreateApple(position_af, 1);
-	btVector3 position_ag(-100, 10, -125);
+	btVector3 position_ag(-120, 10, -130);
 	CreateApple(position_ag, 1);
-	btVector3 position_ah(-80, 10, -20);
+	btVector3 position_ah(-60, 10, -240);
 	CreateApple(position_ah, 1);
-	btVector3 position_ai(-200, 10, -200);
+	btVector3 position_ai(-245, 10, -245);
 	CreateApple(position_ai, 1);
-	btVector3 position_aj(-175, 10, -65);
+	btVector3 position_aj(-150, 10, -150);
 	CreateApple(position_aj, 1);
-	btVector3 position_ak(-120, 10, -230);
+	btVector3 position_ak(-160, 10, -180);
 	CreateApple(position_ak, 1);
-	btVector3 position_al(-80, 10, -185);
+	btVector3 position_al(-190, 10, -170);
 	CreateApple(position_al, 1);
-	btVector3 position_an(-175, 10, -195);
+	btVector3 position_an(-30, 0, 20);
 	CreateApple(position_an, 1);
-	btVector3 position_am(-20, 10, -105);
+	btVector3 position_am(-50, 0, 100);
 	CreateApple(position_am, 1);
-	btVector3 position_ao(-17, 0, 20);
+	btVector3 position_ao(-60, 0, 240);
 	CreateApple(position_ao, 1);
-	btVector3 position_ap(-30, 0, 70);
+	btVector3 position_ap(-70, 0, 230);
 	CreateApple(position_ap, 1);
-	btVector3 position_aq(-50, 0, 100);
+	btVector3 position_aq(-140, 0, 200);
 	CreateApple(position_aq, 1);
-	btVector3 position_ar(-60, 0, 150);
+	btVector3 position_ar(-220, 0, 30);
 	CreateApple(position_ar, 1);
 	btVector3 position_as(-150, 0, 20);
 	CreateApple(position_as, 1);
-	btVector3 position_at(-10, 0, 200);
+	btVector3 position_at(-230, 0, 160);
 	CreateApple(position_at, 1);
-	btVector3 position_au(-20, 0, 125);
+	btVector3 position_au(-210, 0, 100);
 	CreateApple(position_au, 1);
-	btVector3 position_av(-150, 0, 240);
+	btVector3 position_av(-220, 0, 80);
 	CreateApple(position_av, 1);
-	btVector3 position_aw(-220, 0, 225);
+	btVector3 position_aw(20, 1, 22);
 	CreateApple(position_aw, 1);
-	btVector3 position_ax(-60, 0, 230);
+	btVector3 position_ax(80, 1, 125);
 	CreateApple(position_ax, 1);
-	btVector3 position_ay(-160, 0, 100);
+	btVector3 position_ay(100, 1, 10);
 	CreateApple(position_ay, 1);
-	btVector3 position_az(-200, 0, 130);
+	btVector3 position_az(100, 1, 200);
 	CreateApple(position_az, 1);
-	btVector3 position_aaa(-230, 0, 80);
+	btVector3 position_aaa(160, 1, 240);
 	CreateApple(position_aaa, 1);
-	btVector3 position_aab(-220, 0, 190);
+	btVector3 position_aab(10, 1, -190);
 	CreateApple(position_aab, 1);
-	btVector3 position_aac(-180, 0, 174);
+	btVector3 position_aac(80, 1, -50);
 	CreateApple(position_aac, 1);
-	btVector3 position_aad(-200, 0, 60);
+	btVector3 position_aad(10, 1, -20);
 	CreateApple(position_aad, 1);
-	btVector3 position_aae(-230, 0, 50);
+	btVector3 position_aae(60, 1, -150);
 	CreateApple(position_aae, 1);
-	btVector3 position_aaf(-135, 0, 150);
+	btVector3 position_aaf(240, 1, -240);
 	CreateApple(position_aaf, 1);
-	btVector3 position_aag(10, 0, -100);
-	CreateApple(position_aag, 1);
-	btVector3 position_aah(50, 10, -145);
-	CreateApple(position_aah, 1);
-	btVector3 position_aai(100, 10, -55);
-	CreateApple(position_aai, 1);
-	btVector3 position_aaj(-175, 10, -65);
-	CreateApple(position_aaj, 1);
-	btVector3 position_aak(30, 1, -175);
-	CreateApple(position_aak, 1);
-	btVector3 position_aal(30, 1, 40);
-	CreateApple(position_aal, 1);
-	btVector3 position_aan(50, 1, 0);
-	CreateApple(position_aan, 1);
-	btVector3 position_aam(100, 1, -15);
-	CreateApple(position_aam, 1);
-//	btVector3 position_aao(-175, 10, -215);
-//	CreateApple(position_aao, 2);
-//	btVector3 position_aap(-220, 10, -60);
-//	CreateApple(position_aap, 2);
-//	btVector3 position_aaq(-45, 42, -225);
-//	CreateApple(position_aaq, 2);
-//	btVector3 position_aar(-230, 10, -230);
-//	CreateApple(position_aar, 2);
-//	btVector3 position_aas(-155, 10, -115);
-//	CreateApple(position_aas, 2);
-//	btVector3 position_aat(-225, 10, -115);
-//	CreateApple(position_aat, 2);
-//	btVector3 position_aau(-240, 10, -115);
-//	CreateApple(position_aau, 2);
-//	btVector3 position_aav(-117, 10, -200);
-//	CreateApple(position_aav, 2);
-//	btVector3 position_aaw(-238, 10, -45);
-//	CreateApple(position_aaw, 2);
-//	btVector3 position_aax(-160, 10, -75);
-//	CreateApple(position_aax, 3);
-//	btVector3 position_aay(-160, 10, -100);
-//	CreateApple(position_aay, 1);
-//	btVector3 position_aaz(-170, 10, -30);
-//	CreateApple(position_aaz, 2);
 
 //タワー
 	btVector3 position_wa(-125, 0, 125);
 	CreateTower(position_wa, 5);
 
 //ポンデリング
-	btVector3 position_oa(-170, 20, -170);
-	CreatePonde(position_oa, 3);
-//	btVector3 position_ob(-100, 10, -150);
-//	CreatePonde(position_ob, 1);
-//	btVector3 position_oc(-30, 10, -30);
-//	CreatePonde(position_oc, 2);
-//	btVector3 position_od(-20, 10, -200);
-//	CreatePonde(position_od, 1);
-//	btVector3 position_oe(-150, 10, -5);
-//	CreatePonde(position_oe, 1);
+	btVector3 position_oa(-60, 20, -170);
+	CreatePonde(position_oa, 4);
+	btVector3 position_ob(65, 10, 65);
+	CreatePonde(position_ob, 4);
+	btVector3 position_oc(-220, 10, 230);
+	CreatePonde(position_oc, 4);
+
 //プレイヤー
 
 //描画
@@ -925,12 +917,12 @@ void StageMap::CreateSpider(const btVector3& position, int level) {
 
 	//レベル分け
 	if (level == 5) {
-		fBodySize = 5.75;
-		fLegLength = 15.45;
-		fForeLegLength = 15.75;
+		fBodySize = 6.75;
+		fLegLength = 15.65;
+		fForeLegLength = 15.95;
 		mass = 0.001;
-		wide = 0.6;
-		wide2 = 0.68;
+		wide = 0.7;
+		wide2 = 0.78;
 	} else if (level == 4) {
 		fBodySize = 3.75;
 		fLegLength = 10.45;
@@ -1085,7 +1077,7 @@ void StageMap::CreateSnowman(const btVector3& position, int level) {
 		size = 5;
 		mass = 0.01;
 	} else if (level == 3) {
-		size = 3.2;
+		size = 5;
 		mass = 0.01;
 	} else if (level == 2) {
 		size = 1.7;
@@ -1165,8 +1157,8 @@ void StageMap::CreatePyramid(const btVector3& position, int level) {
 		cube_size = 2.3;
 		cube_mass = 8;
 	} else if (level == 4) {
-		cube_size = 1.9;
-		cube_mass = 8;
+		cube_size = 2.3;
+		cube_mass = 0.01;
 	} else if (level == 3) {
 		cube_size = 2.3;
 		cube_mass = 0.01;
@@ -2103,8 +2095,8 @@ void StageMap::CreatePonde(const btVector3& position, int level) {
 		size = 3.5;
 		mass = 0.01;
 	} else if (level == 4) {
-		r = 5.0;
-		size = 2.5;
+		r = 6.0;
+		size = 3.6;
 		mass = 0.01;
 	} else if (level == 3) {
 		r = 9;
@@ -2269,7 +2261,7 @@ void StageMap::CreateMush(const btVector3 &position, int level, int co) {
 		size = 7;
 		mass = 0;
 	} else if (level == 3) {
-		size = 5;
+		size = 4.8;
 		mass = 0;
 	} else if (level == 2) {
 		size = 2;
@@ -2433,8 +2425,8 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 		size2 = 0.8;
 		mass = 0.01;
 	} else if (level == 3) {
-		size = 4;
-		size2 = 0.5;
+		size = 7;
+		size2 = 0.8;
 		mass = 0.01;
 	} else if (level == 2) {
 		size = 1.5;
@@ -2519,11 +2511,11 @@ int StageMap::DestroyObject(int num, int level) {
 
 	//オブジェクトのレベルを取得
 	if (level_[num] == 5) {
-		l = 55;
+		l = 88;
 	} else if (level_[num] == 4) {
-		l = 63;
+		l = 55;
 	} else if (level_[num] == 3) {
-		l = 45;
+		l = 40;
 	} else if (level_[num] == 2) {
 		l = 15;
 	}
