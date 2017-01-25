@@ -11,6 +11,7 @@
 #include "../input/input.h"
 #include "../map/map.h"
 #include "../util/cc_util.h"
+#include "../sound/sound.h"
 
 #include "../map/GL_ShapeDrawer.h"
 

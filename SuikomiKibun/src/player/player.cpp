@@ -241,7 +241,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
 }
-	
+
 
 //描画
 void Player::Draw() {
