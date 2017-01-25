@@ -69,6 +69,7 @@ Player::Player(btDynamicsWorld* world) :
 	//効果音
 	se_win_ = new Sound("sound/win.wav");
 	se_lose_ = new Sound("sound/lose.wav");
+	se_draw_ = new Sound("sound/draw.wav");
 }
 
 //デストラクタ
@@ -80,6 +81,7 @@ Player::~Player() {
 	//効果音
 	delete se_win_;
 	delete se_lose_;
+	delete se_draw_;
 }
 
 void Player::RenderScene() {
@@ -162,6 +164,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	//効果音
 	se_win_->SetSourceToListener();
 	se_lose_->SetSourceToListener();
+	se_draw_->SetSourceToListener();
 
 	if (pflug == 0)
 		upcount++;
@@ -455,7 +458,8 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 		} else if (tekilevel < level_) {
 			level_ += (tekilevel / 2) + 1;
 			se_lose_->Play();
-		}
+		} else
+			se_draw_->Play();
 	}
 	else if(color1 == 2 && color2 == 1){
 		se_win_->Play();

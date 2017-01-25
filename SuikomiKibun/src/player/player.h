@@ -37,6 +37,7 @@ private:
 	btRigidBody* sphere_tekibody2_;
 	Sound* se_win_;
 	Sound* se_lose_;
+	Sound* se_draw_;
 
 	void RenderScene();
 public:
