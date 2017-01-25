@@ -38,6 +38,7 @@ private:
 	Sound* se_win_;
 	Sound* se_lose_;
 	Sound* se_draw_;
+	Sound* se_change_color_;
 
 	void RenderScene();
 public:

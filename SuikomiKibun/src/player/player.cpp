@@ -70,6 +70,7 @@ Player::Player(btDynamicsWorld* world) :
 	se_win_ = new Sound("sound/win.wav");
 	se_lose_ = new Sound("sound/lose.wav");
 	se_draw_ = new Sound("sound/draw.wav");
+	se_change_color_ = new Sound("sound/change_color.wav");
 }
 
 //デストラクタ
@@ -82,6 +83,7 @@ Player::~Player() {
 	delete se_win_;
 	delete se_lose_;
 	delete se_draw_;
+	delete se_change_color_;
 }
 
 void Player::RenderScene() {
@@ -165,6 +167,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	se_win_->SetSourceToListener();
 	se_lose_->SetSourceToListener();
 	se_draw_->SetSourceToListener();
+	se_change_color_->SetSourceToListener();
 
 	if (pflug == 0)
 		upcount++;
@@ -209,8 +212,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
 					int level_item = map->DestroyObject(i,level_);
-					if(level_item < 0)
+					if (level_item < 0) {
+						se_change_color_->Play();
 						color_judge_ = ColorChange(level_item);
+					}
 					else
 						level_ += level_item;
 				}
