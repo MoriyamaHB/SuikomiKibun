@@ -152,7 +152,8 @@ void GameScene::Draw() {
 	if (!nav_font_.Error()) {
 		glColor4fv(uColor4fv_blue);
 		glRasterPos2f(840, 80);
-		nav_font_1.Render(("残り" + uToStr(net_main_->GetLimitedTime()) + "秒").c_str());
+		nav_font_1.Render(
+				("残り" + uToStr(net_main_->GetLimitedTime() < 0 ? 0 : net_main_->GetLimitedTime()) + "秒").c_str());
 	}
 	u2Dto3D();
 	//案内表示
