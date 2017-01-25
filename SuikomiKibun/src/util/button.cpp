@@ -1,5 +1,7 @@
 #include "button.h"
 
+Sound* Button::se_button_ = NULL;
+
 Button::Button(int x1, int y1, int x2, int y2, const std::string& text, const std::string& font_path,
 		unsigned int font_size) :
 		font_(font_path.c_str()) {
@@ -21,6 +23,9 @@ Button::Button(int x1, int y1, int x2, int y2, const std::string& text, const st
 	} else {
 		font_.FaceSize(font_size_);
 	}
+	//効果音
+	if (se_button_ == NULL)
+		se_button_ = new Sound("sound/button.wav");
 }
 
 Button::~Button() {
@@ -28,10 +33,14 @@ Button::~Button() {
 }
 
 bool Button::Update() {
+	//効果音位置更新
+	se_button_->SetSourceToListener();
 	//クリックされていたらtrueを返す
 	if (input::get_mouse_left_button_frame() == 1 || input::get_mouse_right_button_frame() == 1) {
-		if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
+		if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y())) {
+			se_button_->Play(); //効果音を鳴らす
 			return true;
+		}
 	}
 	return false;
 }

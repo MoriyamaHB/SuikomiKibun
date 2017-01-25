@@ -58,7 +58,7 @@ StartScene::StartScene(ISceneChanger* changer, SceneParam param) :
 
 	//サウンド
 	bgm_ = new Bgm();
-	bgm_->Play(Bgm::kStartBgm, 3.0);
+	bgm_->Play(Bgm::kStartBgm);
 
 	//ボタン
 	button1_ = new Button(500, 600, 770, 680, "ゲームスタート", "font/jkgm.ttf", 40);
