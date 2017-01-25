@@ -52,6 +52,9 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 		nav_font_.FaceSize(90);
 		nav_font_1.FaceSize(60);
 	}
+
+	//効果音
+	se_time_up = new Sound("sound/time_up.wav");
 }
 
 //デストラクタ
@@ -71,6 +74,8 @@ GameScene::~GameScene() {
 	delete bgm_;
 	//ボタン
 	delete button_;
+	//効果音
+	delete se_time_up;
 }
 
 //更新
@@ -122,8 +127,12 @@ void GameScene::Update() {
 	Sound::SetListener(camera_);
 	bgm_->Update();
 
+	//効果音
+	se_time_up->SetSourceToListener();
+
 	//終了したフレーム
 	if (net_main_->GetLimitedTime() == 0 && net_main_->GetGameState() == kPlay) {
+		se_time_up->Play();
 		result_.SetData(ranking_.get_item());
 	}
 

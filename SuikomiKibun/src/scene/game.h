@@ -35,6 +35,7 @@ private:
 	Button *button_;
 	Result result_;
 	FTPixmapFont nav_font_, nav_font_1;
+	Sound* se_time_up;
 
 	void DrawRelation(int x, int y); //3すくみの関係を描画
 public:
