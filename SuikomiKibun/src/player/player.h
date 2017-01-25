@@ -35,6 +35,8 @@ private:
 	btRigidBody* sphere_tekibody1_;
 	btCollisionObject* colObj2;
 	btRigidBody* sphere_tekibody2_;
+	Sound* se_win_;
+	Sound* se_lose_;
 
 	void RenderScene();
 public:

@@ -66,6 +66,9 @@ Player::Player(btDynamicsWorld* world) :
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
+	//効果音
+	se_win_ = new Sound("sound/win.wav");
+	se_lose_ = new Sound("sound/lose.wav");
 }
 
 //デストラクタ
@@ -74,7 +77,9 @@ Player::~Player() {
 	delete sphere_body_->getMotionState();
 	world_->removeRigidBody(sphere_body_);
 	delete sphere_body_;
-
+	//効果音
+	delete se_win_;
+	delete se_lose_;
 }
 
 void Player::RenderScene() {
@@ -153,6 +158,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 		impulse.setValue(0, t, 0);
 		sphere_body_->applyCentralImpulse(impulse);
 	}
+
+	//効果音
+	se_win_->SetSourceToListener();
+	se_lose_->SetSourceToListener();
 
 	if (pflug == 0)
 		upcount++;
@@ -440,25 +449,36 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 
 void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 	if(color1 == color2){
-		if(tekilevel > level_)
-		ResMove(sphere_body_);
+		if (tekilevel > level_) {
+			se_win_->Play();
+			ResMove(sphere_body_);
+		} else if (tekilevel < level_) {
+			level_ += (tekilevel / 2) + 1;
+			se_lose_->Play();
+		}
 	}
 	else if(color1 == 2 && color2 == 1){
+		se_win_->Play();
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 3 && color2 == 2){
+		se_win_->Play();
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 1 && color2 == 3){
+		se_win_->Play();
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 1 && color2 == 2){
+		se_lose_->Play();
 		level_ += (tekilevel / 2) + 1;
 	}
 	else if(color1 == 2 && color2 == 3){
+		se_lose_->Play();
 		level_ += (tekilevel / 2) + 1;
 	}
 	else if(color1 == 3 && color2 == 1){
+		se_lose_->Play();
 		level_ += (tekilevel / 2) + 1;
 		}
 }
