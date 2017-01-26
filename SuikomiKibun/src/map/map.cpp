@@ -788,7 +788,7 @@ StageMap::~StageMap() {
 void StageMap::Update() {
 	//流動体
 	static float offset = 0;
-	offset += 0.01;
+	offset += 0.1;
 	SetVertexPositions(10, offset);
 	btVector3 worldMin(-1000, -1000, -1000);
 	btVector3 worldMax(1000, 1000, 1000);
