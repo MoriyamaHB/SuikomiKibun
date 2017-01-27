@@ -36,6 +36,10 @@ private:
 	State state_;
 	int com_accept_num_; //接続数
 	LimitedTime time; //制限時間
+	//勝敗変数
+	WinLoseData win_lose[3];
+	void PlayerCollisionDetection(int client_num1, int client_num2);
+	bool IsWin(int my_level, int my_color, int enemy_level, int enemy_color);
 	//定数
 	const int kStartPort;	//待機開始ポート
 	const int kClientNum;	//クライアント接続数
