@@ -135,7 +135,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 		if (pcount > 0 && pflug == 1) {
 			sphere_body_->activate(true);
 			impulse.setValue(t * cos(angle), 0, t * sin(angle));
-			sphere_body_->applyCentralImpulse(impulse);
+			sphere_body_->applyCentralForce(impulse);
 			//pcount--;
 			upcount = 0;
 		}
@@ -143,25 +143,26 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	else if (input::get_keyboard_frame('s') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
-		sphere_body_->applyCentralImpulse(impulse);
+		sphere_body_->applyCentralForce(impulse);
 	}
 	else if (input::get_keyboard_frame('a') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
 				t * sin(angle - M_PI / 2.0));
-		sphere_body_->applyCentralImpulse(impulse);
+		sphere_body_->applyCentralForce(impulse);
 	}
 	else if (input::get_keyboard_frame('d') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
 				t * sin(angle + M_PI / 2.0));
-		sphere_body_->applyCentralImpulse(impulse);
+		sphere_body_->applyCentralForce(impulse);
 	}
 	else if (input::get_keyboard_frame(' ') == 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(0, t, 0);
 		sphere_body_->applyCentralImpulse(impulse);
 	}else{
+
 		sphere_body_->clearForces();
 	}
 
