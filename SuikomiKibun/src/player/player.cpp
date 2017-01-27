@@ -66,6 +66,11 @@ Player::Player(btDynamicsWorld* world) :
 	m_shapeDrawer = new GL_ShapeDrawer();
 	m_shapeDrawer->enableTexture(true);
 
+	//効果音
+	se_win_ = new Sound("sound/win.wav");
+	se_lose_ = new Sound("sound/lose.wav");
+	se_draw_ = new Sound("sound/draw.wav");
+	se_change_color_ = new Sound("sound/change_color.wav");
 }
 
 //デストラクタ
@@ -74,7 +79,11 @@ Player::~Player() {
 	delete sphere_body_->getMotionState();
 	world_->removeRigidBody(sphere_body_);
 	delete sphere_body_;
-
+	//効果音
+	delete se_win_;
+	delete se_lose_;
+	delete se_draw_;
+	delete se_change_color_;
 }
 
 void Player::RenderScene() {
@@ -127,7 +136,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 			sphere_body_->activate(true);
 			impulse.setValue(t * cos(angle), 0, t * sin(angle));
 			sphere_body_->applyCentralImpulse(impulse);
-			pcount--;
+			//pcount--;
 			upcount = 0;
 		}
 	}
@@ -157,7 +166,13 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	}
 
 
-     if (pflug == 0)
+	//効果音
+	se_win_->SetSourceToListener();
+	se_lose_->SetSourceToListener();
+	se_draw_->SetSourceToListener();
+	se_change_color_->SetSourceToListener();
+
+	if (pflug == 0)
 		upcount++;
 
 	 if (pcount <= 0)
@@ -200,8 +215,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
 					int level_item = map->DestroyObject(i,level_);
-					if(level_item < 0)
+					if (level_item < 0) {
+						se_change_color_->Play();
 						color_judge_ = ColorChange(level_item);
+					}
 					else
 						level_ += level_item;
 				}
@@ -247,7 +264,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	if(uOutOfRange(sphere_body_->getCenterOfMassPosition(),btVector3(-280,-50,-280),btVector3(280,600,280)))
 		ResMove(sphere_body_);
 }
-	
+
 
 //描画
 void Player::Draw() {
@@ -446,25 +463,37 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 
 void Player::Pwinlosejudge(int color1, int color2, int tekilevel){
 	if(color1 == color2){
-		if(tekilevel > level_)
-		ResMove(sphere_body_);
+		if (tekilevel > level_) {
+			se_win_->Play();
+			ResMove(sphere_body_);
+		} else if (tekilevel < level_) {
+			level_ += (tekilevel / 2) + 1;
+			se_lose_->Play();
+		} else
+			se_draw_->Play();
 	}
 	else if(color1 == 2 && color2 == 1){
+		se_win_->Play();
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 3 && color2 == 2){
+		se_win_->Play();
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 1 && color2 == 3){
+		se_win_->Play();
 		ResMove(sphere_body_);
 	}
 	else if(color1 == 1 && color2 == 2){
+		se_lose_->Play();
 		level_ += (tekilevel / 2) + 1;
 	}
 	else if(color1 == 2 && color2 == 3){
+		se_lose_->Play();
 		level_ += (tekilevel / 2) + 1;
 	}
 	else if(color1 == 3 && color2 == 1){
+		se_lose_->Play();
 		level_ += (tekilevel / 2) + 1;
 		}
 }

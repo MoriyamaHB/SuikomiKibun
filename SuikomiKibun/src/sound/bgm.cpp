@@ -10,7 +10,7 @@
 //コンストラクタ
 Bgm::Bgm() {
 	for (int i = 0; i < Bgm::BgmStructNum; i++) {
-		distance_[i] = 10.0;
+		distance_[i] = 0.0;
 		pbgm_[i] = NULL;
 	}
 }

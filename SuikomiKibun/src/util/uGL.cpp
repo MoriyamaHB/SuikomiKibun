@@ -236,6 +236,45 @@ void uOval2DFill(float radius, int x, int y, float ovalx, float ovaly) {
 	u2Dto3D();
 }
 
+//矢印を描画
+void uDrawArrowd(float x1, float y1, float x2, float y2, float length_arrow, float width_arrow, float scale) {
+	u3Dto2D();
+	double deg;
+	float length, width;
+	double sn, cs;
+	float ratio;
+
+	length = scale * length_arrow;
+	width = scale * width_arrow;
+	deg = atan2(y2 - y1, x2 - x1);
+	sn = sin(deg);
+	cs = cos(deg);
+	//矢印の傘の部分と棒の部分の長さの比率は1:2とする。
+	//普通に計算するとintの型変換で0になるのでratio変数へ格納
+	ratio = (float) 2 / (float) 3;
+
+	glBegin(GL_QUADS);
+	glVertex3f(x1 + width / 2 * sn, y1 - width / 2 * cs, 0);
+	glVertex3f(x1 + width / 2 * sn + ratio * length * cs, y1 - width / 2 * cs + ratio * length * sn, 0);
+	glVertex3f(x1 - width / 2 * sn + ratio * length * cs, y1 + width / 2 * cs + ratio * length * sn, 0);
+	glVertex3f(x1 - width / 2 * sn, y1 + width / 2 * cs, 0);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glVertex3f(x1 + ratio * length * cs, y1 + ratio * length * sn, 0);
+	glVertex3f(x1 + width / 2 * sn + ratio * length * cs + width * sn,
+			y1 - width / 2 * cs + ratio * length * sn - width * cs, 0);
+	glVertex3f(x1 + length * cs, y1 + length * sn, 0);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	glVertex3f(x1 + length * cs, y1 + length * sn, 0);
+	glVertex3f(x1 - width / 2 * sn + ratio * length * cs - width * sn,
+			y1 + width / 2 * cs + ratio * length * sn + width * cs, 0);
+	glVertex3f(x1 + ratio * length * cs, y1 + ratio * length * sn, 0);
+	glEnd();
+	u2Dto3D();
+}
+
 //三角形を描画
 void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vector3 v3, float color3[]) {
 	u3Dto2D();

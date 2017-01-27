@@ -86,6 +86,10 @@ extern void uOval2D(float radius, int x, int y, float ovalx, float ovaly);
 //2D上に楕円を描画(塗りつぶし)
 extern void uOval2DFill(float radius, int x, int y, float ovalx, float ovaly);
 
+//矢印を描画
+extern void uDrawArrowd(float x1, float y1, float x2, float y2, float length_arrow, float width_arrow,
+		float scale);
+
 //三角形を描画
 extern void uDrawTriangle(Vector3 v1, float color1[], Vector3 v2, float color2[], Vector3 v3, float color3[]);
 

@@ -52,6 +52,9 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 		nav_font_.FaceSize(90);
 		nav_font_1.FaceSize(60);
 	}
+
+	//効果音
+	se_time_up = new Sound("sound/time_up.wav");
 }
 
 //デストラクタ
@@ -71,6 +74,8 @@ GameScene::~GameScene() {
 	delete bgm_;
 	//ボタン
 	delete button_;
+	//効果音
+	delete se_time_up;
 }
 
 //更新
@@ -99,8 +104,9 @@ void GameScene::Update() {
 	//プレイヤー更新
 	if (net_main_->GetGameState() == kPlay)
 		player_->Update(camera_.get_angle_w() + M_PI, map_, net_main_->GetColor(0), net_main_->GetColor(1),
-				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1),net_main_->GetEnemyPos(0),net_main_->GetEnemyPos(1)
-				,(double)net_main_->GetEnemyLevel(0) / 5.0 + 0.5,(double)net_main_->GetEnemyLevel(1) / 5.0 + 0.5);
+				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1), net_main_->GetEnemyPos(0),
+				net_main_->GetEnemyPos(1), (double) net_main_->GetEnemyLevel(0) / 5.0 + 0.5,
+				(double) net_main_->GetEnemyLevel(1) / 5.0 + 0.5);
 
 	//敵プレイヤー更新
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_,
@@ -109,16 +115,26 @@ void GameScene::Update() {
 			net_main_->GetEnemyName(1));
 
 	//ランキング
-	ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
-			net_main_->GetEnemyLevel(0), net_main_->GetEnemyName(1), net_main_->GetEnemyLevel(1));
+	if (net_main_->GetLimitedTime() >= 0 && net_main_->GetGameState() == kPlay)
+		ranking_.Update(net_main_->GetMyName(), player_->get_level(), net_main_->GetEnemyName(0),
+				net_main_->GetEnemyLevel(0), net_main_->GetEnemyName(1), net_main_->GetEnemyLevel(1));
 
 	//ライト
 	GLfloat kLight0Pos[4] = { 0.0, 100.0, 0.0, 1.0 }; //ライト位置
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
 	//BGM
-	Sound::SetListener (camera_);
+	Sound::SetListener(camera_);
 	bgm_->Update();
+
+	//効果音
+	se_time_up->SetSourceToListener();
+
+	//終了したフレーム
+	if (net_main_->GetLimitedTime() == 0 && net_main_->GetGameState() == kPlay) {
+		se_time_up->Play();
+		result_.SetData(ranking_.get_item());
+	}
 
 	//終了時
 	if (net_main_->GetLimitedTime() < 0) {
@@ -143,25 +159,44 @@ void GameScene::Draw() {
 	//制限時間描画
 	u3Dto2D();
 	if (!nav_font_.Error()) {
-		glColor4fv (uColor4fv_blue);
+		glColor4fv(uColor4fv_blue);
 		glRasterPos2f(840, 80);
-		nav_font_1.Render(("残り" + uToStr(net_main_->GetLimitedTime()) + "秒").c_str());
+		nav_font_1.Render(
+				("残り" + uToStr(net_main_->GetLimitedTime() < 0 ? 0 : net_main_->GetLimitedTime()) + "秒").c_str());
 	}
 	u2Dto3D();
-	//ランキング
-	ranking_.Draw();
 	//案内表示
 	u3Dto2D();
 	if (net_main_->GetGameState() == kConnect) {
 		if (!nav_font_.Error()) {
-			glColor4fv (uColor4fv_orange);
+			glColor4fv(uColor4fv_orange);
 			glRasterPos2f(10, 500);
 			nav_font_.Render("ほかプレイヤーの接続待機中");
 		}
 	}
 	u2Dto3D();
+	//3すくみ
+	DrawRelation(1100, 550);
+	//ランキング
+	if (net_main_->GetLimitedTime() >= 0 && net_main_->GetGameState() == kPlay)
+		ranking_.Draw();
 	//終了時
 	if (net_main_->GetLimitedTime() < 0) {
 		button_->Draw();
+		result_.Draw();
 	}
+}
+
+//3すくみの関係を描画
+void GameScene::DrawRelation(int x, int y) {
+	glColor4fv(uColor4fv_blue);
+	uCircle2DFill(30.0, x + 50, y);
+	glColor4fv(uColor4fv_red);
+	uCircle2DFill(30.0, x, y + 100);
+	glColor4fv(uColor4fv_green);
+	uCircle2DFill(30.0, x + 100, y + 100);
+	glColor4fv(uColor4fv_maroon);
+	uDrawArrowd(x + 35, y + 30, x + 15, y + 70, 40, 5, 1.0);
+	uDrawArrowd(x + 35, y + 100, x + 60, y + 100, 35, 5, 1.0);
+	uDrawArrowd(x + 90, y + 65, x + 70, y + 30, 40, 5, 1.0);
 }

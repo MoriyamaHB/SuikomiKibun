@@ -1,10 +1,8 @@
 #include "ranking.h"
 
-Ranking::Ranking() {
+Ranking::Ranking() :
+		item_(3) {
 	disp_ = new OutputDisplay("font/kanjuku.otf", 850, 150, 40);
-	RankItem r;
-	for (int i = 0; i < 3; i++)
-		item_.push_back(r);
 }
 
 Ranking::~Ranking() {
@@ -42,4 +40,8 @@ void Ranking::Update(std::string my_name, int my_level, std::string enemy1_name,
 
 void Ranking::Draw() const {
 	disp_->Draw();
+}
+
+std::vector<Ranking::RankItem>& Ranking::get_item() {
+	return item_;
 }

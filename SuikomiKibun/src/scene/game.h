@@ -18,6 +18,7 @@
 #include "../network/net_main.h"
 #include "../sound/bgm.h"
 #include "../ranking/ranking.h"
+#include "../ranking/result.h"
 #include "../util/button.h"
 
 class GameScene: public BaseScene {
@@ -32,7 +33,11 @@ private:
 	Bgm *bgm_;
 	Ranking ranking_;
 	Button *button_;
+	Result result_;
 	FTPixmapFont nav_font_, nav_font_1;
+	Sound* se_time_up;
+
+	void DrawRelation(int x, int y); //3すくみの関係を描画
 public:
 	GameScene(ISceneChanger* changer, SceneParam param);
 	~GameScene();

@@ -8,6 +8,7 @@
 
 #include "../input/input.h"
 #include "uGL.h"
+#include "../sound/sound.h"
 
 class Button {
 private:
@@ -22,6 +23,9 @@ private:
 	std::string text_;
 	unsigned int font_size_; //フォントの大きさ
 	FTPixmapFont font_; //フォント
+	//効果音
+	static Sound *se_button_;
+
 public:
 	Button(int x1, int y1, int x2, int y2, const std::string& text, const std::string& font_path,
 			unsigned int font_size);

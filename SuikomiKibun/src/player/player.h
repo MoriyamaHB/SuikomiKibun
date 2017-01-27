@@ -11,6 +11,7 @@
 #include "../input/input.h"
 #include "../map/map.h"
 #include "../util/cc_util.h"
+#include "../sound/sound.h"
 
 #include "../map/GL_ShapeDrawer.h"
 
@@ -34,6 +35,10 @@ private:
 	btRigidBody* sphere_tekibody1_;
 	btCollisionObject* colObj2;
 	btRigidBody* sphere_tekibody2_;
+	Sound* se_win_;
+	Sound* se_lose_;
+	Sound* se_draw_;
+	Sound* se_change_color_;
 
 	void RenderScene();
 public:

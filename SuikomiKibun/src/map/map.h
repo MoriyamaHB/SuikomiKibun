@@ -14,6 +14,7 @@
 #include <math.h>
 #include <LinearMath/btAlignedObjectArray.h>
 #include "GL_ShapeDrawer.h"
+#include "../sound/sound.h"
 
 
 #include "../util/uGL.h"
@@ -47,6 +48,9 @@ private:
 	void CreateMush(const btVector3& position, int level, int co);
 	void CreateApple(const btVector3& position, int level);
 	void CreateDango(const btVector3& position, int level);
+
+	//効果音
+	Sound *se_absorb_;
 public:
 	StageMap(btDynamicsWorld* world);
 	~StageMap();

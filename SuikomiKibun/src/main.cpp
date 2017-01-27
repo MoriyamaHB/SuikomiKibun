@@ -116,6 +116,9 @@ void DisplayFunc(void) {
 	//入力更新
 	input::UpdateFrame();
 
+	//ecs終了案内
+	output_display0.Regist("Escキーで終了", uColor4fv_brack);
+
 	//fps
 	fps.Update();
 	fps.Draw(&output_display0);

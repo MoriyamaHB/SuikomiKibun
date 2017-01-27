@@ -787,6 +787,9 @@ StageMap::StageMap(btDynamicsWorld* world) :
 
 	printf("%d\n", world_->getNumCollisionObjects());
 
+	//効果音
+	se_absorb_ = new Sound("sound/absorb.wav");
+
 }
 
 //デストラクタ
@@ -807,6 +810,8 @@ StageMap::~StageMap() {
 	delete trimeshShape_;
 	delete[] indices_;
 
+	//効果音
+	delete se_absorb_;
 }
 
 //更新
@@ -818,6 +823,8 @@ void StageMap::Update() {
 	btVector3 worldMin(-1000, -1000, -1000);
 	btVector3 worldMax(1000, 1000, 1000);
 	trimeshShape_->refitTree(worldMin, worldMax);
+	//効果音
+	se_absorb_->SetSourceToListener();
 }
 
 //描画
@@ -2594,6 +2601,8 @@ int StageMap::DestroyObject(int num, int level) {
 					break;
 			}
 		}
+		//効果音
+		se_absorb_->Play();
 	} else {
 		return 0;
 	}
