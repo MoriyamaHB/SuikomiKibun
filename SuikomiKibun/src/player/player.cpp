@@ -500,5 +500,6 @@ void Player::ResMove(btRigidBody* sphere_res_body_) {
 	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
 			btTransform(qrot, pos));
 	sphere_res_body_->setMotionState(sphere_motion_state);
+	sphere_res_body_->activate(true);
 }
 
