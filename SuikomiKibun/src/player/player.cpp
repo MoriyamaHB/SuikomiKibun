@@ -269,7 +269,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 
 	if (player_radius_ <= (double) level_ / level_adjust)
 		PlayerSize(player_radius_ + 0.1);
-	if (player_radius_ > level_)
+	if (level_ == 1)
 		PlayerSize((btScalar) level_ / level_adjust);
 
 	delete_body_ = NULL;
