@@ -123,6 +123,8 @@ void PlayerTeki::Update(btVector3 pos, int level, int color_change, StageMap* ma
 	PlayerTekiMove(pos);
 	if (player_radius_ <= (double) level / 5.0)
 		PlayerTekiResize(player_radius_ += 0.05);
+	if(player_radius_ > level)
+		PlayerTekiResize(0.1);
 
 //	int i;
 //	btCollisionObject* obj;

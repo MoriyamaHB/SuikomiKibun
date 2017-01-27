@@ -26,6 +26,7 @@ private:
 	static btRigidBody* delete_body_;
 	static btRigidBody* delete_body2_;
 	btScalar sphere_mass;
+	int b_flug;
 	int pcount;
 	int level_;
 	GL_ShapeDrawer* m_shapeDrawer;

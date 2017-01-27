@@ -142,13 +142,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 			//pcount--;
 			upcount = 0;
 		}
-	}else{
-	    sphere_body_->setLinearVelocity(btVector3(0,0,0));
-		impulse.setValue(0,-9.8, 0);
-		sphere_body_->applyCentralForce(impulse);
 	}
-
-
 	if (input::get_keyboard_frame('s') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
@@ -171,6 +165,15 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		impulse.setValue(0, t, 0);
 		sphere_body_->applyCentralImpulse(impulse);
 	}
+
+	if(input::get_keyboard_frame('w') == 0 && input::get_keyboard_frame('s') == 0 && input::get_keyboard_frame('a') == 0
+				&& input::get_keyboard_frame('d') == 0){
+		    sphere_body_->setLinearVelocity(btVector3(0,0,0));
+			impulse.setValue(0,-9.8, 0);
+			sphere_body_->applyCentralForce(impulse);
+		}
+
+
 
 	//効果音
 	se_win_->SetSourceToListener();
@@ -261,6 +264,8 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 
 	if (player_radius_ <= (double) level_ / 3.0)
 		PlayerSize(player_radius_ += 0.05);
+	if(player_radius_ > level_)
+		PlayerSize(1.0);
 
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
@@ -508,7 +513,6 @@ int Player::ColorChange(int colorchange) {
 }
 
 void Player::ResMove(btRigidBody* sphere_res_body_) {
-	player_radius_ = 1;
 	level_ = 1;
 	color_judge_ = cc_util::GetRandom(1, 3);
 	sphere_res_body_->clearForces();
