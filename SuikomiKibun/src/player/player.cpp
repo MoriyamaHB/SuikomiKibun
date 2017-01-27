@@ -211,7 +211,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 		if (sphere_body_ == delete_body_)
 			delete_body_ = delete_body2_;
 		if (delete_body_ != NULL) {
-			for (i = world_->getNumCollisionObjects() - 1; i > 141; i--) {
+			for (i = world_->getNumCollisionObjects() - 1; i > 51; i--) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {

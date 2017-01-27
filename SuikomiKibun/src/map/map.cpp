@@ -133,94 +133,94 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	color_[num_++] = btVector3(0.75, 1, 0.80);
 	color_[num_++] = btVector3(1.0, 1.0, 1.0);
 
-	//螺旋階段
-	double h, r, g, b;
-	int h2;
-	h = 0;
-	offset.setOrigin(stairs_pos);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 50; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		h += 7.2;
-		h2 = h / 60;
-		if (h2 == 5) {
-			r = 255;
-			g = 0;
-			b = ((360 - h) / 60) * 255;
-		} else if (h2 == 4) {
-			r = ((h - 240) / 60) * 255;
-			g = 0;
-			b = 255;
-		} else if (h2 == 3) {
-			r = 0;
-			g = ((240 - h) / 60) * 255;
-			b = 255;
-		} else if (h2 == 2) {
-			r = 0;
-			g = 255;
-			b = ((h - 120) / 60) * 255;
-		} else if (h2) {
-			r = ((120 - h) / 60) * 255;
-			g = 255;
-			b = 0;
-		} else {
-			r = 255;
-			g = (h / 60) * 255;
-			b = 0;
-		}
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
-		offset = offset * offset2;
-	}
-
-//	赤階段
-	offset.setOrigin(stairs_pos3);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-		offset = offset * offset2;
-	}
-
-//	黄階段
-	offset.setOrigin(stairs_pos4);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1.0, 1.0, 0.0);
-		offset = offset * offset2;
-	}
-	// 	青階段
-	offset.setOrigin(stairs_pos5);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(0.0, 0.0, 1.0);
-		offset = offset * offset2;
-	}
-
-// 	緑階段
-	offset.setOrigin(stairs_pos6);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(0.0, 1.0, 0.0);
-		offset = offset * offset2;
-	}
+//	//螺旋階段
+//	double h, r, g, b;
+//	int h2;
+//	h = 0;
+//	offset.setOrigin(stairs_pos);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 50; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		h += 7.2;
+//		h2 = h / 60;
+//		if (h2 == 5) {
+//			r = 255;
+//			g = 0;
+//			b = ((360 - h) / 60) * 255;
+//		} else if (h2 == 4) {
+//			r = ((h - 240) / 60) * 255;
+//			g = 0;
+//			b = 255;
+//		} else if (h2 == 3) {
+//			r = 0;
+//			g = ((240 - h) / 60) * 255;
+//			b = 255;
+//		} else if (h2 == 2) {
+//			r = 0;
+//			g = 255;
+//			b = ((h - 120) / 60) * 255;
+//		} else if (h2) {
+//			r = ((120 - h) / 60) * 255;
+//			g = 255;
+//			b = 0;
+//		} else {
+//			r = 255;
+//			g = (h / 60) * 255;
+//			b = 0;
+//		}
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
+//		offset = offset * offset2;
+//	}
+//
+////	赤階段
+//	offset.setOrigin(stairs_pos3);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(1.0, 0.0, 0.0);
+//		offset = offset * offset2;
+//	}
+//
+////	黄階段
+//	offset.setOrigin(stairs_pos4);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(1.0, 1.0, 0.0);
+//		offset = offset * offset2;
+//	}
+//	// 	青階段
+//	offset.setOrigin(stairs_pos5);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(0.0, 0.0, 1.0);
+//		offset = offset * offset2;
+//	}
+//
+//// 	緑階段
+//	offset.setOrigin(stairs_pos6);
+//	offset2.setOrigin(stairs_pos2);
+//	for (int ten = 0; ten < 10; ten++) {
+//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
+//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+//		object_[num_] = object_num_;
+//		level_[num_] = 0;
+//		color_[num_++] = btVector3(0.0, 1.0, 0.0);
+//		offset = offset * offset2;
+//	}
 
 	//滝
 	offset.setIdentity();
@@ -494,7 +494,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	int indexstride = 3 * sizeof(int);
 	vertices_ = new btVector3[total];
 	indices_ = new int[3 * total];
-	SetVertexPositions(10, 0.f);
+	SetVertexPositions(10, 1);
 	btTriangleIndexVertexArray* arrays;
 
 	int index = 0;
@@ -638,46 +638,46 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateTriangle(position_th, -2);
 
 //きのこ
-	btVector3 position_ma(160, 41, -130);
-	CreateMush(position_ma, 3, 2);
-	btVector3 position_mb(128, 10, -162);
-	CreateMush(position_mb, 3, 1);
-	btVector3 position_md(185, 61, 113);
-	CreateMush(position_md, 3, 3);
-	btVector3 position_me(160, 41, 80);
-	CreateMush(position_me, 3, 3);
-	btVector3 position_mf(135, 21, -60);
-	CreateMush(position_mf, 3, 2);
-	btVector3 position_mg(135, 21, 100);
-	CreateMush(position_mg, 3, 1);
-	btVector3 position_mh(135, 21, 60);
-	CreateMush(position_mh, 3, 2);
-	btVector3 position_mi(140, 11, 175);
-	CreateMush(position_mi, 3, 1);
-	btVector3 position_mj(190, 31, 155);
-	CreateMush(position_mj, 3, 2);
-	btVector3 position_mk(220, 21, 163);
-	CreateMush(position_mk, 3, 2);
-	btVector3 position_ml(125, 11, 130);
-	CreateMush(position_ml, 3, 3);
-	btVector3 position_mm(150, 31, 140);
-	CreateMush(position_mm, 3, 1);
-	btVector3 position_mn(195, 71, 60);
-	CreateMush(position_mn, 3, 1);
-	btVector3 position_mo(210, 51, 130);
-	CreateMush(position_mo, 3, 1);
-	btVector3 position_mp(125, 11, -90);
-	CreateMush(position_mp, 3, 3);
-	btVector3 position_mq(150, 31, -115);
-	CreateMush(position_mq, 3, 1);
-	btVector3 position_mr(170, 51, -70);
-	CreateMush(position_mr, 3, 3);
-	btVector3 position_ms(180, 21, -155);
-	CreateMush(position_ms, 3, 3);
-	btVector3 position_mt(220, 31, -140);
-	CreateMush(position_mt, 3, 1);
-	btVector3 position_mu(195, 71, -85);
-	CreateMush(position_mu, 3, 1);
+//	btVector3 position_ma(160, 41, -130);
+//	CreateMush(position_ma, 3, 2);
+//	btVector3 position_mb(128, 10, -162);
+//	CreateMush(position_mb, 3, 1);
+//	btVector3 position_md(185, 61, 113);
+//	CreateMush(position_md, 3, 3);
+//	btVector3 position_me(160, 41, 80);
+//	CreateMush(position_me, 3, 3);
+//	btVector3 position_mf(135, 21, -60);
+//	CreateMush(position_mf, 3, 2);
+//	btVector3 position_mg(135, 21, 100);
+//	CreateMush(position_mg, 3, 1);
+//	btVector3 position_mh(135, 21, 60);
+//	CreateMush(position_mh, 3, 2);
+//	btVector3 position_mi(140, 11, 175);
+//	CreateMush(position_mi, 3, 1);
+//	btVector3 position_mj(190, 31, 155);
+//	CreateMush(position_mj, 3, 2);
+//	btVector3 position_mk(220, 21, 163);
+//	CreateMush(position_mk, 3, 2);
+//	btVector3 position_ml(125, 11, 130);
+//	CreateMush(position_ml, 3, 3);
+//	btVector3 position_mm(150, 31, 140);
+//	CreateMush(position_mm, 3, 1);
+//	btVector3 position_mn(195, 71, 60);
+//	CreateMush(position_mn, 3, 1);
+//	btVector3 position_mo(210, 51, 130);
+//	CreateMush(position_mo, 3, 1);
+//	btVector3 position_mp(125, 11, -90);
+//	CreateMush(position_mp, 3, 3);
+//	btVector3 position_mq(150, 31, -115);
+//	CreateMush(position_mq, 3, 1);
+//	btVector3 position_mr(170, 51, -70);
+//	CreateMush(position_mr, 3, 3);
+//	btVector3 position_ms(180, 21, -155);
+//	CreateMush(position_ms, 3, 3);
+//	btVector3 position_mt(220, 31, -140);
+//	CreateMush(position_mt, 3, 1);
+//	btVector3 position_mu(195, 71, -85);
+//	CreateMush(position_mu, 3, 1);
 //りんご
 	btVector3 position_ab(220, 110, -50);
 	CreateApple(position_ab, 3);
@@ -792,12 +792,12 @@ StageMap::~StageMap() {
 //更新
 void StageMap::Update() {
 	//流動体
-	static float offset = 0;
-	offset += 0.03;
-	SetVertexPositions(10, offset);
-	btVector3 worldMin(-1000, -1000, -1000);
-	btVector3 worldMax(1000, 1000, 1000);
-	trimeshShape_->refitTree(worldMin, worldMax);
+//	static float offset = 0;
+//	offset += 0.03;
+//	SetVertexPositions(10, offset);
+//	btVector3 worldMin(-1000, -1000, -1000);
+//	btVector3 worldMax(1000, 1000, 1000);
+//	trimeshShape_->refitTree(worldMin, worldMax);
 	//効果音
 	se_absorb_->SetSourceToListener();
 }
