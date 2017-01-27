@@ -2,6 +2,9 @@
 
 NetMain::NetMain() {
 	client_num_ = 0;
+	win_cnt_ = 0;
+	draw_cnt_ = 0;
+	lose_cnt_ = 0;
 	is_client_ = true;
 	//ネットワーク初期化
 	char is_server;
@@ -35,6 +38,9 @@ NetMain::NetMain() {
 
 NetMain::NetMain(InputIniInfoData i_data) {
 	client_num_ = 0;
+	win_cnt_ = 0;
+	draw_cnt_ = 0;
+	lose_cnt_ = 0;
 	is_client_ = true;
 
 	//ネットワーク初期化
@@ -169,6 +175,47 @@ std::string NetMain::GetMyName() const {
 		uExit();
 	}
 	return client_name_;
+}
+
+bool NetMain::IsWin() {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	if (client_udp_->get_receive_data().game_data.win_lose.win_cnt != win_cnt_) {
+		win_cnt_ = client_udp_->get_receive_data().game_data.win_lose.win_cnt;
+		return true;
+	}
+	return false;
+}
+int NetMain::GetWinLevel() const {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	return client_udp_->get_receive_data().game_data.win_lose.win_level;
+}
+bool NetMain::IsDraw() {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	if (client_udp_->get_receive_data().game_data.win_lose.draw_cnt != draw_cnt_) {
+		draw_cnt_ = client_udp_->get_receive_data().game_data.win_lose.draw_cnt;
+		return true;
+	}
+	return false;
+}
+bool NetMain::IsLose() {
+	if (!is_client_) {
+		uErrorOut(__FILE__, __func__, __LINE__, "サーバーのみのためこの関数は利用できません");
+		uExit();
+	}
+	if (client_udp_->get_receive_data().game_data.win_lose.lose_cnt != lose_cnt_) {
+		lose_cnt_ = client_udp_->get_receive_data().game_data.win_lose.lose_cnt;
+		return true;
+	}
+	return false;
 }
 
 //setter

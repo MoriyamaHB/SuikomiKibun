@@ -26,6 +26,9 @@ class NetMain {
 private:
 	//状態変数
 	int client_num_;
+	int win_cnt_;
+	int draw_cnt_;
+	int lose_cnt_;
 	//クライアント
 	ClientUdp *client_udp_;
 	ToServerContainer client_data_;
@@ -52,6 +55,10 @@ public:
 	time_t GetLimitedTime() const;
 	std::string GetEnemyName(int num) const;
 	std::string GetMyName() const;
+	bool IsWin();
+	int GetWinLevel() const;
+	bool IsDraw();
+	bool IsLose();
 
 	//setter
 	void SetMyPos(btVector3 pos);

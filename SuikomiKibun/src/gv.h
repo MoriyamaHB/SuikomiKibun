@@ -32,10 +32,19 @@ enum GameState {
 	kConnect, kPlay
 };
 
+//勝敗構造体
+struct WinLoseData {
+	int win_cnt;
+	int win_level;
+	int lose_cnt;
+	int draw_cnt;
+};
+
 //ゲームの状態
 struct GameData {
 	GameState state;
 	time_t limited_time;
+	WinLoseData win_lose;
 };
 
 //送信するデータの種類を示す(toサーバー)
