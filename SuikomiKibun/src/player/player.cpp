@@ -125,15 +125,14 @@ void Player::RenderScene() {
 //更新
 void Player::Update(double angle, StageMap* map, int color_judge1,
 		int color_judge2, int teki1_level, int teki2_level, Vector3 teki1_pos,
-		Vector3 teki2_pos, double teki1_radius, double teki2_radius) {
+		Vector3 teki2_pos, double teki1_radius, double teki2_radius, bool win,
+		bool draw, bool lose, int win_level) {
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
 	double t = 0.04;
 	static int upcount = 0;
 	static int pflug = 1;
-
-
 
 	if (input::get_keyboard_frame('w') >= 1) {
 		if (pcount > 0 && pflug == 1) {
@@ -167,14 +166,14 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		sphere_body_->applyCentralImpulse(impulse);
 	}
 
-	if(input::get_keyboard_frame('w') == 0 && input::get_keyboard_frame('s') == 0 && input::get_keyboard_frame('a') == 0
-				&& input::get_keyboard_frame('d') == 0){
-		    sphere_body_->setLinearVelocity(btVector3(0,0,0));
-			impulse.setValue(0,-9.8, 0);
-			sphere_body_->applyCentralForce(impulse);
-		}
-
-
+	if (input::get_keyboard_frame('w') == 0
+			&& input::get_keyboard_frame('s') == 0
+			&& input::get_keyboard_frame('a') == 0
+			&& input::get_keyboard_frame('d') == 0) {
+		sphere_body_->setLinearVelocity(btVector3(0, 0, 0));
+		impulse.setValue(0, -9.8, 0);
+		sphere_body_->applyCentralForce(impulse);
+	}
 
 	//効果音
 	se_win_->SetSourceToListener();
@@ -199,12 +198,16 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	btCollisionObject* obj;
 	btRigidBody* body;
 
-	if (uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),
-			(double) level_ / level_adjust, teki1_pos, teki1_radius, NULL))
-		Player::Pwinlosejudge(color_judge_, color_judge1, teki1_level);
-	if (uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),
-			(double) level_ / level_adjust, teki2_pos, teki2_radius, NULL))
-		Player::Pwinlosejudge(color_judge_, color_judge1, teki2_level);
+	if (win) {
+		level_ += ((win_level / 2) + 1);
+		se_lose_->Play();
+	}
+	if (lose) {
+		se_win_->Play();
+		ResMove(sphere_body_);
+	}
+	if(draw)
+		se_draw_->Play();
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
 		//Player::Pwinlosejudge(color_judge_,color_judge1,teki1_level);
@@ -263,9 +266,9 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		}
 	}
 
-	if (player_radius_  <= (double) level_ / level_adjust)
+	if (player_radius_ <= (double) level_ / level_adjust)
 		PlayerSize(player_radius_ + 0.05);
-	if(player_radius_ > level_)
+	if (player_radius_ > level_)
 		PlayerSize((btScalar) level_ / level_adjust);
 
 	delete_body_ = NULL;
@@ -471,37 +474,6 @@ bool Player::HandleContactProcess(btManifoldPoint& p, void* a, void* b) {
 	return true;
 }
 
-void Player::Pwinlosejudge(int color1, int color2, int tekilevel) {
-	if (color1 == color2) {
-		if (tekilevel > level_) {
-			se_win_->Play();
-			ResMove(sphere_body_);
-		} else if (tekilevel < level_) {
-			level_ += ((tekilevel / 2) + 1);
-			se_lose_->Play();
-		} else
-			se_draw_->Play();
-	} else if (color1 == 2 && color2 == 1) {
-		se_win_->Play();
-		ResMove(sphere_body_);
-	} else if (color1 == 3 && color2 == 2) {
-		se_win_->Play();
-		ResMove(sphere_body_);
-	} else if (color1 == 1 && color2 == 3) {
-		se_win_->Play();
-		ResMove(sphere_body_);
-	} else if (color1 == 1 && color2 == 2) {
-		se_lose_->Play();
-		level_ += ((tekilevel / 2) + 1);
-	} else if (color1 == 2 && color2 == 3) {
-		se_lose_->Play();
-		level_ += ((tekilevel / 2) + 1);
-	} else if (color1 == 3 && color2 == 1) {
-		se_lose_->Play();
-		level_ += ((tekilevel / 2) + 1);
-	}
-}
-
 int Player::ColorChange(int colorchange) {
 	int rcolor = 0;
 
@@ -511,7 +483,7 @@ int Player::ColorChange(int colorchange) {
 		return 2;
 	else if (colorchange == -3)
 		return 3;
-	else{
+	else {
 		rcolor = cc_util::GetRandom(1, 3);
 		return rcolor;
 	}
@@ -521,7 +493,8 @@ void Player::ResMove(btRigidBody* sphere_res_body_) {
 	level_ = 1;
 	color_judge_ = cc_util::GetRandom(1, 3);
 	sphere_res_body_->clearForces();
-	btVector3 pos = btVector3(cc_util::GetRandom(-240, 240), 120, cc_util::GetRandom(-240,240));
+	btVector3 pos = btVector3(cc_util::GetRandom(-240, 240), 120,
+			cc_util::GetRandom(-240, 240));
 	btQuaternion qrot(0, 0, 0, 1);
 	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
 			btTransform(qrot, pos));

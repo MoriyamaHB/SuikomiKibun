@@ -48,7 +48,8 @@ public:
 	Player(btDynamicsWorld* world);
 	~Player();
 	void Update(double angle, StageMap* map, int color_judge1, int color_judge2, int teki1_level, int teki2_level,
-			Vector3 teki1_pos, Vector3 teki2_pos, double teki1_radius, double teki2_radius);
+			Vector3 teki1_pos, Vector3 teki2_pos, double teki1_radius, double teki2_radius,bool win,bool draw,bool lose,
+			int win_level);
 	void Draw();
 	btVector3 get_center_pos() const;
 	double get_camera_distance() const;
@@ -56,7 +57,6 @@ public:
 	int get_color() const;
 	void PlayerSize(double size);
 	void PlayerMove(btVector3 pos);
-	void Pwinlosejudge(int color1, int color2, int tekilevel);
 	int ColorChange(int colorchange);
 	void ResMove(btRigidBody* sphere_res_body);
 	static bool HandleContactProcess(btManifoldPoint& p, void* a, void* b);

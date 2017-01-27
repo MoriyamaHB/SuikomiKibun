@@ -106,7 +106,8 @@ void GameScene::Update() {
 		player_->Update(camera_.get_angle_w() + M_PI, map_, net_main_->GetColor(0), net_main_->GetColor(1),
 				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1), net_main_->GetEnemyPos(0),
 				net_main_->GetEnemyPos(1), (double) net_main_->GetEnemyLevel(0) / 3.0 + 0.5,
-				(double) net_main_->GetEnemyLevel(1) / 3.0 + 0.5);
+				(double) net_main_->GetEnemyLevel(1) / 3.0 + 0.5,net_main_->IsWin(),net_main_->IsDraw(),net_main_->IsLose()
+				,net_main_->GetWinLevel());
 
 	//敵プレイヤー更新
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_,
