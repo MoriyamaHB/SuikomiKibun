@@ -29,6 +29,7 @@ private:
 	int b_flug;
 	int pcount;
 	int level_;
+	int level_adjust;
 	GL_ShapeDrawer* m_shapeDrawer;
 	int color_judge_;
 	btVector3 color_[3];

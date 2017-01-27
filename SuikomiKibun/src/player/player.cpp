@@ -9,6 +9,7 @@ Player::Player(btDynamicsWorld* world) :
 
 	//プレイヤーレベル
 	level_ = 1;
+	level_adjust = 3;
 
 	//中心座標
 	btVector3 sphere_pos = btVector3(0, 120, 0);
@@ -199,10 +200,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	btRigidBody* body;
 
 	if (uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),
-			(double) level_ / 3, teki1_pos, teki1_radius, NULL))
+			(double) level_ / level_adjust, teki1_pos, teki1_radius, NULL))
 		Player::Pwinlosejudge(color_judge_, color_judge1, teki1_level);
 	if (uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),
-			(double) level_ / 3, teki2_pos, teki2_radius, NULL))
+			(double) level_ / level_adjust, teki2_pos, teki2_radius, NULL))
 		Player::Pwinlosejudge(color_judge_, color_judge1, teki2_level);
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
@@ -262,7 +263,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		}
 	}
 
-	if (player_radius_ <= (double) level_ / 3.0)
+	if (player_radius_ <= (double) level_ / level_adjust);
 		PlayerSize(player_radius_ += 0.05);
 	if(player_radius_ > level_)
 		PlayerSize(1.0);
@@ -476,7 +477,7 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel) {
 			se_win_->Play();
 			ResMove(sphere_body_);
 		} else if (tekilevel < level_) {
-			level_ += (tekilevel / 2) + 1;
+			level_ += ((tekilevel / 2) + 1);
 			se_lose_->Play();
 		} else
 			se_draw_->Play();
@@ -491,13 +492,13 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel) {
 		ResMove(sphere_body_);
 	} else if (color1 == 1 && color2 == 2) {
 		se_lose_->Play();
-		level_ += (tekilevel / 2) + 1;
+		level_ += ((tekilevel / 2) + 1);
 	} else if (color1 == 2 && color2 == 3) {
 		se_lose_->Play();
-		level_ += (tekilevel / 2) + 1;
+		level_ += ((tekilevel / 2) + 1);
 	} else if (color1 == 3 && color2 == 1) {
 		se_lose_->Play();
-		level_ += (tekilevel / 2) + 1;
+		level_ += ((tekilevel / 2) + 1);
 	}
 }
 
