@@ -190,7 +190,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	黄階段
 	offset.setOrigin(stairs_pos4);
 	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
+	for (int ten = 0; ten < 7; ten++) {
 		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
 		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
 		object_[num_] = object_num_;
@@ -201,7 +201,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	// 	青階段
 	offset.setOrigin(stairs_pos5);
 	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
+	for (int ten = 0; ten < 7; ten++) {
 		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
 		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
 		object_[num_] = object_num_;
@@ -213,7 +213,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 // 	緑階段
 	offset.setOrigin(stairs_pos6);
 	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
+	for (int ten = 0; ten < 7; ten++) {
 		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
 		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
 		object_[num_] = object_num_;
@@ -542,16 +542,16 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //クモ
 	btVector3 posision_ka(130, 20, -205);
 	CreateSpider(posision_ka, 5);
-	btVector3 posision_kb(-64, 10, -64);
-	CreateSpider(posision_kb, 2);
-	btVector3 posision_kc(-9, 10, -121);
-	CreateSpider(posision_kc, 2);
-	btVector3 posision_kd(-111, 10, -77);
-	CreateSpider(posision_kd, 2);
-	btVector3 posision_ke(-233, 10, -200);
-	CreateSpider(posision_ke, 2);
-	btVector3 posision_kf(-144, 10, -237);
-	CreateSpider(posision_kf, 2);
+//	btVector3 posision_kb(-64, 10, -64);
+//	CreateSpider(posision_kb, 2);
+//	btVector3 posision_kc(-9, 10, -121);
+//	CreateSpider(posision_kc, 2);
+//	btVector3 posision_kd(-111, 10, -77);
+//	CreateSpider(posision_kd, 2);
+//	btVector3 posision_ke(-233, 10, -200);
+//	CreateSpider(posision_ke, 2);
+//	btVector3 posision_kf(-144, 10, -237);
+//	CreateSpider(posision_kf, 2);
 	btVector3 posision_kg(-77, 3, 151);
 	CreateSpider(posision_kg, 2);
 	btVector3 posision_kh(-8, 3, 73);
@@ -600,14 +600,14 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateSnowman(position_sk, 2);
 	btVector3 position_sl(33, 1, 190);
 	CreateSnowman(position_sl, 2);
-	btVector3 position_sm(90, 1, 80);
-	CreateSnowman(position_sm, 2);
+//	btVector3 position_sm(90, 1, 80);
+//	CreateSnowman(position_sm, 2);
 	btVector3 position_sn(70, 1, -133);
 	CreateSnowman(position_sn, 2);
 	btVector3 position_so(70, 1, -30);
 	CreateSnowman(position_so, 2);
-	btVector3 position_sp(11, 1, -90);
-	CreateSnowman(position_sp, 2);
+//	btVector3 position_sp(11, 1, -90);
+//	CreateSnowman(position_sp, 2);
 	btVector3 position_sq(100, 1, 150);
 	CreateSnowman(position_sq, 2);
 
@@ -638,44 +638,44 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateTriangle(position_th, -2);
 
 //きのこ
-//	btVector3 position_ma(160, 41, -130);
-//	CreateMush(position_ma, 3, 2);
+	btVector3 position_ma(160, 41, -130);
+	CreateMush(position_ma, 3, 2);
 //	btVector3 position_mb(128, 10, -162);
 //	CreateMush(position_mb, 3, 1);
-//	btVector3 position_md(185, 61, 113);
-//	CreateMush(position_md, 3, 3);
+	btVector3 position_md(185, 61, 113);
+	CreateMush(position_md, 3, 3);
 //	btVector3 position_me(160, 41, 80);
 //	CreateMush(position_me, 3, 3);
-//	btVector3 position_mf(135, 21, -60);
-//	CreateMush(position_mf, 3, 2);
+	btVector3 position_mf(135, 21, -60);
+	CreateMush(position_mf, 3, 2);
 //	btVector3 position_mg(135, 21, 100);
 //	CreateMush(position_mg, 3, 1);
-//	btVector3 position_mh(135, 21, 60);
-//	CreateMush(position_mh, 3, 2);
+	btVector3 position_mh(135, 21, 60);
+	CreateMush(position_mh, 3, 2);
 //	btVector3 position_mi(140, 11, 175);
 //	CreateMush(position_mi, 3, 1);
-//	btVector3 position_mj(190, 31, 155);
-//	CreateMush(position_mj, 3, 2);
+	btVector3 position_mj(190, 31, 155);
+	CreateMush(position_mj, 3, 2);
 //	btVector3 position_mk(220, 21, 163);
 //	CreateMush(position_mk, 3, 2);
-//	btVector3 position_ml(125, 11, 130);
-//	CreateMush(position_ml, 3, 3);
+	btVector3 position_ml(125, 11, 130);
+	CreateMush(position_ml, 3, 3);
 //	btVector3 position_mm(150, 31, 140);
 //	CreateMush(position_mm, 3, 1);
-//	btVector3 position_mn(195, 71, 60);
-//	CreateMush(position_mn, 3, 1);
+	btVector3 position_mn(195, 71, 60);
+	CreateMush(position_mn, 3, 1);
 //	btVector3 position_mo(210, 51, 130);
 //	CreateMush(position_mo, 3, 1);
-//	btVector3 position_mp(125, 11, -90);
-//	CreateMush(position_mp, 3, 3);
+	btVector3 position_mp(125, 11, -90);
+	CreateMush(position_mp, 3, 3);
 //	btVector3 position_mq(150, 31, -115);
 //	CreateMush(position_mq, 3, 1);
-//	btVector3 position_mr(170, 51, -70);
-//	CreateMush(position_mr, 3, 3);
+	btVector3 position_mr(170, 51, -70);
+	CreateMush(position_mr, 3, 3);
 //	btVector3 position_ms(180, 21, -155);
 //	CreateMush(position_ms, 3, 3);
-//	btVector3 position_mt(220, 31, -140);
-//	CreateMush(position_mt, 3, 1);
+	btVector3 position_mt(220, 31, -140);
+	CreateMush(position_mt, 3, 1);
 //	btVector3 position_mu(195, 71, -85);
 //	CreateMush(position_mu, 3, 1);
 //りんご
@@ -792,12 +792,12 @@ StageMap::~StageMap() {
 //更新
 void StageMap::Update() {
 	//流動体
-//	static float offset = 0;
-//	offset += 0.03;
-//	SetVertexPositions(10, offset);
-//	btVector3 worldMin(-1000, -1000, -1000);
-//	btVector3 worldMax(1000, 1000, 1000);
-//	trimeshShape_->refitTree(worldMin, worldMax);
+	static float offset = 0;
+	offset += 0.03;
+	SetVertexPositions(10, offset);
+	btVector3 worldMin(-1000, -1000, -1000);
+	btVector3 worldMax(1000, 1000, 1000);
+	trimeshShape_->refitTree(worldMin, worldMax);
 	//効果音
 	se_absorb_->SetSourceToListener();
 }
