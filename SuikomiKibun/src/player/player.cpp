@@ -128,7 +128,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
-	double t = 0.07;
+	double t = 0.04;
 	static int upcount = 0;
 	static int pflug = 1;
 
@@ -199,10 +199,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	btRigidBody* body;
 
 	if (uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),
-			(double) level_ / 5, teki1_pos, teki1_radius, NULL))
+			(double) level_ / 3, teki1_pos, teki1_radius, NULL))
 		Player::Pwinlosejudge(color_judge_, color_judge1, teki1_level);
 	if (uIsCollisionBallAndBall(sphere_body_->getCenterOfMassPosition(),
-			(double) level_ / 5, teki2_pos, teki2_radius, NULL))
+			(double) level_ / 3, teki2_pos, teki2_radius, NULL))
 		Player::Pwinlosejudge(color_judge_, color_judge1, teki2_level);
 
 	if (sphere_body_ == delete_body_ && sphere_tekibody1_ == delete_body2_) {
