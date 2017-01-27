@@ -14,7 +14,7 @@ Player::Player(btDynamicsWorld* world) :
 	//中心座標
 	btVector3 sphere_pos = btVector3(0, 120, 0);
 	//大きさ
-	player_radius_ = level_ / level_adjust;
+	player_radius_ = (btScalar) level_ / level_adjust;
 	//質量
 	sphere_mass = 0.03;
 	//反発係数
@@ -266,7 +266,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	if (player_radius_  <= (double) level_ / level_adjust)
 		PlayerSize(player_radius_ + 0.05);
 	if(player_radius_ > level_)
-		PlayerSize(level_ / level_adjust);
+		PlayerSize((btScalar) level_ / level_adjust);
 
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
