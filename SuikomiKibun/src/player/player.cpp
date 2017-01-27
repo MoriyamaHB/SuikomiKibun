@@ -8,7 +8,7 @@ Player::Player(btDynamicsWorld* world) :
 		world_(world) {
 
 	//プレイヤーレベル
-	level_ = 1;
+	level_ = 3;
 	level_adjust = 3;
 
 	//中心座標
@@ -491,7 +491,7 @@ int Player::ColorChange(int colorchange) {
 }
 
 void Player::ResMove(btRigidBody* sphere_res_body_) {
-	level_ = 1;
+	level_ = 3;
 	color_judge_ = cc_util::GetRandom(1, 3);
 	sphere_res_body_->clearForces();
 	btVector3 pos = btVector3(cc_util::GetRandom(-240, 240), 120,
