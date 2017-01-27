@@ -542,16 +542,16 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //クモ
 	btVector3 posision_ka(130, 20, -205);
 	CreateSpider(posision_ka, 5);
-	btVector3 posision_kb(-64, 10, -64);
-	CreateSpider(posision_kb, 2);
-	btVector3 posision_kc(-9, 10, -121);
-	CreateSpider(posision_kc, 2);
-	btVector3 posision_kd(-111, 10, -77);
-	CreateSpider(posision_kd, 2);
-	btVector3 posision_ke(-233, 10, -200);
-	CreateSpider(posision_ke, 2);
-	btVector3 posision_kf(-144, 10, -237);
-	CreateSpider(posision_kf, 2);
+//	btVector3 posision_kb(-64, 10, -64);
+//	CreateSpider(posision_kb, 2);
+//	btVector3 posision_kc(-9, 10, -121);
+//	CreateSpider(posision_kc, 2);
+//	btVector3 posision_kd(-111, 10, -77);
+//	CreateSpider(posision_kd, 2);
+//	btVector3 posision_ke(-233, 10, -200);
+//	CreateSpider(posision_ke, 2);
+//	btVector3 posision_kf(-144, 10, -237);
+//	CreateSpider(posision_kf, 2);
 	btVector3 posision_kg(-77, 3, 151);
 	CreateSpider(posision_kg, 2);
 	btVector3 posision_kh(-8, 3, 73);
