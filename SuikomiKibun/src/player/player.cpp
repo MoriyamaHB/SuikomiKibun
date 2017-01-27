@@ -263,8 +263,10 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		}
 	}
 
-	if (player_radius_ <= (double) level_ / level_adjust);
+	if (player_radius_ <= (double) level_ / level_adjust);{
+		if(player_radius_+= 0.05 <= level_)
 		PlayerSize(player_radius_ += 0.05);
+	}
 	if(player_radius_ > level_)
 		PlayerSize(1.0);
 
@@ -517,7 +519,7 @@ void Player::ResMove(btRigidBody* sphere_res_body_) {
 	level_ = 1;
 	color_judge_ = cc_util::GetRandom(1, 3);
 	sphere_res_body_->clearForces();
-	btVector3 pos = btVector3(0, 120, 0);
+	btVector3 pos = btVector3(cc_util::GetRandom(-240, 240), 120, cc_util::GetRandom(-240,240));
 	btQuaternion qrot(0, 0, 0, 1);
 	btDefaultMotionState* sphere_motion_state = new btDefaultMotionState(
 			btTransform(qrot, pos));
