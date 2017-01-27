@@ -133,94 +133,94 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	color_[num_++] = btVector3(0.75, 1, 0.80);
 	color_[num_++] = btVector3(1.0, 1.0, 1.0);
 
-//	//螺旋階段
-//	double h, r, g, b;
-//	int h2;
-//	h = 0;
-//	offset.setOrigin(stairs_pos);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 50; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		h += 7.2;
-//		h2 = h / 60;
-//		if (h2 == 5) {
-//			r = 255;
-//			g = 0;
-//			b = ((360 - h) / 60) * 255;
-//		} else if (h2 == 4) {
-//			r = ((h - 240) / 60) * 255;
-//			g = 0;
-//			b = 255;
-//		} else if (h2 == 3) {
-//			r = 0;
-//			g = ((240 - h) / 60) * 255;
-//			b = 255;
-//		} else if (h2 == 2) {
-//			r = 0;
-//			g = 255;
-//			b = ((h - 120) / 60) * 255;
-//		} else if (h2) {
-//			r = ((120 - h) / 60) * 255;
-//			g = 255;
-//			b = 0;
-//		} else {
-//			r = 255;
-//			g = (h / 60) * 255;
-//			b = 0;
-//		}
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
-//		offset = offset * offset2;
-//	}
-//
-////	赤階段
-//	offset.setOrigin(stairs_pos3);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-//		offset = offset * offset2;
-//	}
-//
-////	黄階段
-//	offset.setOrigin(stairs_pos4);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(1.0, 1.0, 0.0);
-//		offset = offset * offset2;
-//	}
-//	// 	青階段
-//	offset.setOrigin(stairs_pos5);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(0.0, 0.0, 1.0);
-//		offset = offset * offset2;
-//	}
-//
-//// 	緑階段
-//	offset.setOrigin(stairs_pos6);
-//	offset2.setOrigin(stairs_pos2);
-//	for (int ten = 0; ten < 10; ten++) {
-//		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
-//		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-//		object_[num_] = object_num_;
-//		level_[num_] = 0;
-//		color_[num_++] = btVector3(0.0, 1.0, 0.0);
-//		offset = offset * offset2;
-//	}
+	//螺旋階段
+	double h, r, g, b;
+	int h2;
+	h = 0;
+	offset.setOrigin(stairs_pos);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 50; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		h += 7.2;
+		h2 = h / 60;
+		if (h2 == 5) {
+			r = 255;
+			g = 0;
+			b = ((360 - h) / 60) * 255;
+		} else if (h2 == 4) {
+			r = ((h - 240) / 60) * 255;
+			g = 0;
+			b = 255;
+		} else if (h2 == 3) {
+			r = 0;
+			g = ((240 - h) / 60) * 255;
+			b = 255;
+		} else if (h2 == 2) {
+			r = 0;
+			g = 255;
+			b = ((h - 120) / 60) * 255;
+		} else if (h2) {
+			r = ((120 - h) / 60) * 255;
+			g = 255;
+			b = 0;
+		} else {
+			r = 255;
+			g = (h / 60) * 255;
+			b = 0;
+		}
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
+		offset = offset * offset2;
+	}
+
+//	赤階段
+	offset.setOrigin(stairs_pos3);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(1.0, 0.0, 0.0);
+		offset = offset * offset2;
+	}
+
+//	黄階段
+	offset.setOrigin(stairs_pos4);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(1.0, 1.0, 0.0);
+		offset = offset * offset2;
+	}
+	// 	青階段
+	offset.setOrigin(stairs_pos5);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(0.0, 0.0, 1.0);
+		offset = offset * offset2;
+	}
+
+// 	緑階段
+	offset.setOrigin(stairs_pos6);
+	offset2.setOrigin(stairs_pos2);
+	for (int ten = 0; ten < 10; ten++) {
+		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
+		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+		object_[num_] = object_num_;
+		level_[num_] = 0;
+		color_[num_++] = btVector3(0.0, 1.0, 0.0);
+		offset = offset * offset2;
+	}
 
 	//滝
 	offset.setIdentity();
@@ -542,16 +542,16 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //クモ
 	btVector3 posision_ka(130, 20, -205);
 	CreateSpider(posision_ka, 5);
-//	btVector3 posision_kb(-64, 10, -64);
-//	CreateSpider(posision_kb, 2);
-//	btVector3 posision_kc(-9, 10, -121);
-//	CreateSpider(posision_kc, 2);
-//	btVector3 posision_kd(-111, 10, -77);
-//	CreateSpider(posision_kd, 2);
-//	btVector3 posision_ke(-233, 10, -200);
-//	CreateSpider(posision_ke, 2);
-//	btVector3 posision_kf(-144, 10, -237);
-//	CreateSpider(posision_kf, 2);
+	btVector3 posision_kb(-64, 10, -64);
+	CreateSpider(posision_kb, 2);
+	btVector3 posision_kc(-9, 10, -121);
+	CreateSpider(posision_kc, 2);
+	btVector3 posision_kd(-111, 10, -77);
+	CreateSpider(posision_kd, 2);
+	btVector3 posision_ke(-233, 10, -200);
+	CreateSpider(posision_ke, 2);
+	btVector3 posision_kf(-144, 10, -237);
+	CreateSpider(posision_kf, 2);
 	btVector3 posision_kg(-77, 3, 151);
 	CreateSpider(posision_kg, 2);
 	btVector3 posision_kh(-8, 3, 73);
@@ -2440,7 +2440,7 @@ void StageMap::CreateApple(const btVector3& position, int level) {
 		size2 = 0.2;
 		mass = 0.01;
 	} else {
-		size = 0.8;
+		size = 0.6;
 		size2 = 0.1;
 		mass = 0.01;
 	}
