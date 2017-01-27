@@ -123,7 +123,7 @@ void PlayerTeki::Update(btVector3 pos, int level, int color_change, StageMap* ma
 	PlayerTekiMove(pos);
 	if (player_radius_  <= (double) level / 3.0)
 		PlayerTekiResize(player_radius_ + 0.1);
-	if(level == 1)
+	if(level == 3)
 		PlayerTekiResize(1.0);
 
 
