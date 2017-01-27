@@ -14,7 +14,7 @@ Player::Player(btDynamicsWorld* world) :
 	//中心座標
 	btVector3 sphere_pos = btVector3(0, 120, 0);
 	//大きさ
-	player_radius_ = (btScalar) level_ / level_adjust;
+	player_radius_ = 1.0;
 	//質量
 	sphere_mass = 0.03;
 	//反発係数
