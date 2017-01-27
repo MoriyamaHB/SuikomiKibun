@@ -122,7 +122,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 	static int upcount = 0;
 	static int pflug = 1;
 
-	if (input::get_keyboard_frame('w') == 1) {
+	if (input::get_keyboard_frame('w') >= 1) {
 		if (pcount > 0 && pflug == 1) {
 			sphere_body_->activate(true);
 			impulse.setValue(t * cos(angle), 0, t * sin(angle));
@@ -131,33 +131,36 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 			upcount = 0;
 		}
 	}
-	if (input::get_keyboard_frame('s') == 1) {
+	else if (input::get_keyboard_frame('s') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle + M_PI), 0, t * sin(angle + M_PI));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
-	if (input::get_keyboard_frame('a') == 1) {
+	else if (input::get_keyboard_frame('a') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle - M_PI / 2.0), 0,
 				t * sin(angle - M_PI / 2.0));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
-	if (input::get_keyboard_frame('d') == 1) {
+	else if (input::get_keyboard_frame('d') >= 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(t * cos(angle + M_PI / 2.0), 0,
 				t * sin(angle + M_PI / 2.0));
 		sphere_body_->applyCentralImpulse(impulse);
 	}
-	if (input::get_keyboard_frame(' ') == 1) {
+	else if (input::get_keyboard_frame(' ') == 1) {
 		sphere_body_->activate(true);
 		impulse.setValue(0, t, 0);
 		sphere_body_->applyCentralImpulse(impulse);
+	}else{
+		sphere_body_->clearForces();
 	}
 
-	if (pflug == 0)
+
+     if (pflug == 0)
 		upcount++;
 
-	if (pcount <= 0)
+	 if (pcount <= 0)
 		pflug = 0;
 	if (upcount == 10) {
 		upcount = 0;
@@ -235,11 +238,14 @@ void Player::Update(double angle, StageMap* map, int color_judge1, int color_jud
 		}
 	}
 
-	if (player_radius_ <= (double) level_ / 5.0)
+	if (player_radius_ <= (double) level_ / 3.0)
 		PlayerSize(player_radius_ += 0.05);
 
 	delete_body_ = NULL;
 	delete_body2_ = NULL;
+
+	if(uOutOfRange(sphere_body_->getCenterOfMassPosition(),btVector3(-280,-50,-280),btVector3(280,600,280)))
+		ResMove(sphere_body_);
 }
 	
 
