@@ -25,6 +25,7 @@ private:
 	btScalar player_radius_;
 	static btRigidBody* delete_body_;
 	static btRigidBody* delete_body2_;
+	btScalar sphere_mass;
 	int pcount;
 	int level_;
 	GL_ShapeDrawer* m_shapeDrawer;
