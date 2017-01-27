@@ -133,94 +133,94 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	color_[num_++] = btVector3(0.75, 1, 0.80);
 	color_[num_++] = btVector3(1.0, 1.0, 1.0);
 
-	//螺旋階段
-	double h, r, g, b;
-	int h2;
-	h = 0;
-	offset.setOrigin(stairs_pos);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 50; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		h += 7.2;
-		h2 = h / 60;
-		if (h2 == 5) {
-			r = 255;
-			g = 0;
-			b = ((360 - h) / 60) * 255;
-		} else if (h2 == 4) {
-			r = ((h - 240) / 60) * 255;
-			g = 0;
-			b = 255;
-		} else if (h2 == 3) {
-			r = 0;
-			g = ((240 - h) / 60) * 255;
-			b = 255;
-		} else if (h2 == 2) {
-			r = 0;
-			g = 255;
-			b = ((h - 120) / 60) * 255;
-		} else if (h2) {
-			r = ((120 - h) / 60) * 255;
-			g = 255;
-			b = 0;
-		} else {
-			r = 255;
-			g = (h / 60) * 255;
-			b = 0;
+		//螺旋階段
+		double h, r, g, b;
+		int h2;
+		h = 0;
+		offset.setOrigin(stairs_pos);
+		offset2.setOrigin(stairs_pos2);
+		for (int ten = 0; ten < 30; ten++) {
+			offset.setRotation(btQuaternion(PI_ / 5 * ten + PI_ / 4, 0, 0));
+			ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+			h += 12;
+			h2 = h / 60;
+			if (h2 == 5) {
+				r = 255;
+				g = 0;
+				b = ((360 - h) / 60) * 255;
+			} else if (h2 == 4) {
+				r = ((h - 240) / 60) * 255;
+				g = 0;
+				b = 255;
+			} else if (h2 == 3) {
+				r = 0;
+				g = ((240 - h) / 60) * 255;
+				b = 255;
+			} else if (h2 == 2) {
+				r = 0;
+				g = 255;
+				b = ((h - 120) / 60) * 255;
+			} else if (h2) {
+				r = ((120 - h) / 60) * 255;
+				g = 255;
+				b = 0;
+			} else {
+				r = 255;
+				g = (h / 60) * 255;
+				b = 0;
+			}
+			object_[num_] = object_num_;
+			level_[num_] = 0;
+			color_[num_++] = btVector3(r / 255, g / 255, b / 255);
+			offset = offset * offset2;
 		}
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(r / 255, g / 255, b / 255);
-		offset = offset * offset2;
-	}
 
-//	赤階段
-	offset.setOrigin(stairs_pos3);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 10; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1.0, 0.0, 0.0);
-		offset = offset * offset2;
-	}
+	//	赤階段
+		offset.setOrigin(stairs_pos3);
+		offset2.setOrigin(stairs_pos2);
+		for (int ten = 0; ten < 7; ten++) {
+			offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ / 4, 0, 0));
+			ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+			object_[num_] = object_num_;
+			level_[num_] = 0;
+			color_[num_++] = btVector3(1.0, 0.0, 0.0);
+			offset = offset * offset2;
+		}
 
-//	黄階段
-	offset.setOrigin(stairs_pos4);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 7; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(1.0, 1.0, 0.0);
-		offset = offset * offset2;
-	}
-	// 	青階段
-	offset.setOrigin(stairs_pos5);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 7; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(0.0, 0.0, 1.0);
-		offset = offset * offset2;
-	}
+	//	黄階段
+		offset.setOrigin(stairs_pos4);
+		offset2.setOrigin(stairs_pos2);
+		for (int ten = 0; ten < 7; ten++) {
+			offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ / 4, 0, 0));
+			ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+			object_[num_] = object_num_;
+			level_[num_] = 0;
+			color_[num_++] = btVector3(1.0, 1.0, 0.0);
+			offset = offset * offset2;
+		}
+		// 	青階段
+		offset.setOrigin(stairs_pos5);
+		offset2.setOrigin(stairs_pos2);
+		for (int ten = 0; ten < 7; ten++) {
+			offset.setRotation(btQuaternion(PI_ / 20 * ten + PI_ * 3 / 4, 0, 0));
+			ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+			object_[num_] = object_num_;
+			level_[num_] = 0;
+			color_[num_++] = btVector3(0.0, 0.0, 1.0);
+			offset = offset * offset2;
+		}
 
-// 	緑階段
-	offset.setOrigin(stairs_pos6);
-	offset2.setOrigin(stairs_pos2);
-	for (int ten = 0; ten < 7; ten++) {
-		offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
-		ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
-		object_[num_] = object_num_;
-		level_[num_] = 0;
-		color_[num_++] = btVector3(0.0, 1.0, 0.0);
-		offset = offset * offset2;
-	}
+	// 	緑階段
+		offset.setOrigin(stairs_pos6);
+		offset2.setOrigin(stairs_pos2);
+		for (int ten = 0; ten < 7; ten++) {
+			offset.setRotation(btQuaternion(PI_ / 20 * ten - PI_ * 3 / 4, 0, 0));
+			ground_body[6] = LocalCreateRigidBody(btScalar(0), offset, stairs);
+			object_[num_] = object_num_;
+			level_[num_] = 0;
+			color_[num_++] = btVector3(0.0, 1.0, 0.0);
+			offset = offset * offset2;
+		}
 
 	//滝
 	offset.setIdentity();
@@ -558,16 +558,16 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateSpider(posision_kh, 2);
 	btVector3 posision_ki(-244, 3, 9);
 	CreateSpider(posision_ki, 2);
-	btVector3 posision_kj(-155, 3, 178);
-	CreateSpider(posision_kj, 2);
-	btVector3 posision_kk(-210, 3, 240);
-	CreateSpider(posision_kk, 2);
+//	btVector3 posision_kj(-155, 3, 178);
+//	CreateSpider(posision_kj, 2);
+//	btVector3 posision_kk(-210, 3, 240);
+//	CreateSpider(posision_kk, 2);
 	btVector3 posision_kl(13, 3, 177);
 	CreateSpider(posision_kl, 2);
 	btVector3 posision_km(77, 3, 198);
 	CreateSpider(posision_km, 2);
-	btVector3 posision_kn(40, 3, 0);
-	CreateSpider(posision_kn, 2);
+//	btVector3 posision_kn(40, 3, 0);
+//	CreateSpider(posision_kn, 2);
 	btVector3 posision_ko(90, 3, -89);
 	CreateSpider(posision_ko, 2);
 	btVector3 posision_kp(105, 3, -190);
@@ -580,8 +580,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateSnowman(position_sa, 3);
 	btVector3 position_sb(-10, 10, -15);
 	CreateSnowman(position_sb, 2);
-	btVector3 position_sc(-72, 10, -20);
-	CreateSnowman(position_sc, 2);
+//	btVector3 position_sc(-72, 10, -20);
+//	CreateSnowman(position_sc, 2);
 	btVector3 position_sd(-172, 10, -172);
 	CreateSnowman(position_sd, 2);
 	btVector3 position_se(-240, 10, -123);
@@ -592,8 +592,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateSnowman(position_sg, 2);
 	btVector3 position_sh(-62, 1, 80);
 	CreateSnowman(position_sh, 2);
-	btVector3 position_si(-111, 1, 220);
-	CreateSnowman(position_si, 2);
+//	btVector3 position_si(-111, 1, 220);
+//	CreateSnowman(position_si, 2);
 	btVector3 position_sj(-166, 1, 230);
 	CreateSnowman(position_sj, 2);
 	btVector3 position_sk(-198, 1, 55);
@@ -616,8 +616,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreatePyramid(position_pa, 4);
 	btVector3 position_pb(220, 5, 215);
 	CreatePyramid(position_pb, 4);
-	btVector3 position_pc(-70, 0, 13);
-	CreatePyramid(position_pc, 4);
+//	btVector3 position_pc(-70, 0, 13);
+//	CreatePyramid(position_pc, 4);
 
 //トライアングル
 	btVector3 position_ta(180, 0, -5);
@@ -643,19 +643,19 @@ StageMap::StageMap(btDynamicsWorld* world) :
 //	btVector3 position_mb(128, 10, -162);
 //	CreateMush(position_mb, 3, 1);
 	btVector3 position_md(185, 61, 113);
-	CreateMush(position_md, 3, 3);
+	CreateMush(position_md, 3, 1);
 //	btVector3 position_me(160, 41, 80);
 //	CreateMush(position_me, 3, 3);
 	btVector3 position_mf(135, 21, -60);
 	CreateMush(position_mf, 3, 2);
 //	btVector3 position_mg(135, 21, 100);
 //	CreateMush(position_mg, 3, 1);
-	btVector3 position_mh(135, 21, 60);
-	CreateMush(position_mh, 3, 2);
+//	btVector3 position_mh(135, 21, 60);
+//	CreateMush(position_mh, 3, 2);
 //	btVector3 position_mi(140, 11, 175);
 //	CreateMush(position_mi, 3, 1);
 	btVector3 position_mj(190, 31, 155);
-	CreateMush(position_mj, 3, 2);
+	CreateMush(position_mj, 3, 3);
 //	btVector3 position_mk(220, 21, 163);
 //	CreateMush(position_mk, 3, 2);
 	btVector3 position_ml(125, 11, 130);
@@ -689,14 +689,14 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateApple(position_ae, 1);
 	btVector3 position_af(-120, 10, -120);
 	CreateApple(position_af, 1);
-	btVector3 position_ag(-120, 10, -130);
-	CreateApple(position_ag, 1);
+//	btVector3 position_ag(-120, 10, -130);
+//	CreateApple(position_ag, 1);
 	btVector3 position_ah(-60, 10, -240);
 	CreateApple(position_ah, 1);
 	btVector3 position_ai(-245, 10, -245);
 	CreateApple(position_ai, 1);
-	btVector3 position_aj(-150, 10, -150);
-	CreateApple(position_aj, 1);
+//	btVector3 position_aj(-150, 10, -150);
+//	CreateApple(position_aj, 1);
 	btVector3 position_ak(-160, 10, -180);
 	CreateApple(position_ak, 1);
 	btVector3 position_al(-190, 10, -170);
@@ -711,8 +711,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateApple(position_ap, 1);
 	btVector3 position_aq(-140, 0, 200);
 	CreateApple(position_aq, 1);
-	btVector3 position_ar(-220, 0, 30);
-	CreateApple(position_ar, 1);
+//	btVector3 position_ar(-220, 0, 30);
+//	CreateApple(position_ar, 1);
 	btVector3 position_as(-150, 0, 20);
 	CreateApple(position_as, 1);
 	btVector3 position_at(-230, 0, 160);
@@ -723,8 +723,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreateApple(position_av, 1);
 	btVector3 position_aw(20, 1, 22);
 	CreateApple(position_aw, 1);
-	btVector3 position_ax(80, 1, 125);
-	CreateApple(position_ax, 1);
+//	btVector3 position_ax(80, 1, 125);
+//	CreateApple(position_ax, 1);
 	btVector3 position_ay(100, 1, 10);
 	CreateApple(position_ay, 1);
 	btVector3 position_az(100, 1, 200);
@@ -751,8 +751,8 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreatePonde(position_oa, 4);
 	btVector3 position_ob(65, 10, 65);
 	CreatePonde(position_ob, 4);
-	btVector3 position_oc(-220, 10, 230);
-	CreatePonde(position_oc, 4);
+//	btVector3 position_oc(-220, 10, 230);
+//	CreatePonde(position_oc, 4);
 
 //プレイヤー
 
@@ -2518,9 +2518,9 @@ int StageMap::DestroyObject(int num, int level) {
 
 	//オブジェクトのレベルを取得
 	if (level_[num] == 5) {
-		l = 88;
+		l = 80;
 	} else if (level_[num] == 4) {
-		l = 55;
+		l = 50;
 	} else if (level_[num] == 3) {
 		l = 40;
 	} else if (level_[num] == 2) {
