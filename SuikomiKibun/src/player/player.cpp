@@ -128,7 +128,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	//撃力を加える
 	btVector3 impulse;
 	static btVector3 pos;
-	double t = 0.2;
+	double t = 0.07;
 	static int upcount = 0;
 	static int pflug = 1;
 
