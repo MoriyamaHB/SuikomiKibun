@@ -199,7 +199,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	btRigidBody* body;
 
 	if (win) {
-		level_ += ((win_level / 2) + 1);
+		level_ += ((win_level / 4) + 1);
 		se_lose_->Play();
 	}
 	if (lose) {
@@ -268,7 +268,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 	}
 
 	if (player_radius_ <= (double) level_ / level_adjust)
-		PlayerSize(player_radius_ + 0.05);
+		PlayerSize(player_radius_ + 0.1);
 	if (player_radius_ > level_)
 		PlayerSize((btScalar) level_ / level_adjust);
 
