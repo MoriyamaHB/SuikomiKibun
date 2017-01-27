@@ -173,17 +173,17 @@ bool Server::IsWin(int my_level, int my_color, int enemy_level, int enemy_color)
 			return true;
 		}
 	} else if (my_color == 2 && enemy_color == 1) {
-		return true;
+		return false;
 	} else if (my_color == 3 && enemy_color == 2) {
-		return true;
+		return false;
 	} else if (my_color == 1 && enemy_color == 3) {
-		return true;
+		return false;
 	} else if (my_color == 1 && enemy_color == 2) {
-		return false;
+		return true;
 	} else if (my_color == 2 && enemy_color == 3) {
-		return false;
+		return true;
 	} else if (my_color == 3 && enemy_color == 1) {
-		return false;
+		return true;
 	}
 	return false;
 }
