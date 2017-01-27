@@ -221,6 +221,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		if (sphere_body_ == delete_body_)
 			delete_body_ = delete_body2_;
 		if (delete_body_ != NULL) {
+
 			for (i = world_->getNumCollisionObjects() - 1; i > 109; i--) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
@@ -240,7 +241,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		if (sphere_tekibody1_ == delete_body_)
 			delete_body_ = delete_body2_;
 		if (delete_body_ != NULL) {
-			for (i = world_->getNumCollisionObjects() - 1; i > 109; i--) {
+			for (i = world_->getNumCollisionObjects() - 1; i > 141; i--) {
 				obj = world_->getCollisionObjectArray()[i];
 				body = btRigidBody::upcast(obj);
 				if (delete_body_ == body) {
@@ -503,14 +504,18 @@ void Player::Pwinlosejudge(int color1, int color2, int tekilevel) {
 }
 
 int Player::ColorChange(int colorchange) {
+	int rcolor = 0;
+
 	if (colorchange == -1)
 		return 1;
 	else if (colorchange == -2)
 		return 2;
 	else if (colorchange == -3)
 		return 3;
-	else
-		return cc_util::GetRandom(1, 3);
+	else{
+		rcolor = cc_util::GetRandom(1, 3);
+		return rcolor;
+	}
 }
 
 void Player::ResMove(btRigidBody* sphere_res_body_) {
