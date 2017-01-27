@@ -144,7 +144,7 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 		}
 	}else{
 	    sphere_body_->setLinearVelocity(btVector3(0,0,0));
-		impulse.setValue(0,-2 * sphere_mass * 9.8, 0);
+		impulse.setValue(0,-9.8, 0);
 		sphere_body_->applyCentralForce(impulse);
 	}
 
