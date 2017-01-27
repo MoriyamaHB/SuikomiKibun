@@ -2524,7 +2524,7 @@ int StageMap::DestroyObject(int num, int level) {
 	} else if (level_[num] == 3) {
 		l = 40;
 	} else if (level_[num] == 2) {
-		l = 15;
+		l = 9;
 	}
 
 	//プレイヤーがオブジェクトよりレベルが高いならオブジェクトを破壊
