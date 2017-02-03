@@ -2,7 +2,7 @@
 
 //コンストラクタ
 GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
-		BaseScene(changer), nav_font_("font/hui.ttf"), nav_font_1("font/hui.ttf") {
+		BaseScene(changer), nav_font_("font/hui.ttf"), nav_font_1("font/hui.ttf"), nav_font_2("font/hui.ttf") {
 	//input初期化
 	input::Init();
 	input::set_is_enabled_mouse_motion(true); //マウス移動料取得を有効にする
@@ -46,11 +46,12 @@ GameScene::GameScene(ISceneChanger* changer, SceneParam param) :
 	button_->set_text_active_color(uColor4fv_red);
 
 	// フォントの初期化
-	if (nav_font_.Error() || nav_font_1.Error()) {
+	if (nav_font_.Error() || nav_font_1.Error() || nav_font_2.Error()) {
 		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
 	} else {
 		nav_font_.FaceSize(90);
 		nav_font_1.FaceSize(60);
+		nav_font_2.FaceSize(40);
 	}
 
 	//効果音
@@ -106,8 +107,8 @@ void GameScene::Update() {
 		player_->Update(camera_.get_angle_w() + M_PI, map_, net_main_->GetColor(0), net_main_->GetColor(1),
 				net_main_->GetEnemyLevel(0), net_main_->GetEnemyLevel(1), net_main_->GetEnemyPos(0),
 				net_main_->GetEnemyPos(1), (double) net_main_->GetEnemyLevel(0) / 3.0 + 0.5,
-				(double) net_main_->GetEnemyLevel(1) / 3.0 + 0.5,net_main_->IsWin(),net_main_->IsDraw(),net_main_->IsLose()
-				,net_main_->GetWinLevel());
+				(double) net_main_->GetEnemyLevel(1) / 3.0 + 0.5, net_main_->IsWin(), net_main_->IsDraw(),
+				net_main_->IsLose(), net_main_->GetWinLevel());
 
 	//敵プレイヤー更新
 	playerteki1_->Update(net_main_->GetEnemyPos(0), net_main_->GetEnemyLevel(0), net_main_->GetColor(0), map_,
@@ -125,7 +126,7 @@ void GameScene::Update() {
 	glLightfv(GL_LIGHT0, GL_POSITION, kLight0Pos);
 
 	//BGM
-	Sound::SetListener(camera_);
+	Sound::SetListener (camera_);
 	bgm_->Update();
 
 	//効果音
@@ -160,7 +161,7 @@ void GameScene::Draw() {
 	//制限時間描画
 	u3Dto2D();
 	if (!nav_font_.Error()) {
-		glColor4fv(uColor4fv_blue);
+		glColor4fv (uColor4fv_blue);
 		glRasterPos2f(840, 80);
 		nav_font_1.Render(
 				("残り" + uToStr(net_main_->GetLimitedTime() < 0 ? 0 : net_main_->GetLimitedTime()) + "秒").c_str());
@@ -170,9 +171,23 @@ void GameScene::Draw() {
 	u3Dto2D();
 	if (net_main_->GetGameState() == kConnect) {
 		if (!nav_font_.Error()) {
-			glColor4fv(uColor4fv_orange);
+			glColor4fv (uColor4fv_orange);
 			glRasterPos2f(10, 500);
 			nav_font_.Render("ほかプレイヤーの接続待機中");
+		}
+	}
+	u2Dto3D();
+	//操作方法
+	u3Dto2D();
+	if (net_main_->GetGameState() == kPlay) {
+		if (!nav_font_2.Error()) {
+			glColor4fv (uColor4fv_purple);
+			glRasterPos2f(10, 600);
+			nav_font_2.Render("w/sキー = 前後");
+			glRasterPos2f(10, 640);
+			nav_font_2.Render("a/dキー = 左右");
+			glRasterPos2f(10, 680);
+			nav_font_2.Render("マウス = 視点変更");
 		}
 	}
 	u2Dto3D();
@@ -190,13 +205,13 @@ void GameScene::Draw() {
 
 //3すくみの関係を描画
 void GameScene::DrawRelation(int x, int y) {
-	glColor4fv(uColor4fv_blue);
+	glColor4fv (uColor4fv_blue);
 	uCircle2DFill(30.0, x + 50, y);
-	glColor4fv(uColor4fv_red);
+	glColor4fv (uColor4fv_red);
 	uCircle2DFill(30.0, x, y + 100);
-	glColor4fv(uColor4fv_green);
+	glColor4fv (uColor4fv_green);
 	uCircle2DFill(30.0, x + 100, y + 100);
-	glColor4fv(uColor4fv_maroon);
+	glColor4fv (uColor4fv_maroon);
 	uDrawArrowd(x + 35, y + 30, x + 15, y + 70, 40, 5, 1.0);
 	uDrawArrowd(x + 35, y + 100, x + 60, y + 100, 35, 5, 1.0);
 	uDrawArrowd(x + 90, y + 65, x + 70, y + 30, 40, 5, 1.0);
