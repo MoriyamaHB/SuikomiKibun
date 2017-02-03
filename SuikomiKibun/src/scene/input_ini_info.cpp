@@ -3,6 +3,8 @@
 //コンストラクタ
 InputIniInfo::InputIniInfo(ISceneChanger* changer, SceneParam param) :
 		BaseScene(changer), font_("font/jkgm.ttf") {
+	//入力初期化
+	input::Init();
 	// フォントの初期化
 	if (font_.Error()) {
 		uErrorOut(__FILE__, __func__, __LINE__, "タイトルフォントが開けません");
