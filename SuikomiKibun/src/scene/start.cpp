@@ -148,9 +148,11 @@ void StartScene::Draw() {
 	}
 	//ゲーム説明描画
 	if (!description_font_.Error()) {
-		glColor4fv (uColor4fv_gray);
+		glColor4fv (uColor4fv_yellow);
 		glRasterPos2f(200, 260);
-		description_font_.Render("このゲームは物体を吸い込んで大きくしていくゲームです。");
+		description_font_.Render("このゲームはフィールドに落ちているオブジェクトや、");
+		glRasterPos2f(200, 300);
+		description_font_.Render("敵プレイヤーを吸い込んで最終的な大きさを競うゲームです。");
 	}
 	u2Dto3D();
 
