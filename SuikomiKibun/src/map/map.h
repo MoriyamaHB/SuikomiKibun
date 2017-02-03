@@ -16,15 +16,15 @@
 #include "GL_ShapeDrawer.h"
 #include "../sound/sound.h"
 
-
 #include "../util/uGL.h"
+#include "../util/cc_util.h"
 #include "../define.h"
 
 #define PI_ 3.1415926
 
-class StageMap{
+class StageMap {
 private:
-	GL_ShapeDrawer*	m_shapeDrawer;
+	GL_ShapeDrawer* m_shapeDrawer;
 	btDynamicsWorld* world_;
 
 	int num_;
@@ -37,7 +37,7 @@ private:
 	btRigidBody* staticBody_;
 	int* indices_;
 	void RenderScene(void);
-	btRigidBody* LocalCreateRigidBody (float mass, const btTransform& startTransform, btCollisionShape* shape);
+	btRigidBody* LocalCreateRigidBody(float mass, const btTransform& startTransform, btCollisionShape* shape);
 	void SetVertexPositions(float waveheight, float offset);
 	void CreateSpider(const btVector3& position, int level);
 	void CreateSnowman(const btVector3& position, int level);
@@ -58,6 +58,5 @@ public:
 	void Draw();
 	int DestroyObject(int num, int level);
 };
-
 
 #endif
