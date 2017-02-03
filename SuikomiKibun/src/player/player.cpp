@@ -282,142 +282,142 @@ void Player::Update(double angle, StageMap* map, int color_judge1,
 
 //描画
 void Player::Draw() {
-	int i, n = 200;
-	float x, y, r = 80, r2 = 110, r3 = 76;
-	double rate;
+//	int i, n = 200;
+//	float x, y, r = 80, r2 = 110, r3 = 76;
+//	double rate;
+//
+//	//中心円作成
+//	u3Dto2D();
+//	glBegin(GL_POLYGON); // ポリゴンの描画
+//	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+//	// 円を描画
+//	for (i = 0; i < n; i++) {
+//		// 座標を計算
+//		rate = (double) i / n;
+//		x = r3 * cos(2.0 * M_PI * rate) + 110;
+//		y = r3 * sin(2.0 * M_PI * rate) + 110;
+//		glVertex3f(x, y, 0); // 頂点座標を指定
+//	}
+//	glEnd(); // ポリゴンの描画終了
+//	u2Dto3D();
 
-	//中心円作成
-	u3Dto2D();
-	glBegin(GL_POLYGON); // ポリゴンの描画
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	// 円を描画
-	for (i = 0; i < n; i++) {
-		// 座標を計算
-		rate = (double) i / n;
-		x = r3 * cos(2.0 * M_PI * rate) + 110;
-		y = r3 * sin(2.0 * M_PI * rate) + 110;
-		glVertex3f(x, y, 0); // 頂点座標を指定
-	}
-	glEnd(); // ポリゴンの描画終了
-	u2Dto3D();
-
-	//中心円作成
-	u3Dto2D();
-	glBegin(GL_POLYGON); // ポリゴンの描画
-	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-	// 円を描画
-	for (i = 0; i < n; i++) {
-		// 座標を計算
-		rate = (double) i / n;
-		x = r * cos(2.0 * M_PI * rate) + 110;
-		y = r * sin(2.0 * M_PI * rate) + 110;
-		glVertex3f(x, y, 0); // 頂点座標を指定
-	}
-	glEnd(); // ポリゴンの描画終了
-	u2Dto3D();
-
-	u3Dto2D();
-	for (i = 0; i < pcount; i++) {
-		if (pcount == 5) {
-			glBegin(GL_POLYGON); // ポリゴンの描画
-			glColor4f(0.3f, 1.0f, 0.9f, 1.0f);
-			// 円を描画
-			for (i = 0; i < n; i++) {
-				// 座標を計算
-				rate = (double) i / n;
-				if (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 5 / 3)
-					r2 = 0;
-				else
-					r2 = 110;
-
-				x = r2 * cos(2.0 * M_PI * rate) + 110;
-				y = r2 * sin(2.0 * M_PI * rate) + 110;
-				glVertex3f(x, y, 0); // 頂点座標を指定
-			}
-			glEnd(); // ポリゴンの描画終了
-		}
-
-		if (pcount == 5 || pcount == 4) {
-			glBegin(GL_POLYGON); // ポリゴンの描画
-			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-			for (i = 0; i < n; i++) {
-				// 座標を計算
-				rate = (double) i / n;
-				if (2.0 * M_PI * rate >= M_PI * 2 / 9
-						&& 2.0 * M_PI * rate <= M_PI * 2)
-					r2 = 0;
-				else
-					r2 = 110;
-
-				x = r2 * cos(2.0 * M_PI * rate) + 110;
-				y = r2 * sin(2.0 * M_PI * rate) + 110;
-				glVertex3f(x, y, 0); // 頂点座標を指定
-			}
-			glEnd(); // ポリゴンの描画終了
-		}
-		if (pcount == 5 || pcount == 4 || pcount == 3) {
-			glBegin(GL_POLYGON); // ポリゴンの描画
-			glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
-			for (i = 0; i < n; i++) {
-				// 座標を計算
-				rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2 * 7 / 36
-						&& 2.0 * M_PI * rate <= M_PI * 2)
-						|| (2.0 * M_PI * rate >= 0
-								&& 2.0 * M_PI * rate <= M_PI * 2 / 9))
-					r2 = 0;
-				else
-					r2 = 110;
-
-				x = r2 * cos(2.0 * M_PI * rate) + 110;
-				y = r2 * sin(2.0 * M_PI * rate) + 110;
-				glVertex3f(x, y, 0); // 頂点座標を指定
-			}
-			glEnd(); // ポリゴンの描画終了
-		}
-		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2) {
-			glBegin(GL_POLYGON); // ポリゴンの描画
-			glColor4f(1.0f, 0.5f, 0.0f, 1.0f);
-			for (i = 0; i < n; i++) {
-				// 座標を計算
-				rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2 * 47 / 180
-						&& 2.0 * M_PI * rate <= M_PI * 2)
-						|| (2.0 * M_PI * rate >= 0
-								&& 2.0 * M_PI * rate <= M_PI * 2 * 7 / 36))
-					r2 = 0;
-				else
-					r2 = 110;
-
-				x = r2 * cos(2.0 * M_PI * rate) + 110;
-				y = r2 * sin(2.0 * M_PI * rate) + 110;
-				glVertex3f(x, y, 0); // 頂点座標を指定
-			}
-			glEnd(); // ポリゴンの描画終了
-		}
-		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2
-				|| pcount == 1) {
-			glBegin(GL_POLYGON); // ポリゴンの描画
-			glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-			for (i = 0; i < n; i++) {
-				// 座標を計算
-				rate = (double) i / n;
-				if ((2.0 * M_PI * rate >= M_PI * 2 * 57 / 180
-						&& 2.0 * M_PI * rate <= M_PI * 2)
-						|| (2.0 * M_PI * rate >= 0
-								&& 2.0 * M_PI * rate <= M_PI * 2 * 47 / 180))
-					r2 = 0;
-				else
-					r2 = 110;
-
-				x = r2 * cos(2.0 * M_PI * rate) + 110;
-				y = r2 * sin(2.0 * M_PI * rate) + 110;
-				glVertex3f(x, y, 0); // 頂点座標を指定
-			}
-			glEnd(); // ポリゴンの描画終了
-		}
-	}
-	u2Dto3D();
+//	//中心円作成
+//	u3Dto2D();
+//	glBegin(GL_POLYGON); // ポリゴンの描画
+//	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+//	// 円を描画
+//	for (i = 0; i < n; i++) {
+//		// 座標を計算
+//		rate = (double) i / n;
+//		x = r * cos(2.0 * M_PI * rate) + 110;
+//		y = r * sin(2.0 * M_PI * rate) + 110;
+//		glVertex3f(x, y, 0); // 頂点座標を指定
+//	}
+//	glEnd(); // ポリゴンの描画終了
+//	u2Dto3D();
+//
+//	u3Dto2D();
+//	for (i = 0; i < pcount; i++) {
+//		if (pcount == 5) {
+//			glBegin(GL_POLYGON); // ポリゴンの描画
+//			glColor4f(0.3f, 1.0f, 0.9f, 1.0f);
+//			// 円を描画
+//			for (i = 0; i < n; i++) {
+//				// 座標を計算
+//				rate = (double) i / n;
+//				if (2.0 * M_PI * rate >= 0 && 2.0 * M_PI * rate <= M_PI * 5 / 3)
+//					r2 = 0;
+//				else
+//					r2 = 110;
+//
+//				x = r2 * cos(2.0 * M_PI * rate) + 110;
+//				y = r2 * sin(2.0 * M_PI * rate) + 110;
+//				glVertex3f(x, y, 0); // 頂点座標を指定
+//			}
+//			glEnd(); // ポリゴンの描画終了
+//		}
+//
+//		if (pcount == 5 || pcount == 4) {
+//			glBegin(GL_POLYGON); // ポリゴンの描画
+//			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+//			for (i = 0; i < n; i++) {
+//				// 座標を計算
+//				rate = (double) i / n;
+//				if (2.0 * M_PI * rate >= M_PI * 2 / 9
+//						&& 2.0 * M_PI * rate <= M_PI * 2)
+//					r2 = 0;
+//				else
+//					r2 = 110;
+//
+//				x = r2 * cos(2.0 * M_PI * rate) + 110;
+//				y = r2 * sin(2.0 * M_PI * rate) + 110;
+//				glVertex3f(x, y, 0); // 頂点座標を指定
+//			}
+//			glEnd(); // ポリゴンの描画終了
+//		}
+//		if (pcount == 5 || pcount == 4 || pcount == 3) {
+//			glBegin(GL_POLYGON); // ポリゴンの描画
+//			glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+//			for (i = 0; i < n; i++) {
+//				// 座標を計算
+//				rate = (double) i / n;
+//				if ((2.0 * M_PI * rate >= M_PI * 2 * 7 / 36
+//						&& 2.0 * M_PI * rate <= M_PI * 2)
+//						|| (2.0 * M_PI * rate >= 0
+//								&& 2.0 * M_PI * rate <= M_PI * 2 / 9))
+//					r2 = 0;
+//				else
+//					r2 = 110;
+//
+//				x = r2 * cos(2.0 * M_PI * rate) + 110;
+//				y = r2 * sin(2.0 * M_PI * rate) + 110;
+//				glVertex3f(x, y, 0); // 頂点座標を指定
+//			}
+//			glEnd(); // ポリゴンの描画終了
+//		}
+//		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2) {
+//			glBegin(GL_POLYGON); // ポリゴンの描画
+//			glColor4f(1.0f, 0.5f, 0.0f, 1.0f);
+//			for (i = 0; i < n; i++) {
+//				// 座標を計算
+//				rate = (double) i / n;
+//				if ((2.0 * M_PI * rate >= M_PI * 2 * 47 / 180
+//						&& 2.0 * M_PI * rate <= M_PI * 2)
+//						|| (2.0 * M_PI * rate >= 0
+//								&& 2.0 * M_PI * rate <= M_PI * 2 * 7 / 36))
+//					r2 = 0;
+//				else
+//					r2 = 110;
+//
+//				x = r2 * cos(2.0 * M_PI * rate) + 110;
+//				y = r2 * sin(2.0 * M_PI * rate) + 110;
+//				glVertex3f(x, y, 0); // 頂点座標を指定
+//			}
+//			glEnd(); // ポリゴンの描画終了
+//		}
+//		if (pcount == 5 || pcount == 4 || pcount == 3 || pcount == 2
+//				|| pcount == 1) {
+//			glBegin(GL_POLYGON); // ポリゴンの描画
+//			glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+//			for (i = 0; i < n; i++) {
+//				// 座標を計算
+//				rate = (double) i / n;
+//				if ((2.0 * M_PI * rate >= M_PI * 2 * 57 / 180
+//						&& 2.0 * M_PI * rate <= M_PI * 2)
+//						|| (2.0 * M_PI * rate >= 0
+//								&& 2.0 * M_PI * rate <= M_PI * 2 * 47 / 180))
+//					r2 = 0;
+//				else
+//					r2 = 110;
+//
+//				x = r2 * cos(2.0 * M_PI * rate) + 110;
+//				y = r2 * sin(2.0 * M_PI * rate) + 110;
+//				glVertex3f(x, y, 0); // 頂点座標を指定
+//			}
+//			glEnd(); // ポリゴンの描画終了
+//		}
+//	}
+//	u2Dto3D();
 
 	glDisable(GL_LIGHTING);
 	RenderScene();
