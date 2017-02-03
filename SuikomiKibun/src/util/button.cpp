@@ -29,7 +29,6 @@ Button::Button(int x1, int y1, int x2, int y2, const std::string& text, const st
 }
 
 Button::~Button() {
-	glutSetCursor(input::GetDefaultCursor());
 }
 
 bool Button::Update() {
