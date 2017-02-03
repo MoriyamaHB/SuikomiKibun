@@ -177,12 +177,17 @@ void set_is_enabled_mouse_motion(bool boo) {
 		//boolを書き換え
 		is_enabled_mouse_motion = boo;
 		if (is_enabled_mouse_motion == true) {		//有効にするとき
+			//カーソル変更
+			glutSetCursor (GLUT_CURSOR_CROSSHAIR);
 			//変数を初期化,マウスをセンターに移動
 			mouse_dx = 0;
 			mouse_dy = 0;
 			int ww = glutGet(GLUT_WINDOW_WIDTH);
 			int wh = glutGet(GLUT_WINDOW_HEIGHT);
 			glutWarpPointer(ww / 2, wh / 2);
+		} else {
+			//カーソル変更
+			glutSetCursor (GLUT_CURSOR_INHERIT);
 		}
 	}
 }
@@ -211,6 +216,16 @@ void CheckMouseMotion(int x, int y) {
 	} else {
 		wrap_flag = 0;
 	}
+}
+}
+
+//デフォルトのカーソルを返す
+namespace input {
+int GetDefaultCursor() {
+	if (is_enabled_mouse_motion)
+		return GLUT_CURSOR_CROSSHAIR;
+	else
+		return GLUT_CURSOR_INHERIT;
 }
 }
 
@@ -277,5 +292,7 @@ void Init() {
 	is_down_mouse_right_button = false;
 	mouse_right_button_frame = 0;
 	is_enabled_mouse_motion = false;
+	//カーソル初期化
+	glutSetCursor (GLUT_CURSOR_INHERIT);
 }
 }

@@ -46,15 +46,24 @@ bool Button::Update() {
 }
 
 void Button::Draw() {
+	//ボタン描画
 	if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
 		uSquare2D(x1_, y1_, x2_, y2_, 4.0, button_active_color_); //アクティブ時
 	else
-		uSquare2D(x1_, y1_, x2_, y2_, 4.0, button_color_); //アクティブ時
+		uSquare2D(x1_, y1_, x2_, y2_, 4.0, button_color_); //非アクティブ時
+	//カーソル変更
+	if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
+		glutSetCursor (GLUT_CURSOR_INFO);
+	else {
+		//非アクティブ時
+		glutSetCursor(input::GetDefaultCursor());
+	}
+	//文字描画
 	u3Dto2D();
 	if (uIsCollisionSquareAndPoint(x1_, y1_, x2_, y2_, input::get_mouse_x(), input::get_mouse_y()))
-		glColor4fv(text_active_color_); //アクティブ時
+		glColor4fv (text_active_color_); //アクティブ時
 	else
-		glColor4fv(text_color_); //アクティブ時
+		glColor4fv (text_color_); //非アクティブ時
 	glRasterPos2f(x1_, y1_ + 50);
 	if (!font_.Error())
 		font_.Render(text_.c_str());

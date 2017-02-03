@@ -23,6 +23,7 @@ int get_mouse_left_button_frame();
 int get_mouse_right_button_frame();
 int get_mouse_x();
 int get_mouse_y();
+int GetDefaultCursor();
 //setter
 void set_is_enabled_mouse_motion(bool boo);
 //初期化
