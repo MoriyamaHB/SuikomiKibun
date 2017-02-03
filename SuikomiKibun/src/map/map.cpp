@@ -749,7 +749,7 @@ StageMap::StageMap(btDynamicsWorld* world) :
 	CreatePonde(position_ob, 4);
 //	btVector3 position_oc(-220, 10, 230);
 //	CreatePonde(position_oc, 4);
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 30; i++) {
 		btVector3 vec(cc_util::GetRandom(-250, 250), 160, cc_util::GetRandom(-250, 250));
 		CreateApple(vec, cc_util::GetRandom(1, 3));
 	}
