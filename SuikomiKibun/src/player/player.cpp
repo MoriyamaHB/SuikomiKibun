@@ -485,8 +485,11 @@ int Player::ColorChange(int colorchange) {
 	else if (colorchange == -3)
 		return 3;
 	else {
+		while(1){
 		rcolor = cc_util::GetRandom(1, 3);
+		if(rcolor != color_judge_)
 		return rcolor;
+		}
 	}
 }
 
